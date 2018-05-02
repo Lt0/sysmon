@@ -2,4 +2,5 @@ sysmon
 swagger/swagger.json
 swagger/swagger.yml
 routers/commentsRouter_controllers.go
+routers/commentsRouter____controllers.go
 lastupdate.tmp
