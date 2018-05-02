@@ -3,8 +3,8 @@
 WS=$PWD
 
 cd web
-#npm install
-#npm run build
+npm install
+npm run build
 
 cd $WS
 
