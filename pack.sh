@@ -12,4 +12,4 @@ echo "build..."
 go build -o sysmon -ldflags '-linkmode "external" -extldflags "-static"'
 
 echo "pack..."
-tar zcvf sysmon.tar.gz sysmon views conf web/dist
+tar zcvf sysmon.tar.gz sysmon views conf web/dist swagger
