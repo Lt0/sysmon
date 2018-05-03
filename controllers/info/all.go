@@ -5,6 +5,7 @@ import (
 
 	"github.com/Lt0/sysmon/controllers/info/cpu"
 	"github.com/Lt0/sysmon/controllers/info/mem"
+	"github.com/Lt0/sysmon/controllers/info/net"
 	"github.com/astaxie/beego"
 )
 
@@ -17,7 +18,7 @@ type AllInfo struct {
 type SysInfo struct {
 	Cpu cpu.CpuInfo
 	Mem mem.MemInfo
-	// NetInfo struct
+	Net net.NetInfo
 	// StorageInfo struct
 
 	// HWInfo struct
@@ -30,8 +31,10 @@ func (p *AllInfo) Do() interface{} {
 	fmt.Println("do all info")
 	si.Cpu = cpu.GetCpuInfo()
 	si.Mem = mem.GetMemInfo()
+	si.Net = net.GetNetInfo()
 	fmt.Println("si.Cpu: ", si.Cpu)
 	fmt.Println("si.Mem: ", si.Mem)
+	fmt.Println("si.Net: ", si.Net)
 
-	return nil
+	return si
 }
