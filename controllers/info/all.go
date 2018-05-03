@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Lt0/sysmon/controllers/info/cpu"
+	"github.com/Lt0/sysmon/controllers/info/mem"
 	"github.com/astaxie/beego"
 )
 
@@ -15,7 +16,7 @@ type AllInfo struct {
 
 type SysInfo struct {
 	Cpu cpu.CpuInfo
-	// MemInfo struct
+	Mem mem.MemInfo
 	// NetInfo struct
 	// StorageInfo struct
 
@@ -24,7 +25,13 @@ type SysInfo struct {
 }
 
 func (p *AllInfo) Do() interface{} {
+	var si SysInfo
+
 	fmt.Println("do all info")
+	si.Cpu = cpu.GetCpuInfo()
+	si.Mem = mem.GetMemInfo()
+	fmt.Println("si.Cpu: ", si.Cpu)
+	fmt.Println("si.Mem: ", si.Mem)
 
 	return nil
 }
