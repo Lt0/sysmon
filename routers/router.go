@@ -12,11 +12,17 @@ import (
 func init() {
     beego.Router("/", &controllers.MainController{})
     ns := beego.NewNamespace("/v1",
+        beego.NSNamespace("/process",
+            beego.NSInclude(
+                &controllers.ProcessController{},
+            ),
+        ),
         beego.NSNamespace("/info",
             beego.NSInclude(
                 &controllers.InfoController{},
             ),
         ),
+        
     )
 
     beego.AddNamespace(ns)
