@@ -47,7 +47,6 @@ func GetNetInfo() NetInfo {
 		NicStrs := strings.Split(v, ":")
 		infos := strings.Split(NicStrs[1], "|")
 
-		fmt.Println("len infos: ", len(infos))
 		if len(infos) < 17 {
 			fmt.Println("infos is too short, could not get NIC info")
 			return ni
