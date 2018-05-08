@@ -14,48 +14,58 @@
             <v-container fluid fill-height>
                 <v-layout justify-center align-center>
                 <v-flex shrink>
-                    <!-- <v-tooltip right>
-                    <v-btn
-                        slot="activator"
-                        :href="source"
-                        icon
-                        large
-                        target="_blank"
-                    >
-                        <v-icon large>code</v-icon>
-                    </v-btn>
-                    <span>Source</span>
-                    </v-tooltip>
-                    <v-tooltip right>
-                    <v-btn slot="activator" icon large href="https://codepen.io/johnjleider/pen/qxQWda" target="_blank">
-                        <v-icon large>mdi-codepen</v-icon>
-                    </v-btn>
-                    <span>Codepen</span>
-                    </v-tooltip> -->
+                    <router-view></router-view>
                 </v-flex>
                 </v-layout>
             </v-container>
         </v-content>
 
         <v-footer app fixed>
-            <span>&copy; lightimehpq@gmail.com</span>
+            <div>&copy; lightimehpq@gmail.com</div>
         </v-footer>
     </v-app>
 </template>
 
 <script>
+import cm from '../js/common'
 import DrawerLeft from '@/components/DrawerLeft'
 
 export default {
-  name: 'Layout',
-  components: {
-      DrawerLeft
-  },
-  data () {
-    return {
-      drawer: false,
+    name: 'Layout',
+    components: {
+        DrawerLeft
+    },
+    data () {
+        return {
+            drawer: false,
+        }
+    },
+    beforeCreate () {
+        
+    },
+    created () {
+        cm.bus.$on('changeContent', this.changeContentHandler);
+    },
+    methods: {
+        changeContentHandler (r) {
+            switch (r) {
+                case 'resources':
+                    this.$router.push('resources')
+                    break;
+                case 'processes':
+                    this.$router.push('processes')
+                    break;
+                case 'fs':
+                    this.$router.push('fs')
+                    break;
+                case 'setting':
+                    this.$router.push('setting')
+                    break;
+                default:
+                    console.log('unknow page to route: ', r);
+            }
+        },
     }
-  }
 }
 </script>
 
