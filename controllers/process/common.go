@@ -1,5 +1,11 @@
 package process
 
+import (
+	"strings"
+	"strconv"
+	"fmt"
+)
+
 type Process struct {
 	Cmd			string	// 进程命令
 	User		string
@@ -19,4 +25,45 @@ type Process struct {
 
 	State		string	// 进程状态：D 不可中断; R 运行;	S 中断;	T 停止;	Z 僵死
 	Nice		int		// 进程优先级
+}
+
+const psOutputFormatStr = "command,user,%cpu,cputime,%mem,sz,rss,drs,trs,vsz,pid,nlwp,state,nice"
+
+func FormatProcStatus(cmdOutput []byte) []Process {
+	var processes []Process
+
+	for _, v := range(strings.Split(string(cmdOutput), "\n")) {
+		if v == "" {continue}
+		
+		attrs := strings.Split(v, " ")
+
+		if len(attrs) < 14 {
+			fmt.Println("invalide length of attrs:", len(attrs), v)
+			return processes
+		}
+
+		cmd := attrs[0]
+		user := attrs[1]
+
+		cpu, _ := strconv.ParseFloat(attrs[2], 64)
+		
+		cpuTime := attrs[3]
+		
+		mem, _ := strconv.ParseFloat(attrs[4], 64)
+		sz, _ := strconv.ParseUint(attrs[5], 10, 64)
+		rss, _ := strconv.ParseUint(attrs[6], 10, 64)
+		drs, _ := strconv.ParseUint(attrs[7], 10, 64)
+		trs, _ := strconv.ParseUint(attrs[8], 10, 64)
+		vsz, _ := strconv.ParseUint(attrs[9], 10, 64)
+
+		pid, _ := strconv.Atoi(attrs[10])
+		nlwp, _ := strconv.Atoi(attrs[9])
+
+		state := attrs[12]
+		nice, _ := strconv.Atoi(attrs[13])
+
+		processes = append(processes, Process{cmd, user, cpu, cpuTime, mem, sz, rss, drs, trs, vsz, pid, nlwp, state, nice})
+	}
+
+	return processes
 }
