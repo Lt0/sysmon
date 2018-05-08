@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <drawer-left :drawer='drawer' />
+        <v-navigation-drawer v-model="drawer" clipped fixed app ><drawer-left /></v-navigation-drawer>
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-toolbar-title>System Monitor</v-toolbar-title>
@@ -14,7 +14,7 @@
             <v-container fluid fill-height>
                 <v-layout justify-center align-center>
                 <v-flex shrink>
-                    <v-tooltip right>
+                    <!-- <v-tooltip right>
                     <v-btn
                         slot="activator"
                         :href="source"
@@ -31,7 +31,7 @@
                         <v-icon large>mdi-codepen</v-icon>
                     </v-btn>
                     <span>Codepen</span>
-                    </v-tooltip>
+                    </v-tooltip> -->
                 </v-flex>
                 </v-layout>
             </v-container>
@@ -53,7 +53,7 @@ export default {
   },
   data () {
     return {
-      drawer: true,
+      drawer: false,
     }
   }
 }
