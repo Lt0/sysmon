@@ -15,7 +15,7 @@ type InfoController struct {
 // @Description Get all system info
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
-// @router / [get]
+// @router /all [get]
 func (c *InfoController) GetSysInfo() {
 	fmt.Println("GetSysInfo")
 	handler := &info.AllInfo{Controller: &c.Controller}
