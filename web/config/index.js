@@ -33,7 +33,15 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true
+    cssSourceMap: true,
+
+    // API Proxying During Development
+    proxyTable: {
+      '*': {
+        target: 'http://localhost:2048',
+        changeOrigin: true,
+      },
+    },
   },
 
   build: {
