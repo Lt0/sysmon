@@ -2,7 +2,7 @@ var axios = require('axios');
 var bapi = require('./backendAPI');
 var dd = require('./dataDef');
 
-let interval = 50;
+let interval = 1000;
 let updater;
 
 function startUpdater(self){
@@ -33,3 +33,4 @@ function stopUpdater(){
 
 exports.startUpdater = startUpdater;
 exports.stopUpdater = stopUpdater;
+exports.interval = interval;

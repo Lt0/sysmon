@@ -1,7 +1,6 @@
 <template>
     <div>
-        <rsc-mem :chartData='memChartData' :options='chartOptions' />
-        {{ rsc }}
+        <rsc-mem :rsc='rsc' :options='lineChartOptions' />
     </div>
 </template>
 
@@ -18,7 +17,7 @@ export default {
         next(vm => {
             console.log("beforeRouteEnter next");
             cm.rsc.stopUpdater();
-            //cm.rsc.startUpdater(vm);
+            cm.rsc.startUpdater(vm);
         })
     },
     beforeRouteUpdate: (to, from, next) => {
@@ -34,6 +33,7 @@ export default {
     data () {
         return {
             rsc: new Object(),
+            lineChartOptions: null,
         }
     },
     computed: {
