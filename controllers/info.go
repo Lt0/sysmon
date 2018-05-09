@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"fmt"
+	// "fmt"
 
 	"github.com/Lt0/sysmon/controllers/info"
 	"github.com/astaxie/beego"
@@ -17,7 +17,7 @@ type InfoController struct {
 // @Failure 403 :objectId is empty
 // @router /all [get]
 func (c *InfoController) GetSysInfo() {
-	fmt.Println("GetSysInfo")
+	// fmt.Println("GetSysInfo")
 	handler := &info.AllInfo{Controller: &c.Controller}
 	c.Data["json"] = handler.Do()
 	c.ServeJSON()
