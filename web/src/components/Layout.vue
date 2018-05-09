@@ -38,6 +38,7 @@ export default {
     data () {
         return {
             drawer: false,
+            infoAll: null,
         }
     },
     beforeCreate () {
@@ -50,21 +51,22 @@ export default {
         changeContentHandler (r) {
             switch (r) {
                 case 'resources':
-                    this.$router.push('resources')
+                    this.$router.push('resources');
                     break;
                 case 'processes':
-                    this.$router.push('processes')
+                    this.$router.push('processes');
                     break;
                 case 'fs':
-                    this.$router.push('fs')
+                    this.$router.push('fs');
                     break;
                 case 'setting':
-                    this.$router.push('setting')
+                    this.$router.push('setting');
                     break;
                 default:
                     console.log('unknow page to route: ', r);
             }
         },
+
     }
 }
 </script>

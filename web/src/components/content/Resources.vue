@@ -1,15 +1,37 @@
 <template>
     <div>
-        resources
+        {{ rsc }}
     </div>
 </template>
 
 <script>
+import cm from '../../js/common'
 export default {
     name: 'Resources',
+    beforeRouteEnter: (to, from, next) => {
+        next(vm => {
+            console.log("beforeRouteEnter next");
+            cm.rsc.stopUpdater();
+            cm.rsc.startUpdater(vm);
+        })
+    },
+    beforeRouteUpdate: (to, from, next) => {
+        console.log("beforeRouteUpdate rsc");
+        next();
+    },
+    beforeRouteLeave: (to, from, next) => {
+        console.log("beforeRouteLeave rsc");
+        cm.rsc.stopUpdater();
+        next();
+    },
     data () {
         return {
-            a: null,
+            rsc: new Object(),
+        }
+    },
+    computed: {
+        rscStr: function(){
+            return JSON.stringify(this.rsc);
         }
     },
 }
