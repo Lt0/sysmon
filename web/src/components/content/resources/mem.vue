@@ -1,14 +1,15 @@
 <template>
-  <div id="vc-box" style="width: 100%">
     <div id="cv-container" class="chart-container">
       <line-chart :chart-data="datacollection" :options="options"></line-chart>
     </div>
-  </div>
 </template>
 
 <script>
 import LineChart from './LineChart.js'
 import cm from '../../../js/common'
+
+// 显示时长
+let timeCap = 60;
 
 let totalMem;
 let usedMem;
@@ -37,6 +38,16 @@ let tooltipsCallback = {
   }
 }
 
+let yTicksCallback = function(value, index, values){
+  return value + "(%)";
+}
+let yTicks = {
+  beginAtZero: true,
+  max: 100,
+  stepSize: 50,
+  callback: yTicksCallback,
+}
+
 export default {
     name: 'RscMem',
     components: {
@@ -59,11 +70,12 @@ export default {
         //op.scales.xAxes[0].scaleLabel.display = true;
         //op.scales.xAxes[0].scaleLabel.labelString = "Time(seconds)";
         op.tooltips.callbacks = tooltipsCallback;
+        op.scales.yAxes[0].ticks = yTicks;
         return op;
       },
       points: function(){
         let self = this;
-        let t = 60;
+        let t = timeCap;
 
         let num = Math.floor(t*1000/self.interval);
         if (num < 1) {
@@ -125,9 +137,9 @@ export default {
             self.UsedMem.push(0);
           }
         }
-
-        self.UsedMem.shift();
         self.UsedMem.push(val);
+        self.UsedMem.shift();
+        
       },
       updateSwapMem(){
         let self = this;
