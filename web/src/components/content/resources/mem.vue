@@ -54,10 +54,10 @@ export default {
         
         let op = Object.assign({}, self.lineChartOptions);
         op.title.text = "Memory and Swap History";
-        op.scales.yAxes[0].scaleLabel.display = true;
-        op.scales.yAxes[0].scaleLabel.labelString = "Percent(%)";
-        op.scales.xAxes[0].scaleLabel.display = true;
-        op.scales.xAxes[0].scaleLabel.labelString = "Time(seconds)";
+        //op.scales.yAxes[0].scaleLabel.display = true;
+        //op.scales.yAxes[0].scaleLabel.labelString = "Percent(%)";
+        //op.scales.xAxes[0].scaleLabel.display = true;
+        //op.scales.xAxes[0].scaleLabel.labelString = "Time(seconds)";
         op.tooltips.callbacks = tooltipsCallback;
         return op;
       },
@@ -74,8 +74,9 @@ export default {
         let ps = [];
         for(let i = 0; i <= num; i++){
           let p = self.interval/1000*i
-          ps.unshift(p.toFixed(2));
+          ps.unshift(p.toFixed(1));
         }
+        ps[0] = ps[0] + "(s)";
         // console.log("recomputed points: " + ps);
         return ps;
       },
@@ -170,6 +171,6 @@ function genSamplePoints(interval){
 .chart-container {
   position: relative;
   margin: auto;
-  width: 95%;
+  width: 99%;
 }
 </style>
