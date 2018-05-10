@@ -116,8 +116,8 @@ export default {
     methods: {
       updateUsedMem(){
         let self = this;
-        let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemFree)/self.rsc.Mem.MemTotal*100);
-        // console.log("MemTotal: " + self.rsc.Mem.MemTotal + ", MemFree: " + self.rsc.Mem.MemFree + ", val: " + val);
+        let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable)/self.rsc.Mem.MemTotal*100);
+        // console.log("MemTotal: " + self.rsc.Mem.MemTotal + ", MemAvailable: " + self.rsc.Mem.MemAvailable + ", val: " + val);
         let num = this.points.length;
         if (!self.UsedMem){
           self.UsedMem = [];
@@ -132,7 +132,6 @@ export default {
       updateSwapMem(){
         let self = this;
         let val = Math.floor((self.rsc.Mem.SwapTotal - self.rsc.Mem.SwapFree)/self.rsc.Mem.SwapTotal*100);
-        // console.log("MemTotal: " + self.rsc.Mem.MemTotal + ", MemFree: " + self.rsc.Mem.MemFree + ", val: " + val);
         let num = this.points.length;
         if (!self.SwapMem){
           self.SwapMem = [];
@@ -154,7 +153,7 @@ export default {
           totalSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal);
         }
 
-        usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemFree, 2);
+        usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable, 2);
         usedSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal - self.rsc.Mem.SwapFree, 2);
       }
     },
