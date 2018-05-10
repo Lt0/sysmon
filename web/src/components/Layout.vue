@@ -14,7 +14,9 @@
             <v-container fluid fill-height>
                 <v-layout justify-center align-center>
                 <v-flex>
-                    <router-view></router-view>
+                    <keep-alive>
+                        <router-view></router-view>
+                    </keep-alive>
                 </v-flex>
                 </v-layout>
             </v-container>

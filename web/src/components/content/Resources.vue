@@ -75,20 +75,20 @@ export default {
             return o;
         },
     },
+    created () {
+        cm.rsc.startUpdater(this);
+    },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
-            console.log("beforeRouteEnter next");
-            cm.rsc.stopUpdater();
-            cm.rsc.startUpdater(vm);
+            //console.log("beforeRouteEnter next");
         })
     },
     beforeRouteUpdate: (to, from, next) => {
-        console.log("beforeRouteUpdate rsc");
+        //console.log("beforeRouteUpdate rsc");
         next();
     },
     beforeRouteLeave: (to, from, next) => {
-        console.log("beforeRouteLeave rsc");
-        cm.rsc.stopUpdater();
+        //console.log("beforeRouteLeave rsc");
         next();
     },
 }
