@@ -8,6 +8,7 @@
 import LineChart from './LineChart.js'
 import cm from '../../../js/common'
 
+// 保存内存状态信息的字符串，由 updateGlobalInfo 更新
 let totalMem;
 let usedMem;
 let totalSwap;
@@ -142,9 +143,10 @@ export default {
     methods: {
       updateUsedMem(){
         let self = this;
-        //let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable)/self.rsc.Mem.MemTotal*100);
-        let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemFree)/self.rsc.Mem.MemTotal*100);
-        // console.log("MemTotal: " + self.rsc.Mem.MemTotal + ", MemAvailable: " + self.rsc.Mem.MemAvailable + ", val: " + val);
+        let m = self.rsc.Mem;
+        // 不可回收的 slab + 虚拟内存和物理内存的映射表占用的内存 + 硬件中断内存 + 内核为兼容老设备进行的低端地址转发消耗的内存 + hugepages + 堆栈中的内存（不包含共享内存，因为共享内存是基于 tmpfs 实现的，所以被视为file-backed、在page cache里）
+        let val = m.SUnreclaim + m.PageTables + m.KernelStack + m.HardwareCorrupted + m.Bounce + (m.HugePagesTotal * m.Hugepagesize) + m.AnonPages;
+        let percent = Math.floor((val)/self.rsc.Mem.MemTotal*100);
         let num = this.points.length;
         if (!self.UsedMem){
           self.UsedMem = [];
@@ -152,7 +154,7 @@ export default {
             self.UsedMem.push(0);
           }
         }
-        updateElements(self.UsedMem, val, self.points.length);
+        updateElements(self.UsedMem, percent, self.points.length);
       },
       updateSwapMem(){
         let self = this;
@@ -177,7 +179,7 @@ export default {
         }
 
         //usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable, 2);
-        usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemFree, 2);
+        usedMem = cm.fmtSize.fmtKBSize(this.UsedMem[0]/100*self.rsc.Mem.MemTotal, 2);
         usedSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal - self.rsc.Mem.SwapFree, 2);
       }
     },
