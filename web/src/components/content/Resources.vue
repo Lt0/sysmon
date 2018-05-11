@@ -1,6 +1,6 @@
 <template>
     <div>
-        <rsc-mem :rsc='rsc' :lineChartOptions='lineChartOptions' :interval='interval'/>
+        <rsc-mem :rsc='rsc' :lineChartOptions='lineChartOptions' :vueChartOp='vueChartOp' :interval='interval'/>
     </div>
 </template>
 
@@ -53,6 +53,15 @@ let op = {
     }
 };
 
+// vue-chartjs 的配置选项
+let vueChartOp = {
+    styles: {
+        width: '100%',
+        height: '23vh',
+        position: 'relative',
+    },
+}
+
 export default {
     name: 'Resources',
     components: {
@@ -62,6 +71,7 @@ export default {
         return {
             rsc: new Object(),
             interval: 1000,         // 更新时间间隔
+            vueChartOp: vueChartOp,
         }
     },
     computed: {

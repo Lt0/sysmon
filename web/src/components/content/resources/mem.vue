@@ -1,6 +1,6 @@
 <template>
     <div id="cv-container" class="chart-container">
-      <line-chart :chart-data="datacollection" :options="options"></line-chart>
+      <line-chart :chart-data="datacollection" :options="options" :styles="vueChartOp.styles"></line-chart>
     </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
     components: {
         LineChart,
     },
-    props: ['rsc', 'interval', 'lineChartOptions'],
+    props: ['rsc', 'interval', 'lineChartOptions', 'vueChartOp'],
     data () {
         return {
             UsedMem: null,
@@ -65,10 +65,6 @@ export default {
         
         let op = Object.assign({}, self.lineChartOptions);
         op.title.text = "Memory and Swap History";
-        //op.scales.yAxes[0].scaleLabel.display = true;
-        //op.scales.yAxes[0].scaleLabel.labelString = "Percent(%)";
-        //op.scales.xAxes[0].scaleLabel.display = true;
-        //op.scales.xAxes[0].scaleLabel.labelString = "Time(seconds)";
         op.tooltips.callbacks = tooltipsCallback;
         op.scales.yAxes[0].ticks = yTicks;
         return op;
