@@ -1,6 +1,6 @@
 <template>
     <div>
-        <rsc-mem :rsc='rsc' :lineChartOptions='lineChartOptions' :vueChartOp='vueChartOp' :interval='interval'/>
+        <rsc-mem :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
     </div>
 </template>
 
@@ -8,8 +8,8 @@
 import cm from '../../js/common'
 import RscMem from '@/components/content/resources/mem'
 
-// line chart 的配置模板
-let op = {
+// chartjs 的配置模板
+let chartJsOpTpl = {
     maintainAspectRatio: false,
     title: {
         display: true,
@@ -53,13 +53,18 @@ let op = {
     }
 };
 
-// vue-chartjs 的配置选项
-let vueChartOp = {
+// vue-chartjs 的配置模板
+let vueChartOpTpl = {
     styles: {
         width: '100%',
         height: '23vh',
         position: 'relative',
     },
+}
+
+// resources chart 配置模板
+let rscChartOpTpl = {
+    timeCap: 60,   // 显示时长
 }
 
 export default {
@@ -69,20 +74,21 @@ export default {
     },
     data () {
         return {
-            rsc: new Object(),
+            rsc: new Object(),      // 系统信息状态数据，由 resources updater 负责填充
             interval: 1000,         // 更新时间间隔
-            vueChartOp: vueChartOp,
         }
     },
     computed: {
         rscStr: function(){
             return JSON.stringify(this.rsc);
         },
-        lineChartOptions: function(){
-            let o = Object.assign({}, op);
+        rscOp: function(){
+            let chartJsOp = Object.assign({}, chartJsOpTpl);
             // 默认的动画时长为 1000 毫秒，如果动画时长大于 interval，则会导致显示的 tips 在鼠标移开图表后无法自动关闭
-            o.animation.duration = this.interval - 1;
-            return o;
+            chartJsOp.animation.duration = this.interval - 1;
+            let vueChartOp = Object.assign({}, vueChartOpTpl);
+            let rscChartOp = Object.assign({}, rscChartOpTpl);
+            return {chartJsOp, vueChartOp, rscChartOp};
         },
     },
     created () {

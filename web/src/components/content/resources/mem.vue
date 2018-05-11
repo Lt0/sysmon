@@ -1,15 +1,12 @@
 <template>
     <div id="cv-container" class="chart-container">
-      <line-chart :chart-data="datacollection" :options="options" :styles="vueChartOp.styles"></line-chart>
+      <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
     </div>
 </template>
 
 <script>
 import LineChart from './LineChart.js'
 import cm from '../../../js/common'
-
-// 显示时长
-let timeCap = 60;
 
 let totalMem;
 let usedMem;
@@ -53,17 +50,20 @@ export default {
     components: {
         LineChart,
     },
-    props: ['rsc', 'interval', 'lineChartOptions', 'vueChartOp'],
+    // rsc 是从 resources 通过 rsc.startUpdater() 获取的系统资源信息数据
+    // rscOp 是 resources 传进来的全局图表 options
+    props: ['rsc', 'interval', 'rscOp'],
     data () {
         return {
             UsedMem: null,
         }
     },
     computed: {
+      // options 是要通过 vue-chartjs 传给图表组件的 chartjs 配置
       options: function(){
         let self = this;
         
-        let op = Object.assign({}, self.lineChartOptions);
+        let op = Object.assign({}, self.rscOp.chartJsOp);
         op.title.text = "Memory and Swap History";
         op.tooltips.callbacks = tooltipsCallback;
         op.scales.yAxes[0].ticks = yTicks;
@@ -71,7 +71,7 @@ export default {
       },
       points: function(){
         let self = this;
-        let t = timeCap;
+        let t = this.rscOp.rscChartOp.timeCap;
 
         let num = Math.floor(t*1000/self.interval);
         if (num < 1) {
@@ -90,7 +90,7 @@ export default {
       },
       datacollection: function () {
           // `this` 指向 vm 实例
-          if (!this.rsc.Disk) {
+          if (!this.rsc.Mem) {
               return null;
           }
           //console.log("recompute datacollection");
