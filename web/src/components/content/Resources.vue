@@ -16,9 +16,9 @@ let chartJsOpTpl = {
     },
     tooltips: {
         intersect: false,   // 设置为 false，则鼠标只要移动到图表内，都适中显示 tips，否则，只在鼠标在顶点上时才显示 tips
+        displayColors: false,
     },
-    animation: {
-    },
+    animation: {},
     legend: {
         // 图标位置
         position: 'bottom',
@@ -26,7 +26,6 @@ let chartJsOpTpl = {
     elements: {
         line: {
             borderWidth: 1,
-            //borderColor: 'rgba(0, 0, 0, 0.5)',    // 设置线条颜色
         },
         point: {
             radius: 0,  // 设置数据点的顶点大小
@@ -35,7 +34,7 @@ let chartJsOpTpl = {
     scales: {
         // y 轴设置
         yAxes: [{
-            position: 'right',
+            position: 'left',
             ticks: {
                 beginAtZero: true,
                 max: 100,
@@ -47,6 +46,8 @@ let chartJsOpTpl = {
             ticks: {
                 // 在 enable autoSkip 的前提下，调整 x 轴的 padding 距离，仅对 x 轴有效
                 autoSkipPadding: 100,
+                // 设置 x 轴坐标轴文字最大旋转角度
+                maxRotation: 0,
             },
             scaleLabel: {},
         }],
@@ -85,6 +86,7 @@ export default {
         rscOp: function(){
             let chartJsOp = Object.assign({}, chartJsOpTpl);
             // 默认的动画时长为 1000 毫秒，如果动画时长大于 interval，则会导致显示的 tips 在鼠标移开图表后无法自动关闭
+            // 由于更新 legend 会重绘整个图表，导致动画重新开始，暂时先通过全局配置关闭动画效果。
             chartJsOp.animation.duration = this.interval - 1;
             let vueChartOp = Object.assign({}, vueChartOpTpl);
             let rscChartOp = Object.assign({}, rscChartOpTpl);

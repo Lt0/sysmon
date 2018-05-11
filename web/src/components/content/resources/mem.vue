@@ -15,6 +15,9 @@ let usedSwap;
 
 let tooltipsCallback = {
   // 定制 tooltips 的显示内容
+  title: function(tooltipItems, data){
+    return data.datasets[tooltipItems[0].datasetIndex].label;
+  },
   label: function(tooltipItem, data){
     // data.datasets[tooltipItem.datasetIndex].label 为 x 轴的内容
     let label = data.datasets[tooltipItem.datasetIndex].label || '';
@@ -30,14 +33,26 @@ let tooltipsCallback = {
     }
 
     // tooltipItem.yLabel 为 y 轴的内容
-    label += ": " + tooltipItem.yLabel + "% (" + used + ") of " + total;
+    label = tooltipItem.yLabel + "% (" + used + ") of " + total;
     return label;
+  },
+  
+}
+
+// 设置 x 轴坐标点的文字
+let xTicksCallback = function(value, index, values){
+  if (index == values.length-1){
+    return value + "(s)";
+  } else {
+    return value;
   }
 }
 
+// 设置 y 轴坐标点的文字
 let yTicksCallback = function(value, index, values){
   return value + "(%)";
 }
+// 设置 y 轴坐标点
 let yTicks = {
   beginAtZero: true,
   max: 100,
@@ -56,6 +71,7 @@ export default {
     data () {
         return {
             UsedMem: null,
+            SwapMem: null,
         }
     },
     computed: {
@@ -67,6 +83,7 @@ export default {
         op.title.text = "Memory and Swap History";
         op.tooltips.callbacks = tooltipsCallback;
         op.scales.yAxes[0].ticks = yTicks;
+        op.scales.xAxes[0].ticks.callback = xTicksCallback;
         return op;
       },
       points: function(){
@@ -82,9 +99,8 @@ export default {
         let ps = [];
         for(let i = 0; i <= num; i++){
           let p = self.interval/1000*i
-          ps.unshift(p.toFixed(1));
+          ps.push(p.toFixed(1));
         }
-        ps[0] = ps[0] + "(s)";
         // console.log("recomputed points: " + ps);
         return ps;
       },
@@ -97,14 +113,16 @@ export default {
           return {
             labels: this.points,
             datasets: [{
+                //label: `Memory (${usedMem} (${this.UsedMem[this.UsedMem.length-1]}%) of ${totalMem})`,
                 label: 'Memory',
                 borderColor: ['rgba(3, 169, 244, 1)'],
-                backgroundColor: ['rgba(3, 169, 244, 0.2)'],
+                backgroundColor: ['rgba(3, 169, 244, 0.05)'],
                 data: this.UsedMem,
               }, {
+                //label: `Swap (${usedSwap} (${this.SwapMem[this.SwapMem.length-1]}%) of ${totalSwap})`,
                 label: 'Swap',
                 borderColor: ['rgba(0, 150, 136, 1)'],
-                backgroundColor: ['rgba(0, 150, 136, 0.2)'],
+                backgroundColor: ['rgba(0, 150, 136, 0.05)'],
                 data: this.SwapMem,
               }
             ]
@@ -124,7 +142,8 @@ export default {
     methods: {
       updateUsedMem(){
         let self = this;
-        let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable)/self.rsc.Mem.MemTotal*100);
+        //let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable)/self.rsc.Mem.MemTotal*100);
+        let val = Math.floor((self.rsc.Mem.MemTotal - self.rsc.Mem.MemFree)/self.rsc.Mem.MemTotal*100);
         // console.log("MemTotal: " + self.rsc.Mem.MemTotal + ", MemAvailable: " + self.rsc.Mem.MemAvailable + ", val: " + val);
         let num = this.points.length;
         if (!self.UsedMem){
@@ -133,9 +152,7 @@ export default {
             self.UsedMem.push(0);
           }
         }
-        self.UsedMem.push(val);
-        self.UsedMem.shift();
-        
+        updateElements(self.UsedMem, val, self.points.length);
       },
       updateSwapMem(){
         let self = this;
@@ -147,9 +164,7 @@ export default {
             self.SwapMem.push(0);
           }
         }
-
-        self.SwapMem.shift();
-        self.SwapMem.push(val);
+        updateElements(self.SwapMem, val, self.points.length);
       },
       updateGlobalInfo(){
         let self = this;
@@ -161,16 +176,18 @@ export default {
           totalSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal);
         }
 
-        usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable, 2);
+        //usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable, 2);
+        usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemFree, 2);
         usedSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal - self.rsc.Mem.SwapFree, 2);
       }
     },
 }
 
-function genSamplePoints(interval){
-  let num = 50/interval;
-
-  
+function updateElements(elemList, pointData, pointsLen){
+  elemList.unshift(pointData);
+  if (elemList.length > pointsLen+1){
+    elemList.pop();
+  }
 }
 </script>
 
