@@ -1,7 +1,5 @@
 <template>
-    <div class="rsc-line-chart-container">
-      <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
-    </div>
+  <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
 </template>
 
 <script>
@@ -80,7 +78,8 @@ export default {
       options: function(){
         let self = this;
         
-        let op = Object.assign({}, self.rscOp.chartJsOp);
+        //let op = Object.assign({}, self.rscOp.chartJsOp);
+        let op = JSON.parse(JSON.stringify(self.rscOp.chartJsOp));
         op.title.text = "Memory and Swap History";
         op.tooltips.callbacks = tooltipsCallback;
         op.scales.yAxes[0].ticks = yTicks;
