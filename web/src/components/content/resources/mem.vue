@@ -1,5 +1,5 @@
 <template>
-    <div id="cv-container" class="chart-container">
+    <div class="rsc-line-chart-container">
       <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
     </div>
 </template>
@@ -191,9 +191,4 @@ function updateElements(elemList, pointData, pointsLen){
 </script>
 
 <style scoped>
-.chart-container {
-  position: relative;
-  margin: auto;
-  width: 99%;
-}
 </style>
