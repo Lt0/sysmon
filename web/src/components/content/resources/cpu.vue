@@ -9,6 +9,11 @@ import cm from '../../../js/common'
 // 记录上一次更新的 CPU 数据
 let preCpuInfo = {};
 
+let tooltipsCallback = {
+    label: function(tooltipItem, data){
+        return data.datasets[tooltipItem.datasetIndex].label + ": " + tooltipItem.yLabel + '%';
+    }
+}
 
 // 设置 x 轴坐标点的文字
 let xTicksCallback = function(value, index, values){
@@ -51,7 +56,7 @@ export default {
         
         let op = JSON.parse(JSON.stringify(self.rscOp.chartJsOp));
         op.title.text = "CPU(s) History";
-        //op.tooltips.callbacks = tooltipsCallback;
+        op.tooltips.callbacks = tooltipsCallback;
         op.scales.yAxes[0].ticks = yTicks;
         op.scales.xAxes[0].ticks.callback = xTicksCallback;
         return op;
