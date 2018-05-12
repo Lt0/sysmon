@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <div style="width: 99%">
+        <rsc-cpu :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
         <rsc-mem :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
     </div>
 </template>
@@ -7,6 +8,7 @@
 <script>
 import cm from '../../js/common'
 import RscMem from '@/components/content/resources/mem'
+import RscCpu from '@/components/content/resources/cpu'
 
 // chartjs 的配置模板
 let chartJsOpTpl = {
@@ -71,7 +73,7 @@ let rscChartOpTpl = {
 export default {
     name: 'Resources',
     components: {
-        RscMem,
+        RscMem, RscCpu, 
     },
     data () {
         return {
