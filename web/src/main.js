@@ -8,6 +8,7 @@ import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 import cm from './js/common'
+import './css/app.css'
 
 Vue.config.productionTip = false
 
