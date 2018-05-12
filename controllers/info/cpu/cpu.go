@@ -42,7 +42,7 @@ type Core struct {
 	Softirq int
 	Steal int
 	Guest int
-	GuestNide int
+	GuestNice int
 }
 
 type NumaNode struct {
@@ -76,7 +76,7 @@ func GetCoresInfo(ci *CpuInfo){
 		ci.Cores = append(ci.Cores, Core{Name:attrStr[0], User:a[0], Nice:a[1], System:a[2], Idle:a[3], Iowait:a[4], Irq:a[5], Softirq:a[6]})
 		if len(a) >= 8 {ci.Cores[len(ci.Cores)-1].Steal = a[7]}
 		if len(a) >= 9 {ci.Cores[len(ci.Cores)-1].Guest = a[8]}
-		if len(a) >= 10 {ci.Cores[len(ci.Cores)-1].GuestNide = a[9]}
+		if len(a) >= 10 {ci.Cores[len(ci.Cores)-1].GuestNice = a[9]}
 	}
 
 	ci.CoreNum = len(ci.Cores)
