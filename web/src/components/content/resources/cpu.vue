@@ -6,7 +6,30 @@
 import LineChart from './LineChart.js'
 import cm from '../../../js/common'
 
+// 记录上一次更新的 CPU 数据
 let preCpuInfo = {};
+
+
+// 设置 x 轴坐标点的文字
+let xTicksCallback = function(value, index, values){
+    if (index == values.length-1){
+        return value + "s";
+    } else {
+        return value;
+    }
+}
+
+// 设置 y 轴坐标点的文字
+let yTicksCallback = function(value, index, values){
+    return value + "%";
+}
+// 设置 y 轴坐标点
+let yTicks = {
+    beginAtZero: true,
+    max: 100,
+    stepSize: 20,
+    callback: yTicksCallback,
+}
 
 export default {
     name: 'RscCpu',
@@ -29,8 +52,8 @@ export default {
         let op = JSON.parse(JSON.stringify(self.rscOp.chartJsOp));
         op.title.text = "CPU(s) History";
         //op.tooltips.callbacks = tooltipsCallback;
-        //op.scales.yAxes[0].ticks = yTicks;
-        //op.scales.xAxes[0].ticks.callback = xTicksCallback;
+        op.scales.yAxes[0].ticks = yTicks;
+        op.scales.xAxes[0].ticks.callback = xTicksCallback;
         return op;
       },
       points: function(){
@@ -138,7 +161,16 @@ function updateElements(elemList, pointData, pointsLen){
   }
 }
 
+// 预定义的线条颜色
 let alpha = 1;
+function genColor(r, g, b, a){
+    let c = 'rgba(';
+    c += r + ', ';
+    c += g + ', ';
+    c += b + ', ';
+    c += a + ')';
+    return c;
+}
 let colors = [
     genColor(0, 150, 136, alpha),
     genColor(121, 85, 72, alpha),
@@ -162,15 +194,6 @@ let colors = [
     genColor(255, 87, 34, alpha),
     genColor(158, 158, 158, alpha),
 ]
-
-function genColor(r, g, b, a){
-    let c = 'rgba(';
-    c += r + ', ';
-    c += g + ', ';
-    c += b + ', ';
-    c += a + ')';
-    return c;
-}
 </script>
 
 <style scoped>

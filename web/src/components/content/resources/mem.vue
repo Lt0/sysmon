@@ -41,7 +41,7 @@ let tooltipsCallback = {
 // 设置 x 轴坐标点的文字
 let xTicksCallback = function(value, index, values){
   if (index == values.length-1){
-    return value + "(s)";
+    return value + "s";
   } else {
     return value;
   }
@@ -49,7 +49,7 @@ let xTicksCallback = function(value, index, values){
 
 // 设置 y 轴坐标点的文字
 let yTicksCallback = function(value, index, values){
-  return value + "(%)";
+  return value + "%";
 }
 // 设置 y 轴坐标点
 let yTicks = {
