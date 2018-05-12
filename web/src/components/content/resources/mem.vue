@@ -78,7 +78,6 @@ export default {
       options: function(){
         let self = this;
         
-        //let op = Object.assign({}, self.rscOp.chartJsOp);
         let op = JSON.parse(JSON.stringify(self.rscOp.chartJsOp));
         op.title.text = "Memory and Swap History";
         op.tooltips.callbacks = tooltipsCallback;
