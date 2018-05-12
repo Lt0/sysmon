@@ -144,9 +144,7 @@ export default {
       updateUsedMem(){
         let self = this;
         let m = self.rsc.Mem;
-        // 不可回收的 slab + 虚拟内存和物理内存的映射表占用的内存 + 硬件中断内存 + 内核为兼容老设备进行的低端地址转发消耗的内存 + hugepages + 堆栈中的内存（不包含共享内存，因为共享内存是基于 tmpfs 实现的，所以被视为file-backed、在page cache里）
-        let val = m.SUnreclaim + m.PageTables + m.KernelStack + m.HardwareCorrupted + m.Bounce + (m.HugePagesTotal * m.Hugepagesize) + m.AnonPages;
-        let percent = Math.floor((val)/self.rsc.Mem.MemTotal*100);
+        let percent = Math.floor((self.rsc.Mem.UsedMem)/self.rsc.Mem.MemTotal*100);
         let num = this.points.length;
         if (!self.UsedMem){
           self.UsedMem = [];
@@ -178,8 +176,7 @@ export default {
           totalSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal);
         }
 
-        //usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.MemTotal - self.rsc.Mem.MemAvailable, 2);
-        usedMem = cm.fmtSize.fmtKBSize(this.UsedMem[0]/100*self.rsc.Mem.MemTotal, 2);
+        usedMem = cm.fmtSize.fmtKBSize(self.rsc.Mem.UsedMem, 2);
         usedSwap = cm.fmtSize.fmtKBSize(self.rsc.Mem.SwapTotal - self.rsc.Mem.SwapFree, 2);
       }
     },
