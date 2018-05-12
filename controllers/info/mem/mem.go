@@ -55,14 +55,23 @@ type MemInfo struct {
 	DirectMap4k int
 	DirectMap2M int
 	DirectMap1G int
+
+	UsedMem int	// 通过 free 获取，以 KB 为单位
 }
 
-func GetMemInfo() MemInfo {
+func All() MemInfo {
 	var mi MemInfo
+	GetMemInfo(&mi)
+	GetUsedMem(&mi)
+
+	return mi
+}
+
+func GetMemInfo(mi *MemInfo) {
 	out, err := exec.Command("sh", "-c", `cat /proc/meminfo | sed 's/:\s*/:/g' | sed 's/ kB$//g'`).Output()
 	if err != nil {
 		fmt.Println("GetMemInfo", err)
-		return mi
+		return
 	}
 
 	for _, v := range(strings.Split(string(out), "\n")) {
@@ -163,5 +172,17 @@ func GetMemInfo() MemInfo {
 		}
 	}
 
-	return mi
+	
+}
+
+func GetUsedMem(mi *MemInfo) {
+	out, err := exec.Command("sh", "-c", `free | awk 'NR==2 {print $3}'`).Output()
+	if err != nil {
+		fmt.Println("GetMemInfo", err)
+		return
+	}
+	mi.UsedMem, err = strconv.Atoi(string(out[0:len(out)-1]))
+	if err != nil {
+		fmt.Println("GetUsedMem: strconv.Atoi: ", err)
+	}
 }

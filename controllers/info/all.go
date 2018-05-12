@@ -37,7 +37,7 @@ func (p *AllInfo) Do() interface{} {
 	// fmt.Println("TimeStamp:", si.TimeStamp);
 
 	si.Cpu = cpu.GetCpuInfo()
-	si.Mem = mem.GetMemInfo()
+	si.Mem = mem.All()
 	si.Net = net.GetNetInfo()
 	si.Disk = disk.AllInfo()
 	// fmt.Println("si.Cpu: ", si.Cpu)
