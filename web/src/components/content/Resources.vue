@@ -2,6 +2,7 @@
     <div style="width: 99%">
         <rsc-cpu :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
         <rsc-mem :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
+        <rsc-net :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
     </div>
 </template>
 
@@ -9,6 +10,7 @@
 import cm from '../../js/common'
 import RscMem from '@/components/content/resources/mem'
 import RscCpu from '@/components/content/resources/cpu'
+import RscNet from '@/components/content/resources/net'
 
 // chartjs 的配置模板
 let chartJsOpTpl = {
@@ -28,6 +30,7 @@ let chartJsOpTpl = {
     elements: {
         line: {
             borderWidth: 1,
+            tension: 0,
         },
         point: {
             radius: 0,  // 设置数据点的顶点大小
@@ -73,7 +76,7 @@ let rscChartOpTpl = {
 export default {
     name: 'Resources',
     components: {
-        RscMem, RscCpu, 
+        RscMem, RscCpu, RscNet, 
     },
     data () {
         return {
