@@ -30,5 +30,40 @@ function stopUpdater(){
     updater = null;
 }
 
+// 预定义的线条颜色
+let alpha = 1;
+function genColor(r, g, b, a){
+    let c = 'rgba(';
+    c += r + ', ';
+    c += g + ', ';
+    c += b + ', ';
+    c += a + ')';
+    return c;
+}
+let colors = [
+    genColor(0, 150, 136, alpha),
+    genColor(121, 85, 72, alpha),
+    genColor(3, 169, 244, alpha),
+    
+    genColor(244, 67, 54, alpha),
+    genColor(139, 195, 74, alpha),
+    genColor(0, 188, 212, alpha),
+    genColor(96, 125, 139, alpha),
+    genColor(103, 58, 183, alpha),
+    genColor(63, 81, 181, alpha),
+    genColor(33, 150, 243, alpha),
+    
+    genColor(233, 30, 99, alpha),
+    genColor(156, 39, 176, alpha),
+    genColor(76, 174, 80, alpha),
+    genColor(205, 220, 57, alpha),
+    genColor(255, 235, 59, alpha),
+    genColor(255, 193, 7, alpha),
+    genColor(255, 152, 0, alpha),
+    genColor(255, 87, 34, alpha),
+    genColor(158, 158, 158, alpha),
+]
+
 exports.startUpdater = startUpdater;
 exports.stopUpdater = stopUpdater;
+exports.colors = colors;
