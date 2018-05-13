@@ -106,7 +106,7 @@ export default {
       datacollection: function () {
           // `this` 指向 vm 实例
           if (!this.rsc.Mem) {
-              return null;
+            return null;
           }
           //console.log("recompute datacollection");
           return {
@@ -146,9 +146,6 @@ export default {
         let num = this.points.length;
         if (!self.UsedMem){
           self.UsedMem = [];
-          for (let i = 0; i < num; i++) {
-            self.UsedMem.push(0);
-          }
         }
         updateElements(self.UsedMem, percent, self.points.length);
       },
