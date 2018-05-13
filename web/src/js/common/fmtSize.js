@@ -34,7 +34,8 @@ function fmtKBSize(ks, acc){
 // unit: B, KB, MB, GB, TB, PB
 // 返回结果不带单位
 function fmtSizeByUnit(size, unit){
-    if (!size || !unit){
+    if (!unit){
+        console.log("fmtSizeByUnit: invalid unit: " + unit);
         return 0;
     }
     switch (unit){

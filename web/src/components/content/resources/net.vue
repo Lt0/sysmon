@@ -48,7 +48,11 @@ export default {
     data () {
         return {
             unit: "",
-            Nics: [],
+            rx: 0,      // 当前的接收速率，单位为 byte
+            tx: 0,      // 当前的发送速率，单位为 byte
+            rxRec: [],  // 要显示的接收速率记录
+            txRec: [],  // 要显示的发送速率记录
+            // Nics: [],
         }
     },
     computed: {
@@ -83,101 +87,65 @@ export default {
       },
       datacollection: function () {
         let self = this;
-        if (!self.rsc.Net){
-            return null;
-        }
-
-        let datasets = [];
-        for (let i = 0; i < self.Nics.length; i++) {
-            let c = self.Nics[i];
-            let rxDataset = {
-                label: c.name + '(rx)',
-                borderColor: colors[i],
-                backgroundColor: ['rgba(0, 0, 0, 0)'],
-                data: c.rxRec,
-            }
-            datasets.push(rxDataset);
-
-            let txDataset = {
-                label: c.name + '(tx)',
-                borderColor: colors[i],
-                backgroundColor: ['rgba(0, 0, 0, 0)'],
-                data: c.txRec,
-            }
-            datasets.push(txDataset);
-        }
-
         return {
             labels: self.points,
-            datasets: datasets,
+            datasets: [
+                {
+                    label: 'Receiving',
+                    borderColor: ['rgba(3, 169, 244, 1)'],
+                    backgroundColor: ['rgba(3, 169, 244, 0)'],
+                    data: self.rxRec,
+                },{
+                    label: 'Sending',
+                    borderColor: ['rgba(0, 150, 136, 1)'],
+                    backgroundColor: ['rgba(3, 169, 244, 0)'],
+                    data: self.txRec,
+                },
+            ],
         }
       }
     },
     mounted () {
-        //this.fillData();
     },
     watch: {
         rsc: function(){
+            this.updateRxTx();
             this.updateUnit();
-            this.updateNICs();
+            this.updateRec();
+            preNetInfo = this.rsc.Net;
       },
     },
     methods: {
-        // 更新 this.unit 和 全局 unit
-        updateUnit(){
+        updateRxTx(){
             if (!preNetInfo.Nics){
                 return;
             }
+
             let self = this;
-            let max = 0;
             let net = self.rsc.Net;
-            for (let i = 0; i < net.Nics.length; i++){
-                let RBytes = net.Nics[i].RBytes - preNetInfo.Nics[i].RBytes;
-                let TBytes = net.Nics[i].TBytes - preNetInfo.Nics[i].TBytes;
-                if (RBytes > max){
-                    max = RBytes;
-                }
 
-                if (TBytes > max){
-                    max = TBytes;
-                }
+            self.rx = 0;
+            self.tx = 0;
+            for (let i = 0; i < net.Nics.length; i++){
+                self.rx += net.Nics[i].RBytes - preNetInfo.Nics[i].RBytes;
+                self.tx += net.Nics[i].TBytes - preNetInfo.Nics[i].TBytes;
             }
-            self.unit = cm.fmtSize.sizeUnit(max);
-            unit = self.unit;
         },
-        updateNICs(){
+        // 更新 this.unit 和 全局 unit
+        updateUnit(){
+            unit = cm.fmtSize.sizeUnit(Math.max(this.rx, this.tx));
+            this.unit = unit;
+        },
+        updateRec(){
             let self = this;
-            let net = self.rsc.Net;         
-            // 如果没有初始化过 self.cores，则初始化
-            if (self.Nics.length < 1){
-                for (let i = 0; i < net.Nics.length; i++) {
-                    self.Nics.push(new Nic(net.Nics[i].Name));
-                }
-            }
+            let net = self.rsc.Net;
 
-            for (let i = 0; i < net.Nics.length; i++){
-                // nic current record
-                let c = net.Nics[i];
-                let percent = 0;
+            let rx = cm.fmtSize.fmtSizeByUnit(self.rx, self.unit);
+            let tx = cm.fmtSize.fmtSizeByUnit(self.tx, self.unit);
 
-                let RBytes = "";
-                let TBytes = "";
-                if (preNetInfo.Nics) {
-                    // nic previous record
-                    let p = preNetInfo.Nics[i];
-                    RBytes = c.RBytes - p.RBytes;
-                    TBytes = c.TBytes - p.TBytes;
-                } else {
-                    RBytes = 0;
-                    TBytes = 0;
-                }
-                RBytes = cm.fmtSize.fmtSizeByUnit(RBytes, self.unit);
-                TBytes = cm.fmtSize.fmtSizeByUnit(TBytes, self.unit);
-                updateElements(self.Nics[i].rxRec, RBytes.toFixed(2), self.points.length);
-                updateElements(self.Nics[i].txRec, TBytes.toFixed(2), self.points.length);
-            }
-            preNetInfo = Object.assign({}, net)
-        },
+            updateElements(self.rxRec, rx.toFixed(2), self.points.length);
+            updateElements(self.txRec, tx.toFixed(2), self.points.length);
+        }
     },
 }
 
