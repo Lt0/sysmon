@@ -1,3 +1,23 @@
+.rsc-chart{
+  padding-top: 2em;
+}
+.rsc-chart-hdr{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.rsc-chart-selector{
+  color: #7e858b;
+  min-width: 11em;
+  padding: 0px;
+}
+.rsc-chart-hdr-title{
+  color: #7e858b;
+  min-width: 10em;
+  text-align: left;
+}
+
+
 .rsc-line-chart-container {
   position: relative;
   margin: auto;

@@ -18,7 +18,7 @@ import RscDisk from '@/components/content/resources/disk'
 let chartJsOpTpl = {
     maintainAspectRatio: false,
     title: {
-        display: true,
+        display: false,
     },
     tooltips: {
         intersect: false,   // 设置为 false，则鼠标只要移动到图表内，都适中显示 tips，否则，只在鼠标在顶点上时才显示 tips
@@ -26,6 +26,7 @@ let chartJsOpTpl = {
     },
     animation: {},
     legend: {
+        display: true,
         // 图标位置
         position: 'bottom',
     },
@@ -65,7 +66,7 @@ let chartJsOpTpl = {
 let vueChartOpTpl = {
     styles: {
         width: '100%',
-        height: '23vh',
+        height: '21vh',
         position: 'relative',
     },
 }
