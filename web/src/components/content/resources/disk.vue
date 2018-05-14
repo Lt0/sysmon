@@ -101,7 +101,6 @@ export default {
             unit = this.disks[this.selectedDisk].unit;
         },
         updateDisks(){
-            console.log("fill: " + (count += 1));
             let self = this;
             let partitions = self.rsc.Disk.Partitions;
 
@@ -118,7 +117,6 @@ export default {
             let totalRRate = 0;
             // 第一个 disk 是 total，不需要查找
             for (let i = 1; i < self.disks.length; i++){
-                
                 let d = self.disks[i];
                 for (let j = 0; j < partitions.length; j++){
                     let c = partitions[j];
@@ -144,7 +142,6 @@ export default {
             } else {
                 recordDisk(self.disks[0], totalRRate, totalWRate, self.points.length);
             }
-            console.log("self.disks[0]: " + JSON.stringify(self.disks[0]));
         },
         updateDatacollection(){
             let self = this;
@@ -214,7 +211,7 @@ function updateDisk(disk, rRate, wRate, pointsLen){
 
     let unit = decideUnit(disk);
     if (disk.unit != unit) {
-        console.log("change unit from " + disk.unit + " to " + unit);
+        // console.log("change unit from " + disk.unit + " to " + unit);
         reFmtRec(disk.rRec, disk.rFmtRec, unit);
         reFmtRec(disk.wRec, disk.wFmtRec, unit);
         disk.unit = unit;
@@ -241,11 +238,8 @@ function maxItem(list){
 
 // 根据 unit 格式化一个 fmtRec
 function reFmtRec(rec, fmtRec, unit){
-    fmtRec = [];
-    console.log("rec.length: " + rec.length);
     for (let i = 0; i < rec.length; i++){
         fmtRec[i] = cm.fmtSize.fmtSizeByUnit(rec[i], unit).toFixed(2);
-        console.log("fmtRec[i]: " + fmtRec[i]);
     }
 }
 
