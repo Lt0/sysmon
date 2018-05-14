@@ -22,9 +22,9 @@
             </v-container>
         </v-content>
 
-        <v-footer app fixed>
+        <!-- <v-footer app fixed>
             <div>&copy; lightimehpq@gmail.com</div>
-        </v-footer>
+        </v-footer> -->
     </v-app>
 </template>
 
