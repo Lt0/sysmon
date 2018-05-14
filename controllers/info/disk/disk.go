@@ -45,6 +45,7 @@ type PartitionStat struct {
 
 	PhySector		uint64	// 物理 sector 大小, 默认为 512，通过 BlkInfo() 修正
 	LogSector		uint64	// 逻辑 sector 大小, 默认为 512，通过 BlkInfo() 修正
+	IsMajorHD		bool	// 是否为物理硬盘，默认为 false，通过 BlkInfo() 修正
 }
 
 func AllInfo() DiskInfo {
@@ -109,7 +110,7 @@ func Stats(di *DiskInfo){
 		di.Partitions = append(di.Partitions, PartitionStat{MajorNum, MinorNum, Name, 
 			ReadsCompleted, ReadsMerged, SectorsRead, ReadTime, 
 			WritesCompleted, WritesMerged, SectorsWrite, WriteTime, 
-			QueueIOs, IOTime, IOWeightedTime, 512, 512})
+			QueueIOs, IOTime, IOWeightedTime, 512, 512, false})
 	}
 }
 
@@ -128,9 +129,9 @@ func BlkInfo(di *DiskInfo){
 			if (di.Partitions[i].Name == name){
 				di.Partitions[i].PhySector, _ = strconv.ParseUint(attrs[4], 10, 64)
 				di.Partitions[i].LogSector, _ = strconv.ParseUint(attrs[5], 10, 64)
+				di.Partitions[i].IsMajorHD = true
 				break
 			}
 		}
-		di.Storage = append(di.Storage, StorageInfo{attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5], attrs[6]})
 	}
 }

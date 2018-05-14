@@ -3,6 +3,7 @@
         <rsc-cpu :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
         <rsc-mem :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
         <rsc-net :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
+        <rsc-disk :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
     </div>
 </template>
 
@@ -11,6 +12,7 @@ import cm from '../../js/common'
 import RscMem from '@/components/content/resources/mem'
 import RscCpu from '@/components/content/resources/cpu'
 import RscNet from '@/components/content/resources/net'
+import RscDisk from '@/components/content/resources/disk'
 
 // chartjs 的配置模板
 let chartJsOpTpl = {
@@ -76,7 +78,7 @@ let rscChartOpTpl = {
 export default {
     name: 'Resources',
     components: {
-        RscMem, RscCpu, RscNet, 
+        RscMem, RscCpu, RscNet, RscDisk, 
     },
     data () {
         return {
