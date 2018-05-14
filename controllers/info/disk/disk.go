@@ -9,8 +9,8 @@ import (
 
 // disk stats
 type DiskInfo struct {
-	Storage	[]StorageInfo	// 每一个分区存储为一个 storage
-	Partitions []PartitionStat	// 按分区统计
+	Storage			[]StorageInfo	// 每一个分区存储为一个 storage
+	Partitions		[]PartitionStat	// 按分区统计
 }
 
 // 存储状态
@@ -42,6 +42,9 @@ type PartitionStat struct {
 	QueueIOs		uint64	// 次块设备队列中的IO请求数
 	IOTime			uint64	// 块设备队列非空时间总和
 	IOWeightedTime	uint64	// 块设备队列非空时间加权读请求的扇区数总和总和
+
+	PhySector		uint64	// 物理 sector 大小, 默认为 512，通过 BlkInfo() 修正
+	LogSector		uint64	// 逻辑 sector 大小, 默认为 512，通过 BlkInfo() 修正
 }
 
 func AllInfo() DiskInfo {
@@ -49,6 +52,8 @@ func AllInfo() DiskInfo {
 
 	Storage(&di)
 	Stats(&di)
+
+	BlkInfo(&di)
 
 	return di
 }
@@ -78,6 +83,11 @@ func Stats(di *DiskInfo){
 		if v == "" {continue}
 		attrs := strings.Split(v, " ")
 
+		// 只获取物理硬盘的数据
+		if (attrs[0] != "8"){
+			continue;
+		}
+
 		MajorNum, _ := strconv.Atoi(attrs[0])
 		MinorNum, _ := strconv.Atoi(attrs[1])
 		Name := attrs[2]
@@ -99,6 +109,28 @@ func Stats(di *DiskInfo){
 		di.Partitions = append(di.Partitions, PartitionStat{MajorNum, MinorNum, Name, 
 			ReadsCompleted, ReadsMerged, SectorsRead, ReadTime, 
 			WritesCompleted, WritesMerged, SectorsWrite, WriteTime, 
-			QueueIOs, IOTime, IOWeightedTime})
+			QueueIOs, IOTime, IOWeightedTime, 512, 512})
+	}
+}
+
+func BlkInfo(di *DiskInfo){
+	out, err := exec.Command("sh", "-c", `lsblk  -tdn | sed 's/^\s*//g' | sed 's/\s\+/|/g'`).Output()
+	if err != nil {
+		fmt.Println("Disk Storage", err)
+		return
+	}
+
+	for _, v := range(strings.Split(string(out), "\n")) {
+		if v == "" {continue}
+		attrs := strings.Split(v, "|")
+		name := attrs[0]
+		for i := 0; i < len(di.Partitions); i++ {
+			if (di.Partitions[i].Name == name){
+				di.Partitions[i].PhySector, _ = strconv.ParseUint(attrs[4], 10, 64)
+				di.Partitions[i].LogSector, _ = strconv.ParseUint(attrs[5], 10, 64)
+				break
+			}
+		}
+		di.Storage = append(di.Storage, StorageInfo{attrs[0], attrs[1], attrs[2], attrs[3], attrs[4], attrs[5], attrs[6]})
 	}
 }
