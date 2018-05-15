@@ -10,7 +10,7 @@
                     :dynamicLabel=dataset.dynamiclabel
                     dynamicLabelMinWidth='5em'
                     v-model="dataset.ctrl.hideChart"
-                    @updateChart="updateDiskInfo"
+                    @updateChart="repaintChart"
                 >
                 </chart-legend>
             </div>
@@ -111,11 +111,16 @@ export default {
             this.updateDiskInfo();
       },
       selectedDisks: function(){
-        this.updateDiskInfo();
+        this.repaintChart();
       },
     },
     methods: {
-        // updateDiskInfo 用来更新 disks 内的数据，也可以用来重绘图像
+        //重绘图像
+        repaintChart(){
+            this.forceRefmtSelectedDisks();
+            this.updateDatacollection();
+        },
+        // updateDiskInfo 用来更新 disks 内的数据
         updateDiskInfo(){
             if (!preDiskInfo){
                 preDiskInfo = this.rsc.Disk
@@ -180,6 +185,14 @@ export default {
                 fmtDisk(self.disks[index], self.points.length);
             }
         },
+        // 强制全部刷新已选 disks 的 fmtRec
+        forceRefmtSelectedDisks(){
+            let self = this;
+            for(let i = 0; i < self.selectedDisks.length; i++){
+                let index = self.selectedDisks[i];
+                forceFmtDisk(self.disks[index]);
+            }
+        },
         updateDatacollection(){
             let self = this;
             let datasets = [];
@@ -189,6 +202,7 @@ export default {
                 let d = self.disks[self.selectedDisks[i]];
                 // console.log("d.rFmtRec: " + d.rFmtRec);
                 // console.log("d.wFmtRec: " + d.wFmtRec);
+                // console.log("d.rFmtRec.length: " + d.rFmtRec.length + ", d.wFmtRec.length: " + d.wFmtRec.length);
                 let rDataset = {
                     label: d.name + "(r)",
                     dynamiclabel: cm.fmtSize.fmtSize(d.rRec[0], 1),
@@ -275,6 +289,20 @@ function fmtDisk(disk, pointsLen){
         }
     } else {
         disk.wFmtRec = [];
+    }
+}
+
+function forceFmtDisk(disk){
+    if (!disk.rCtrl.hideChart) {
+        reFmtRec(disk.rRec, disk.rFmtRec, unit);
+    } else {
+        disk.rFmtRec = [];
+    }
+
+    if (!disk.wCtrl.hideChart) {
+        reFmtRec(disk.wRec, disk.wFmtRec, unit);
+    } else {
+         disk.wFmtRec = [];
     }
 }
 
