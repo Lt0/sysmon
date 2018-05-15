@@ -1,9 +1,26 @@
 <template>
-    <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
+    <div>
+        <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
+        <div class="rsc-legend-container">
+            <div v-for="dataset in datacollection.datasets" :key="dataset.label">
+                <chart-legend 
+                    :borderColor=dataset.borderColor 
+                    :backgroundColor=dataset.backgroundColor
+                    :label=dataset.label
+                    :dynamicLabel=dataset.dynamiclabel
+                    dynamicLabelMinWidth='5em'
+                    v-model="dataset.ctrl.hideChart"
+                    @updateChart="updateDiskInfo"
+                >
+                </chart-legend>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import LineChart from './LineChart.js'
+import chartLegend from '@/components/content/resources/chartLegend'
 import cm from '../../../js/common'
 
 // 记录上一次更新的 Disk 数据
@@ -44,7 +61,7 @@ let yTicks = {
 export default {
     name: 'DiskChart',
     components: {
-        LineChart,
+        LineChart, chartLegend, 
     },
     // rsc 是从 resources 通过 rsc.startUpdater() 获取的系统资源信息数据
     // rscOp 是 resources 传进来的全局图表 options
@@ -98,6 +115,7 @@ export default {
       },
     },
     methods: {
+        // updateDiskInfo 用来更新 disks 内的数据，也可以用来重绘图像
         updateDiskInfo(){
             if (!preDiskInfo){
                 preDiskInfo = this.rsc.Disk
@@ -166,12 +184,15 @@ export default {
             let self = this;
             let datasets = [];
             let colorIndex = 0;
+            
             for (let i = 0; i < self.selectedDisks.length; i++){
                 let d = self.disks[self.selectedDisks[i]];
                 // console.log("d.rFmtRec: " + d.rFmtRec);
                 // console.log("d.wFmtRec: " + d.wFmtRec);
                 let rDataset = {
                     label: d.name + "(r)",
+                    dynamiclabel: cm.fmtSize.fmtSize(d.rRec[0], 1),
+                    ctrl: d.rCtrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],
                     data: d.rFmtRec,
@@ -180,6 +201,8 @@ export default {
 
                 let wDataset = {
                     label: d.name + "(w)",
+                    dynamiclabel: cm.fmtSize.fmtSize(d.wRec[0], 1),
+                    ctrl: d.wCtrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],
                     data: d.wFmtRec,
@@ -201,7 +224,7 @@ export default {
 // wRec：写入速率记录
 // rFmtRec：根据单位格式化后的读取记录
 // wFmtRec：根据单位格式化后的写入记录
-function Disk(name, rRec, wRec, unit, rFmtRec, wFmtRec){
+function Disk(name, rRec, wRec, unit, rFmtRec, hideRRec, wFmtRec, hideWRec){
     this.name = name;
     if (!rRec) {
         this.rRec = [];
@@ -216,6 +239,14 @@ function Disk(name, rRec, wRec, unit, rFmtRec, wFmtRec){
     }
     this.rFmtRec = [];
     this.wFmtRec = [];
+
+    this.rCtrl = {
+        hideChart: hideRRec || false,
+    }
+
+    this.wCtrl = {
+        hideChart: hideWRec || false,
+    }
 }
 
 // 仅记录磁盘的读写速率，不更新绘图部分的数值
@@ -226,18 +257,25 @@ function recordDisk(disk, rRate, wRate, pointsLen){
 
 // 根据 recordDisk 记录的 rRec 和 wRec，更新 disk 的 nit, rFmtRec, wFmtRec
 function fmtDisk(disk, pointsLen){
-    if (preUnit != unit || (disk.rRec.length-1)>(disk.rFmtRec.length)) {
-        // console.log("reFmtRec");
-        reFmtRec(disk.rRec, disk.rFmtRec, unit);
-        reFmtRec(disk.wRec, disk.wFmtRec, unit);
+    if (!disk.rCtrl.hideChart) {
+        if (preUnit != unit || (disk.rRec.length-1)>(disk.rFmtRec.length)){
+            reFmtRec(disk.rRec, disk.rFmtRec, unit);
+        } else {
+            updateElements(disk.rFmtRec, cm.fmtSize.fmtSizeByUnit(disk.rRec[0], unit).toFixed(2), pointsLen);
+        }
     } else {
-        // console.log("add fmtRec")
-        updateElements(disk.rFmtRec, cm.fmtSize.fmtSizeByUnit(disk.rRec[0], unit).toFixed(2), pointsLen);
-        updateElements(disk.wFmtRec, cm.fmtSize.fmtSizeByUnit(disk.wRec[0], unit).toFixed(2), pointsLen);
+        disk.rFmtRec = [];
     }
-    // console.log("unit: " + unit + ", disk.rFmtRec[0]: " + disk.wFmtRec[0] + ", disk.wFmtRec[0]: " + disk.wFmtRec[0]);
-    // console.log("disk.rFmtRec: " + disk.rFmtRec);
-    // console.log("disk.wFmtRec: " + disk.wFmtRec);
+
+    if (!disk.wCtrl.hideChart){
+        if (preUnit != unit || (disk.wRec.length-1)>(disk.wFmtRec.length)){
+            reFmtRec(disk.wRec, disk.wFmtRec, unit);
+        } else {
+            updateElements(disk.wFmtRec, cm.fmtSize.fmtSizeByUnit(disk.wRec[0], unit).toFixed(2), pointsLen);
+        }
+    } else {
+        disk.wFmtRec = [];
+    }
 }
 
 function maxItem(list){

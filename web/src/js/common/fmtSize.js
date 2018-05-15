@@ -1,5 +1,37 @@
 let unitStep = 1024;
 
+function fmtSize(s, acc){
+    if (!acc) {
+        acc = 2;
+    }
+
+    if (s < unitStep){
+        return s + "B";
+    }
+
+    let ks = s/unitStep;
+    if (ks < unitStep) {
+        return ks.toFixed(acc) + "KB";
+    }
+
+    let ms = ks/unitStep;
+    if (ms < unitStep) {
+        return ms.toFixed(acc) + "MB";
+    }
+
+    let gs = ms/unitStep;
+    if (gs < unitStep) {
+        return gs.toFixed(acc) + "GB";
+    }
+
+    let ts = gs/unitStep;
+    if (ts < unitStep) {
+        return ts.toFixed(acc) + "TB";
+    }
+
+    let ps = ts/unitStep;
+    return ps.toFixed(acc) + "PB";
+}
 
 // ks 是以 KB 为单位的大小
 // acc 是保存精度，也就是小数点位数, 默认为 0
@@ -96,6 +128,7 @@ function sizeUnit(size){
     return "too large";
 }
 
+exports.fmtSize = fmtSize;
 exports.fmtKBSize = fmtKBSize;
 exports.sizeUnit = sizeUnit;
 exports.fmtSizeByUnit = fmtSizeByUnit;

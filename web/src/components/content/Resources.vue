@@ -26,7 +26,8 @@ let chartJsOpTpl = {
     },
     animation: {},
     legend: {
-        display: true,
+        // chartjs 自带的 legend 更新的时候会更新整个图表，为了实现在 legend 显示速率的功能，使用自定义的 lagend 组件
+        display: false,
         // 图标位置
         position: 'bottom',
     },
@@ -66,7 +67,7 @@ let chartJsOpTpl = {
 let vueChartOpTpl = {
     styles: {
         width: '100%',
-        height: '21vh',
+        height: '18vh',
         position: 'relative',
     },
 }

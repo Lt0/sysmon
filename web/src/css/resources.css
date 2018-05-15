@@ -17,6 +17,10 @@
   text-align: left;
 }
 
+.rsc-legend-container{
+  display: flex;
+  flex-wrap: wrap;
+}
 
 .rsc-line-chart-container {
   position: relative;
