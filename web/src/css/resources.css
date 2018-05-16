@@ -1,16 +1,7 @@
 .rsc-chart{
   padding-top: 2em;
 }
-.rsc-chart-hdr{
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-.rsc-chart-hdr-title{
-  color: #7e858b;
-  min-width: 10em;
-  text-align: left;
-}
+
 
 .rsc-legend-bar{
   padding-top: 0.2em;
