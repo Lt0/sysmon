@@ -1,23 +1,34 @@
 <template>
     <div class="rsc-chart-panel">
-        
         <div class="rsc-chart-hdr">
             <div class="rsc-chart-hdr-title">
-                <h3>Disk(s) History</h3>
+                <h4>Disk(s) History</h4>
             </div>
-            <div>
-                <v-select 
-                    :items="diskNameList" 
-                    v-model="selectedDiskName" 
-                    multiple 
-                    placeholder="Select Disk(s)"
-                    class="rsc-chart-selector"
-                >
+            <v-dialog v-model="dialog" max-width="500px" >
+                <v-btn slot="activator" flat icon color="teal"><v-icon>list</v-icon></v-btn>
 
-                </v-select>
-            </div>
-            
+                <v-card>
+                    <v-card-title>Select Disks</v-card-title>
+
+                    <v-card-text>
+                        <v-select 
+                            :items="diskNameList" 
+                            v-model="selectedDiskName" 
+                            multiple 
+                            chips
+                            deletable-chips
+                        >
+                        </v-select>
+                    </v-card-text>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" flat @click.native="dialog = false">Close</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
         </div>
+
         <disk-line-chart :rsc='rsc' :rscOp='rscOp' :interval='interval' :selectedDisks='selectedDisks' />
     </div>
 </template>
@@ -32,6 +43,7 @@ export default {
     },
     data () {
         return {
+            dialog: false,
             diskNameList: ["All"],
             selectedDiskName: ["All"],
             selectedDisks: [0],
