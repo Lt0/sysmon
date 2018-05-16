@@ -1,7 +1,7 @@
 <template>
     <div>
         <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
-        <chart-legend-bar :dataCollection='datacollection' @updateChart="repaintChart" />
+        <chart-legend-bar :dataCollection='datacollection' @updateChart="repaintChart" class="rsc-legend-bar"/>
     </div>
 </template>
 
