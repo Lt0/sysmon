@@ -1,26 +1,13 @@
 <template>
     <div>
         <line-chart :chart-data="datacollection" :options="options" :styles="rscOp.vueChartOp.styles"></line-chart>
-        <div class="rsc-legend-container">
-            <div v-for="dataset in datacollection.datasets" :key="dataset.label">
-                <chart-legend 
-                    :borderColor=dataset.borderColor 
-                    :backgroundColor=dataset.backgroundColor
-                    :label=dataset.label
-                    :dynamicLabel=dataset.dynamiclabel
-                    dynamicLabelMinWidth='5em'
-                    v-model="dataset.ctrl.hideChart"
-                    @updateChart="repaintChart"
-                >
-                </chart-legend>
-            </div>
-        </div>
+        <chart-legend-bar :dataCollection='datacollection' @updateChart="repaintChart" />
     </div>
 </template>
 
 <script>
 import LineChart from './LineChart.js'
-import chartLegend from '@/components/content/resources/chartLegend'
+import chartLegendBar from '@/components/content/resources/chartLegendBar'
 import cm from '../../../js/common'
 
 // 记录上一次更新的 Disk 数据
@@ -61,7 +48,7 @@ let yTicks = {
 export default {
     name: 'DiskChart',
     components: {
-        LineChart, chartLegend, 
+        LineChart, chartLegendBar, 
     },
     // rsc 是从 resources 通过 rsc.startUpdater() 获取的系统资源信息数据
     // rscOp 是 resources 传进来的全局图表 options
