@@ -21,7 +21,7 @@ let chartJsOpTpl = {
         display: false,
     },
     tooltips: {
-        intersect: false,   // 设置为 false，则鼠标只要移动到图表内，都适中显示 tips，否则，只在鼠标在顶点上时才显示 tips
+        intersect: false,   // 设置为 false，则鼠标只要移动到图表内，始终显示 tips，否则，只在鼠标在顶点上时才显示 tips
         displayColors: false,
     },
     animation: {},
