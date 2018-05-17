@@ -56,7 +56,7 @@ export default {
     props: ['rsc', 'interval', 'rscOp', 'selectedDisks'],
     data () {
         return {
-            disks: [],  
+            disks: [],          // 所有磁盘的记录信息
             datacollection: {},
         }
     },
@@ -133,17 +133,22 @@ export default {
             let totalRRate = 0;
             // 第一个 disk 是 All, 所以 self.disks[i] 对应的是 self.rsc.Disk.Partitions[i-1]
             for (let i = 1; i < self.disks.length; i++){
-                let d = self.disks[i];
                 let c = partitions[i-1];
-
                 let p = preDiskInfo.Partitions[i-1];
                 let rSector = c.SectorsRead - p.SectorsRead;
                 let wSector = c.SectorsWrite - p.SectorsWrite;
                 let rRate = rSector * c.LogSector;
-                totalRRate += rRate;
                 let wRate = wSector * c.LogSector;
-                totalWRate += wRate;
                 recordDisk(self.disks[i], rRate, wRate, self.points.length);
+
+                // MajorNum == 252 表示该分区为 LVM 分区，如果计算进 total 中，则会和物理分区重复计算
+                // 在物理磁盘中，MinorNum == 0 表示该分区为根分区，如果计算进 total 中，则会和逻辑分区重复计算
+                if (c.MajorNum == 252 || c.MinorNum == 0){
+                    continue;
+                } else {
+                    totalRRate += rRate;
+                    totalWRate += wRate;
+                }
 
             }
             recordDisk(self.disks[0], totalRRate, totalWRate, self.points.length);

@@ -1,5 +1,5 @@
 <template>
-    <div class="rsc-chart-panel">
+    <div>
         <chart-hdr title='Disk(s) History' :items='diskNameList' v-model='selectedDiskName' />
         <disk-line-chart :rsc='rsc' :rscOp='rscOp' :interval='interval' :selectedDisks='selectedDisks' />
     </div>
