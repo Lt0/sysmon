@@ -2,8 +2,10 @@
     <div class="chart-legend" @click="$emit('toggleChart', !hideChart); $emit('updateChart')">
         <div class="color-indicator" :style="{borderColor: borderColor, backgroundColor: backgroundColor}"></div>
         <div class="chart-label" :class="{'hide-chart': hideChart}" :style="{color: labelColor}">
-             {{ label }} 
-             <div :style="{'min-width': dynamicLabelMinWidth}" class="dynamic-label">
+            <div>
+                {{ label }} 
+            </div>
+            <div :style="{'min-width': dynamicLabelMinWidth}" class="dynamic-label">
                 &ensp;{{ dynamicLabel }}
             </div>
         </div>
@@ -42,6 +44,7 @@ export default {
 }
 .chart-label {
     display: flex;
+    align-items: center;
     padding: 0 0 0 0.5em;
 
     user-select: none;
