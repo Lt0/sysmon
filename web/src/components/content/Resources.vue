@@ -2,7 +2,7 @@
     <div style="width: 99%">
         <rsc-cpu :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
         <rsc-mem :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
-        <rsc-net :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
+        <rsc-net :net='rsc.Net' :rscOp='rscOp' :points='points'/>
         <rsc-disk :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
     </div>
 </template>
@@ -100,6 +100,24 @@ export default {
             let vueChartOp = Object.assign({}, vueChartOpTpl);
             let rscChartOp = Object.assign({}, rscChartOpTpl);
             return {chartJsOp, vueChartOp, rscChartOp};
+        },
+        points: function(){
+            let self = this;
+            let t = this.rscOp.rscChartOp.timeCap;
+
+            let num = Math.floor(t*1000/self.interval);
+            if (num < 1) {
+                console.log("genSamplePoints: interval too large: " + self.interval);
+                return null;
+            }
+
+            let ps = [];
+            for(let i = 0; i <= num; i++){
+                let p = self.interval/1000*i
+                ps.push(p.toFixed(1));
+            }
+            // console.log("recomputed points: " + ps);
+            return ps;
         },
     },
     created () {
