@@ -103,7 +103,7 @@ export default {
             let nics = self.net.Nics;
 
             if (self.nics.length < 1){
-                self.nics.push(new Nic("All"));
+                self.nics.push(new Nic("Sum"));
                 for (let i = 0; i < nics.length; i++){
                     self.nics.push(new Nic(nics[i].Name));
                 }
@@ -113,7 +113,7 @@ export default {
             let totalTRate = 0;
             // 下行总数
             let totalRRate = 0;
-            // self.nics 的第一个 nic 是 All, 所以 self.nics[i] 对应的是 nics[i-1]
+            // self.nics 的第一个 nic 是 Sum, 所以 self.nics[i] 对应的是 nics[i-1]
             for (let i = 1; i < self.nics.length; i++){
                 let c = nics[i-1];
                 let p = preNetInfo.Nics[i-1];

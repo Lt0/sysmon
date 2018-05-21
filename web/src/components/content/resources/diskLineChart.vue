@@ -123,7 +123,7 @@ export default {
             let partitions = self.rsc.Disk.Partitions;
 
             if (self.disks.length < 1){
-                self.disks.push(new Disk("All"));
+                self.disks.push(new Disk("Sum"));
                 for (let i = 0; i < partitions.length; i++){
                     self.disks.push(new Disk(partitions[i].Name));
                 }
@@ -131,7 +131,7 @@ export default {
 
             let totalWRate = 0;
             let totalRRate = 0;
-            // 第一个 disk 是 All, 所以 self.disks[i] 对应的是 self.rsc.Disk.Partitions[i-1]
+            // 第一个 disk 是 Sum, 所以 self.disks[i] 对应的是 self.rsc.Disk.Partitions[i-1]
             for (let i = 1; i < self.disks.length; i++){
                 let c = partitions[i-1];
                 let p = preDiskInfo.Partitions[i-1];

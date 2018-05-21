@@ -1,6 +1,6 @@
 <template>
     <div>
-        <chart-hdr title='Network History' :items='nicNameList' v-model='selectedNicName' />
+        <chart-hdr title='Network History' :items='nicNameList' v-model='selectedNicName' defaultItemNum=1 />
         <net-line-chart :net='net' :rscOp='rscOp' :points='points' :selectedNics='selectedNics' />
     </div>
 </template>
@@ -21,8 +21,8 @@ export default {
     props: ['net', 'points', 'rscOp'],
     data () {
         return {
-            nicNameList: ["All"],
-            selectedNicName: ["All"],
+            nicNameList: ["Sum"],
+            selectedNicName: ["Sum"],
             selectedNics: [0],
         }
     },

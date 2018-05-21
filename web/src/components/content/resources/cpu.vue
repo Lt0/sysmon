@@ -2,7 +2,7 @@
 
 <template>
     <div>
-        <chart-hdr title='CPU(s) Usage History' :items='coreList' v-model='selectedCores' />
+        <chart-hdr title='CPU(s) Usage History' :items='coreList' v-model='selectedCores' defaultItemNum=1 />
         <cpu-line-chart :cpu='cpu' :rscOp='rscOp' :points='points' :selectedCores='selectedCores' />
     </div>
 </template>

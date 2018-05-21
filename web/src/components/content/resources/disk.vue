@@ -1,6 +1,6 @@
 <template>
     <div>
-        <chart-hdr title='Disk(s) History' :items='diskNameList' v-model='selectedDiskName' />
+        <chart-hdr title='Disk(s) History' :items='diskNameList' v-model='selectedDiskName' defaultItemNum=1 />
         <disk-line-chart :rsc='rsc' :rscOp='rscOp' :interval='interval' :selectedDisks='selectedDisks' />
     </div>
 </template>
@@ -16,8 +16,8 @@ export default {
     },
     data () {
         return {
-            diskNameList: ["All"],
-            selectedDiskName: ["All"],
+            diskNameList: ["Sum"],
+            selectedDiskName: ["Sum"],
             selectedDisks: [0],
         }
     },
