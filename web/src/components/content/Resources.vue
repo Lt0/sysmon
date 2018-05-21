@@ -1,6 +1,6 @@
 <template>
     <div style="width: 99%">
-        <rsc-cpu :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
+        <rsc-cpu :cpu='rsc.Cpu' :rscOp='rscOp' :points='points'/>
         <rsc-mem :mem='rsc.Mem' :rscOp='rscOp' :points='points'/>
         <rsc-net :net='rsc.Net' :rscOp='rscOp' :points='points'/>
         <rsc-disk :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
