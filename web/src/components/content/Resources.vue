@@ -1,9 +1,24 @@
 <template>
-    <div style="width: 99%">
-        <rsc-cpu :cpu='rsc.Cpu' :rscOp='rscOp' :points='points'/>
-        <rsc-mem :mem='rsc.Mem' :rscOp='rscOp' :points='points'/>
-        <rsc-net :net='rsc.Net' :rscOp='rscOp' :points='points'/>
-        <rsc-disk :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
+    <div>
+        <v-container id="rsc" fluid>
+            <v-layout wrap>
+                <v-flex xs12 sm12 md12 lg6 xl6 class="item-flex">
+                    <rsc-cpu :cpu='rsc.Cpu' :rscOp='rscOp' :points='points'/>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12 lg6 xl6 class="item-flex">
+                    <rsc-mem :mem='rsc.Mem' :rscOp='rscOp' :points='points'/>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12 lg6 xl6 class="item-flex">
+                    <rsc-net :net='rsc.Net' :rscOp='rscOp' :points='points'/>
+                </v-flex>
+
+                <v-flex xs12 sm12 md12 lg6 xl6 class="item-flex">
+                    <rsc-disk :rsc='rsc' :rscOp='rscOp' :interval='interval'/>
+                </v-flex>
+            </v-layout>
+        </v-container>
     </div>
 </template>
 
@@ -67,7 +82,7 @@ let chartJsOpTpl = {
 let vueChartOpTpl = {
     styles: {
         width: '100%',
-        height: '18vh',
+        height: '28vh',
         position: 'relative',
     },
 }
@@ -141,5 +156,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+#rsc{
+    width: 99.5%;
+    padding: 0;
+}
+.item-flex{
+    padding: 0 1em 5em 1em;
+}
 </style>

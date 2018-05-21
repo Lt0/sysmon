@@ -1,7 +1,7 @@
 <template>
     <div class="chart-hdr">
             <div class="chart-hdr-title">
-                <h4>{{ title }}</h4>
+                <h3>{{ title }}</h3>
             </div>
             <v-dialog v-model="dialog" max-width="500px" >
                 <v-btn slot="activator" flat icon color="teal"><v-icon>list</v-icon></v-btn>
@@ -144,7 +144,7 @@ function noDefaultItem(seleted, items, defaultItemNum){
 }
 .chart-hdr-title{
   color: #7e858b;
-  min-width: 10em;
+  min-width: 8em;
   text-align: left;
 }
 </style>

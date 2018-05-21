@@ -2,7 +2,7 @@
     <div>
         <v-container fluid class="container">
             <v-layout wrap align-center>
-                    <v-flex v-for="dataset in dataCollection.datasets" :key="dataset.label" xs6 sm3 md3 lg2 >
+                    <v-flex v-for="dataset in dataCollection.datasets" :key="dataset.label" xs12 sm6 md6 lg6 xl6>
                         <chart-legend 
                             :borderColor=dataset.borderColor 
                             :backgroundColor=dataset.backgroundColor
@@ -38,7 +38,7 @@ export default {
 
 <style scoped>
 .container{
-    padding: 0px;
+    padding: 0 1em 0 1em;
 }
 </style>
 

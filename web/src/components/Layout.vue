@@ -11,7 +11,7 @@
         </v-toolbar>
 
         <v-content>
-            <v-container fluid fill-height>
+            <v-container fluid fill-height class="container">
                 <v-layout justify-center align-center>
                 <v-flex>
                     <keep-alive>
@@ -75,5 +75,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.container{
+    padding: 0;
+}
 </style>
