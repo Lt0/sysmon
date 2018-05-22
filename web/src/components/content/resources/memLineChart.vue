@@ -96,44 +96,17 @@ export default {
 
             let colorIndex = 0;
             let datasets = [];
-            // console.log("r.Memory.hide: " + r.Memory.hide);
-            for (let i = 0; i < this.selectedTypeName.length; i++){
-                if (this.selectedTypeName[i] == 'Memory') {
-                    let dataset = {
-                        label: 'Memory',
-                        dynamiclabel: `${cm.fmtSize.fmtKBSize(r.Memory.rec[0], 2)} (${r.Memory.percentRec[0]}%) of ${r.Memory.allStr})`,
-                        ctrl: r.Memory.ctrl,
-                        borderColor: colors[colorIndex++],
-                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                        data: r.Memory.percentRec,
-                    }
-                    datasets.push(dataset);
-                    continue;
+            for (let i in this.selectedTypeName){
+                let name = this.selectedTypeName[i]
+                let dataset = {
+                    label: name,
+                    dynamiclabel: `${cm.fmtSize.fmtKBSize(r[name].rec[0], 2)} (${r[name].percentRec[0]}%) of ${r[name].allStr})`,
+                    ctrl: r[name].ctrl,
+                    borderColor: colors[colorIndex++],
+                    backgroundColor: ['rgba(0, 0, 0, 0)'],
+                    data: r[name].percentRec,
                 }
-                if (this.selectedTypeName[i] == 'Swap') {
-                    let dataset = {
-                        label: 'Swap',
-                        dynamiclabel: `${cm.fmtSize.fmtKBSize(r.Swap.rec[0], 2)} (${r.Swap.percentRec[0]}%) of ${r.Swap.allStr})`,
-                        ctrl: r.Swap.ctrl,
-                        borderColor: colors[colorIndex++],
-                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                        data: r.Swap.percentRec,
-                    }
-                    datasets.push(dataset);
-                    continue;
-                }
-                if (this.selectedTypeName[i] == 'HugePages') {
-                    let dataset = {
-                        label: 'HugePages',
-                        dynamiclabel: `${cm.fmtSize.fmtKBSize(r.HugePages.rec[0], 2)} (${r.HugePages.percentRec[0]}%) of ${r.HugePages.allStr})`,
-                        ctrl: r.HugePages.ctrl,
-                        borderColor: colors[colorIndex++],
-                        backgroundColor: ['rgba(0, 0, 0, 0)'],
-                        data: r.HugePages.percentRec,
-                    }
-                    datasets.push(dataset);
-                    continue;
-                }
+                datasets.push(dataset);
             }
             
             this.dataCollection = {
@@ -243,154 +216,4 @@ function reFmtPercentRec(percentRec, rec, all){
         percentRec[i] = (rec[i]/all*100).toFixed(2)
     }
 }
-
-
-// // 根据 recordNic 记录的 rRec 和 tRec，更新 nic, rFmtRec, tFmtRec
-// function fmtNic(nic, pointsLen){
-//     if (!nic.rCtrl.hideChart) {
-//         if (preUnit != unit || (nic.rRec.length-1)>(nic.rFmtRec.length)){
-//             reFmtRec(nic.rRec, nic.rFmtRec, unit);
-//         } else {
-//             updateElements(nic.rFmtRec, cm.fmtSize.fmtSizeByUnit(nic.rRec[0], unit).toFixed(2), pointsLen);
-//         }
-//     } else {
-//         nic.rFmtRec = [];
-//     }
-
-//     if (!nic.tCtrl.hideChart){
-//         if (preUnit != unit || (nic.tRec.length-1)>(nic.tFmtRec.length)){
-//             reFmtRec(nic.tRec, nic.tFmtRec, unit);
-//         } else {
-//             updateElements(nic.tFmtRec, cm.fmtSize.fmtSizeByUnit(nic.tRec[0], unit).toFixed(2), pointsLen);
-//         }
-//     } else {
-//         nic.tFmtRec = [];
-//     }
-// }
-
-
-
-
-
-// // 仅记录网口收发速率，不更新绘图部分的数值
-// function recordNic(nic, rRate, tRate, pointsLen){
-//     updateElements(nic.rRec, rRate, pointsLen);
-//     updateElements(nic.tRec, tRate, pointsLen);
-// }
-
-// // 根据 recordNic 记录的 rRec 和 tRec，更新 nic, rFmtRec, tFmtRec
-// function fmtNic(nic, pointsLen){
-//     if (!nic.rCtrl.hideChart) {
-//         if (preUnit != unit || (nic.rRec.length-1)>(nic.rFmtRec.length)){
-//             reFmtRec(nic.rRec, nic.rFmtRec, unit);
-//         } else {
-//             updateElements(nic.rFmtRec, cm.fmtSize.fmtSizeByUnit(nic.rRec[0], unit).toFixed(2), pointsLen);
-//         }
-//     } else {
-//         nic.rFmtRec = [];
-//     }
-
-//     if (!nic.tCtrl.hideChart){
-//         if (preUnit != unit || (nic.tRec.length-1)>(nic.tFmtRec.length)){
-//             reFmtRec(nic.tRec, nic.tFmtRec, unit);
-//         } else {
-//             updateElements(nic.tFmtRec, cm.fmtSize.fmtSizeByUnit(nic.tRec[0], unit).toFixed(2), pointsLen);
-//         }
-//     } else {
-//         nic.tFmtRec = [];
-//     }
-// }
-
-// function forceFmtNic(nic){
-//     console.log("forceFmtNic");
-//     if (!nic.rCtrl.hideChart) {
-//         reFmtRec(nic.rRec, nic.rFmtRec, unit);
-//     } else {
-//         nic.rFmtRec = [];
-//     }
-// console.log("forceFmtNic");
-//     if (!nic.tCtrl.hideChart) {
-//         reFmtRec(nic.tRec, nic.tFmtRec, unit);
-//     } else {
-//          nic.tFmtRec = [];
-//     }
-// }
-
-// function maxItem(list){
-//     let max = list[0];
-//     for (let i = 1; i < list.length; i++){
-//         if (list[i] > max){
-//             max = list[i]
-//         }
-//     }
-//     return max
-// }
-
-// // 根据 unit 格式化一个 fmtRec
-// function reFmtRec(rec, fmtRec, unit){
-//     for (let i = 0; i < rec.length; i++){
-//         fmtRec[i] = cm.fmtSize.fmtSizeByUnit(rec[i], unit).toFixed(2);
-//     }
-// }
-
-
-
-// let tooltipsCallback = {
-//     label: function(tooltipItem, data){
-//         return data.datasets[tooltipItem.datasetIndex].label + ": " + tooltipItem.yLabel + unit;
-//     }
-// }
-
-// // 保存内存状态信息的字符串，由 updateGlobalInfo 更新
-// let totalMem;
-// let usedMem;
-// let totalSwap;
-// let usedSwap;
-
-// let tooltipsCallback = {
-//   // 定制 tooltips 的显示内容
-//   title: function(tooltipItems, data){
-//     return data.datasets[tooltipItems[0].datasetIndex].label;
-//   },
-//   label: function(tooltipItem, data){
-//     // data.datasets[tooltipItem.datasetIndex].label 为 x 轴的内容
-//     let label = data.datasets[tooltipItem.datasetIndex].label || '';
-
-//     let total;
-//     let used;
-//     if (label == "Memory") {
-//       total = totalMem;
-//       used = usedMem;
-//     } else if (label = "Swap") {
-//       total = totalSwap;
-//       used = usedSwap;
-//     }
-
-//     // tooltipItem.yLabel 为 y 轴的内容
-//     label = tooltipItem.yLabel + "% (" + used + ") of " + total;
-//     return label;
-//   },
-  
-// }
-
-// // 设置 x 轴坐标点的文字
-// let xTicksCallback = function(value, index, values){
-//   if (index == values.length-1){
-//     return value + "s";
-//   } else {
-//     return value;
-//   }
-// }
-
-// // 设置 y 轴坐标点的文字
-// let yTicksCallback = function(value, index, values){
-//   return value + "%";
-// }
-// // 设置 y 轴坐标点
-// let yTicks = {
-//   beginAtZero: true,
-//   max: 100,
-//   stepSize: 50,
-//   callback: yTicksCallback,
-// }
 </script>
