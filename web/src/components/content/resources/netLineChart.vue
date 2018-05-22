@@ -255,7 +255,7 @@ function fmtNic(nic, pointsLen){
 }
 
 function forceFmtNic(nic){
-    console.log("forceFmtNic");
+    //console.log("forceFmtNic");
     if (!nic.rCtrl.hideChart) {
         reFmtRec(nic.rRec, nic.rFmtRec, unit);
     } else {
