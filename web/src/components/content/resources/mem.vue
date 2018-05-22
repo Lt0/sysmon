@@ -21,7 +21,18 @@ export default {
     props: ['mem', 'points', 'rscOp'],
     data () {
         return {
-            typeNameList: ['Memory', 'Swap', 'HugePages'],
+            typeNameList: [
+                'Memory', 'Swap', 'Buffers', 'Cached', 
+                'Active', 'Inactive', 'ActiveAnon', 'InactiveAnon', 'ActiveFile', 'InactiveFile', 'Unevictable', 
+                'Mlocked', 'Dirty', 'Writeback', 'AnonPages', 'Mapped', 'Shmem', 
+                'Slab', 'SReclaimable', 'SUnreclaim', 
+                'KernelStack', 'PageTables', 
+                'NfsUnstable', 'Bounce', 'WritebackTmp', 'CommitLimit', 'CommittedAS', 
+                'Vmalloc', 
+                'HardwareCorrupted', 
+                'AnonHugePages', 
+                'HugePages', 
+                'DirectMap4k', 'DirectMap2M', 'DirectMap1G'],
             selectedTypeName: ['Memory', 'Swap'],
         }
     },

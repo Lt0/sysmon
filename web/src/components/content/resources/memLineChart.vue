@@ -117,10 +117,74 @@ export default {
     },
 }
 
+// function recordMem(records, mem, pointsLen){
+//     if (records.length < 1) {
+//         initRecords(records, mem, pointsLen);
+//     }
+// }
+
+// function initRecords(records, mem){
+//     for(item in mem)
+// }
+
+//normal Type 表示 all 为所有内存，不需要特殊计算的统计类别
+let normalTypes = [
+    'Buffers', 'Cached', 
+    'Active', 'Inactive', 'ActiveAnon', 'InactiveAnon', 'ActiveFile', 'InactiveFile', 'Unevictable', 
+    'Mlocked', 'Dirty', 'Writeback', 'AnonPages', 'Mapped', 'Shmem', 
+    'Slab', 'SReclaimable', 'SUnreclaim', 
+    'KernelStack', 'PageTables', 
+    'NfsUnstable', 'Bounce', 'WritebackTmp', 'CommitLimit', 'CommittedAS', 
+    'HardwareCorrupted', 
+    'AnonHugePages',
+    'DirectMap4k', 'DirectMap2M', 'DirectMap1G'
+    ];
 function Records(){
     this.Memory = new MemType('Memory');
     this.Swap = new MemType('Swap');
+    
+    this.Buffers = new MemType('Buffers');
+    this.Cached = new MemType('Cached');
+
+    this.Active = new MemType('Active');
+    this.Inactive = new MemType('Inactive');
+    this.ActiveAnon = new MemType('ActiveAnon');
+    this.InactiveAnon = new MemType('InactiveAnon');
+    this.ActiveFile = new MemType('ActiveFile');
+    this.InactiveFile = new MemType('InactiveFile');
+
+    this.Unevictable = new MemType('Unevictable');
+    this.Mlocked = new MemType('Mlocked');
+    this.Dirty = new MemType('Dirty');
+    this.Writeback = new MemType('Writeback');
+    
+    this.AnonPages = new MemType('AnonPages');
+    this.Mapped = new MemType('Mapped');
+    this.Shmem = new MemType('Shmem');
+
+    this.Slab = new MemType('Slab');
+    this.SReclaimable = new MemType('SReclaimable');
+    this.SUnreclaim = new MemType('SUnreclaim');
+
+    this.KernelStack = new MemType('KernelStack');
+    this.PageTables = new MemType('PageTables');
+
+    this.NfsUnstable = new MemType('NfsUnstable');
+    this.Bounce = new MemType('Bounce');
+    this.WritebackTmp = new MemType('WritebackTmp');
+    this.CommitLimit = new MemType('CommitLimit');
+    this.CommittedAS = new MemType('CommittedAS');
+
+    this.Vmalloc = new MemType('Vmalloc');
+
+    this.HardwareCorrupted = new MemType('HardwareCorrupted');
+    this.AnonHugePages = new MemType('AnonHugePages');
+
     this.HugePages = new MemType('HugePages');
+
+    this.DirectMap4k = new MemType('DirectMap4k');
+    this.DirectMap2M = new MemType('DirectMap2M');
+    this.DirectMap1G = new MemType('DirectMap1G');
 }
 
 // name: 类型名字，/proc/meminfo 的选项名
@@ -164,6 +228,21 @@ function recordMem(records, currentMem, pointsLen){
     }
     updateElements(r.HugePages.rec, m.HugePagesTotal - m.HugePagesFree, p);
     // updateElements(r.HugePages.percentRec, (r.HugePages.rec[0]*100).toFixed(2), p);
+
+    if (r.Vmalloc.all !=  m.VmallocTotal){
+        r.Vmalloc.all = m.VmallocTotal;
+        r.Vmalloc.allStr = cm.fmtSize.fmtKBSize(r.Vmalloc.all, 2)
+    }
+    updateElements(r.Vmalloc.rec, m.VmallocUsed, p);
+
+    for(let i in normalTypes){
+        let item = normalTypes[i];
+        if (r[item].all !=  m.MemTotal){
+            r[item].all = m.MemTotal;
+            r[item].allStr = cm.fmtSize.fmtKBSize(r[item].all, 2)
+        }
+        updateElements(r[item].rec, m[item], p);
+    }
 }
 
 // 根据 rec 记录更新 percentRec
@@ -171,35 +250,16 @@ function fmtMem(records, pointsLen){
     let r = records;
     let p = pointsLen;
 
-    // console.log("r.Memory.rec.length: " + r.Memory.rec.length);
-    if (!r.Memory.ctrl.hideChart) {
-        if (r.Memory.rec.length - r.Memory.percentRec.length > 1){
-            reFmtPercentRec(r.Memory.percentRec, r.Memory.rec, r.Memory.all);
-        } else if (r.Memory.rec.length - r.Memory.percentRec.length == 1) {
-            updateElements(r.Memory.percentRec, (r.Memory.rec[0]/r.Memory.all*100).toFixed(2), p);
+    for (let item in records){
+        if (!r[item].ctrl.hideChart) {
+            if (r[item].rec.length - r[item].percentRec.length > 1){
+                reFmtPercentRec(r[item].percentRec, r[item].rec, r[item].all);
+            } else if (r[item].rec.length - r[item].percentRec.length == 1) {
+                updateElements(r[item].percentRec, (r[item].rec[0]/r[item].all*100).toFixed(2), p);
+            }
+        } else {
+            r[item].percentRec = [];
         }
-    } else {
-        r.Memory.percentRec = [];
-    }
-
-    if (!r.Swap.ctrl.hideChart) {
-        if (r.Swap.rec.length - r.Swap.percentRec.length > 1){
-            reFmtPercentRec(r.Swap.percentRec, r.Swap.rec, r.Swap.all);
-        } else if (r.Swap.rec.length - r.Swap.percentRec.length == 1){
-            updateElements(r.Swap.percentRec, (r.Swap.rec[0]/r.Swap.all*100).toFixed(2), p);
-        }
-    } else {
-        r.Swap.percentRec = [];
-    }
-
-    if (!r.HugePages.ctrl.hideChart) {
-        if (r.HugePages.rec.length - r.HugePages.percentRec.length > 1){
-            reFmtPercentRec(r.HugePages.percentRec, r.HugePages.rec, r.HugePages.all);
-        } else if (r.HugePages.rec.length - r.HugePages.percentRec.length == 1) {
-            updateElements(r.HugePages.percentRec, (r.HugePages.rec[0]/r.HugePages.all*100).toFixed(2), p);
-        }
-    } else {
-        r.HugePages.percentRec = [];
     }
 }
 
