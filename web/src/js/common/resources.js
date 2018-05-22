@@ -73,12 +73,13 @@ function genColorList(){
     let k = 0;
     for (let i in vc){
         let colorType = vc[i];
-        if (k%2 != 0){
+
+        // vuetify colos 相邻的两类颜色非常接近，只取一个
+        if (k%2 == 0){
             k++;
             continue;
         }
         for (let j in colorType) {
-            //console.log("colorType len: " + Object.keys(colorType));
             if (!colorsLists[j]){
                 colorsLists[j] = [];
             }
@@ -88,8 +89,8 @@ function genColorList(){
     }
 
     for (let name in colorsLists){
+        // 下面这些颜色都太浅了，用来绘图几乎看不到图像，所以忽略这些颜色
         if (name == "lighten5" || name == "lighten4" || name == "lighten3" || name == "accent4" || name == "transparent" || name == "white"){
-            console.log("name: " + name);
             continue;
         }
         colors = colors.concat(colorsLists[name]);
