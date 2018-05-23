@@ -158,7 +158,7 @@ export default {
 <style scoped>
 #rsc{
     width: 99.5%;
-    padding: 0;
+    padding: 2em 0 0 0;
 }
 .item-flex{
     padding: 0 1em 5em 1em;
