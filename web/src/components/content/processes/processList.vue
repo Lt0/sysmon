@@ -39,11 +39,36 @@
                 <td class="text-xs-left">{{ props.item.CPU}}</td>
                 <td class="text-xs-left">{{ props.item.CPUTime }}</td>
                 <td class="text-xs-left">{{ props.item.MEM }}</td>
-                <td class="text-xs-left">{{ props.item.SZ }}</td>
-                <td class="text-xs-left">{{ props.item.RSS }}</td>
-                <td class="text-xs-left">{{ props.item.DRS }}</td>
-                <td class="text-xs-left">{{ props.item.TRS }}</td>
-                <td class="text-xs-left">{{ props.item.VSZ }}</td>
+                <td class="text-xs-left">
+                    <v-tooltip bottom>
+                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SZ, 2)}}</span>
+                        <span>{{props.item.SZ}}KB</span>
+                    </v-tooltip>
+                </td>
+                <td class="text-xs-left">
+                    <v-tooltip bottom>
+                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.RSS, 2)}}</span>
+                        <span>{{props.item.RSS}}KB</span>
+                    </v-tooltip>
+                </td>
+                <td class="text-xs-left">
+                    <v-tooltip bottom>
+                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.DRS, 2)}}</span>
+                        <span>{{props.item.DRS}}KB</span>
+                    </v-tooltip>
+                </td>
+                <td class="text-xs-left">
+                    <v-tooltip bottom>
+                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.TRS, 2)}}</span>
+                        <span>{{props.item.TRS}}KB</span>
+                    </v-tooltip>
+                </td>
+                <td class="text-xs-left">
+                    <v-tooltip bottom>
+                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VSZ, 2)}}</span>
+                        <span>{{props.item.VSZ}}KB</span>
+                    </v-tooltip>
+                </td>
                 <td class="text-xs-left">{{ props.item.Pid }}</td>
                 <td class="text-xs-left">{{ props.item.Nlwp }}</td>
                 <td class="text-xs-left">{{ props.item.State }}</td>
@@ -66,18 +91,21 @@
 </template>
 
 <script>
+import cm from '../../../js/common'
+
 export default {
     name: 'processList',
     props: ['info'],
     data() {
         return {
+            cm: cm,
             search: '',
             headers: [
                 { text: 'User', value: 'User' },
                 { text: 'Name', value: 'Cmd' },
                 { text: 'CPU', value: 'CPU' },
                 { text: 'CPUTime', value: 'CPUTime' },
-                { text: 'MEM', value: 'MEM' },
+                { text: 'MEM(%)', value: 'MEM' },
                 { text: 'SZ', value: 'SZ' },
                 { text: 'RSS', value: 'RSS' },
                 { text: 'DRS', value: 'DRS' },

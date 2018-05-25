@@ -36,11 +36,14 @@ function fmtSize(s, acc){
 // ks 是以 KB 为单位的大小
 // acc 是保存精度，也就是小数点位数, 默认为 0
 function fmtKBSize(ks, acc){
+    if (ks == 0){
+        return ks;
+    }
     if (!acc) {
         acc = 0;
     }
     if (ks < unitStep) {
-        return ks.toFixed(acc) + "KB";
+        return ks + "KB";
     }
 
     let ms = ks/unitStep;
