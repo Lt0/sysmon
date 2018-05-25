@@ -57,7 +57,7 @@ func FormatProcStatus(cmdOutput []byte) []Process {
 		vsz, _ := strconv.ParseUint(attrs[9], 10, 64)
 
 		pid, _ := strconv.Atoi(attrs[10])
-		nlwp, _ := strconv.Atoi(attrs[9])
+		nlwp, _ := strconv.Atoi(attrs[11])
 
 		state := attrs[12]
 		nice, _ := strconv.Atoi(attrs[13])
