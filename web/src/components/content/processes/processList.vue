@@ -38,45 +38,45 @@
                 </v-tooltip>
             </template>
             <template slot="items" slot-scope="props">
-                <td class="text-xs-left" v-if="displayUser">{{ props.item.User }}</td>
-                <td class="text-xs-left" v-if="displayCmd">{{ props.item.Cmd }}</td>
-                <td class="text-xs-left" v-if="displayCPU">{{ props.item.CPU}}</td>
-                <td class="text-xs-left" v-if="displayCPUTime">{{ props.item.CPUTime }}</td>
-                <td class="text-xs-left" v-if="displayMEM">{{ props.item.MEM }}</td>
-                <td class="text-xs-left" v-if="displaySZ">
+                <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
+                <td class="text-xs-left" v-show="displayCmd">{{ props.item.Cmd }}</td>
+                <td class="text-xs-left" v-show="displayCPU">{{ props.item.CPU}}</td>
+                <td class="text-xs-left" v-show="displayCPUTime">{{ props.item.CPUTime }}</td>
+                <td class="text-xs-left" v-show="displayMEM">{{ props.item.MEM }}</td>
+                <td class="text-xs-left" v-show="displaySZ">
                     <v-tooltip bottom>
                         <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SZ, 2)}}</span>
                         <span>{{props.item.SZ}}KB</span>
                     </v-tooltip>
                 </td>
-                <td class="text-xs-left" v-if="displayRSS">
+                <td class="text-xs-left" v-show="displayRSS">
                     <v-tooltip bottom>
                         <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.RSS, 2)}}</span>
                         <span>{{props.item.RSS}}KB</span>
                     </v-tooltip>
                 </td>
-                <td class="text-xs-left" v-if="displayDRS">
+                <td class="text-xs-left" v-show="displayDRS">
                     <v-tooltip bottom>
                         <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.DRS, 2)}}</span>
                         <span>{{props.item.DRS}}KB</span>
                     </v-tooltip>
                 </td>
-                <td class="text-xs-left" v-if="displayTRS">
+                <td class="text-xs-left" v-show="displayTRS">
                     <v-tooltip bottom>
                         <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.TRS, 2)}}</span>
                         <span>{{props.item.TRS}}KB</span>
                     </v-tooltip>
                 </td>
-                <td class="text-xs-left" v-if="displayVSZ">
+                <td class="text-xs-left" v-show="displayVSZ">
                     <v-tooltip bottom>
                         <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VSZ, 2)}}</span>
                         <span>{{props.item.VSZ}}KB</span>
                     </v-tooltip>
                 </td>
-                <td class="text-xs-left" v-if="displayPid">{{ props.item.Pid }}</td>
-                <td class="text-xs-left" v-if="displayNlwp">{{ props.item.Nlwp }}</td>
-                <td class="text-xs-left" v-if="displayState">{{ props.item.State }}</td>
-                <td class="text-xs-left" v-if="displayNice">{{ props.item.Nice }}</td>
+                <td class="text-xs-left" v-show="displayPid">{{ props.item.Pid }}</td>
+                <td class="text-xs-left" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
+                <td class="text-xs-left" v-show="displayState">{{ props.item.State }}</td>
+                <td class="text-xs-left" v-show="displayNice">{{ props.item.Nice }}</td>
             </template>
 
             <!-- 没有数据时显示的内容 -->
