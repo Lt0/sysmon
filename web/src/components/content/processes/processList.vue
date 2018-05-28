@@ -1,97 +1,102 @@
 <template>
     <div class="process-container">
-    <v-card id="process" v-resize="onResize">
-        <v-card-title>
-            <selection style='padding-top: 12px;' :items="items" v-model='selectedItems' defaultItemNum=3 />
-
-            <v-spacer></v-spacer>
+        <v-card id="process" v-resize="onResize">
+            <v-card-title>
+                <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="Search"
+                    single-line
+                    hide-details
+                ></v-text-field>
+                <v-spacer></v-spacer>
+                <selection style='padding-top: 12px;' :items="items" v-model='selectedItems' defaultItemNum=3 />
+            </v-card-title>
             
-            <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-            ></v-text-field>
-        </v-card-title>
-        
-        <v-data-table
-            :headers="headers"
-            :items="info.Processes"
-            hide-actions
-            class="elevation-1"
-            must-sort
-            :search="search"
-            id="process-table"
-        >
-            <!-- 定制表头 -->
-            <template slot="headerCell" slot-scope="props">
-                <v-tooltip bottom>
-                    <span slot="activator">
-                        <!-- 表头显示内容 -->
-                        {{ props.header.text }}
-                    </span>
-                    <span>
-                        <!-- 表头的 tooltip -->
-                        {{ props.header.text }}
-                    </span>
-                </v-tooltip>
-            </template>
-            <template slot="items" slot-scope="props">
-                <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
-                <td class="text-xs-left" v-show="displayCmd">{{ props.item.Cmd }}</td>
-                <td class="text-xs-left" v-show="displayCPU">{{ props.item.CPU}}</td>
-                <td class="text-xs-left" v-show="displayCPUTime">{{ props.item.CPUTime }}</td>
-                <td class="text-xs-left" v-show="displayMEM">{{ props.item.MEM }}</td>
-                <td class="text-xs-left" v-show="displaySZ">
+            <v-data-table
+                :headers="headers"
+                :items="info.Processes"
+                hide-actions
+                class="elevation-1"
+                must-sort
+                :search="search"
+                id="process-table"
+            >
+                <!-- 定制表头 -->
+                <template slot="headerCell" slot-scope="props">
                     <v-tooltip bottom>
-                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SZ, 2)}}</span>
-                        <span>{{props.item.SZ}}KB</span>
+                        <span slot="activator">
+                            <!-- 表头显示内容 -->
+                            {{ props.header.text }}
+                        </span>
+                        <span>
+                            <!-- 表头的 tooltip -->
+                            {{ props.header.text }}
+                        </span>
                     </v-tooltip>
-                </td>
-                <td class="text-xs-left" v-show="displayRSS">
-                    <v-tooltip bottom>
-                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.RSS, 2)}}</span>
-                        <span>{{props.item.RSS}}KB</span>
-                    </v-tooltip>
-                </td>
-                <td class="text-xs-left" v-show="displayDRS">
-                    <v-tooltip bottom>
-                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.DRS, 2)}}</span>
-                        <span>{{props.item.DRS}}KB</span>
-                    </v-tooltip>
-                </td>
-                <td class="text-xs-left" v-show="displayTRS">
-                    <v-tooltip bottom>
-                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.TRS, 2)}}</span>
-                        <span>{{props.item.TRS}}KB</span>
-                    </v-tooltip>
-                </td>
-                <td class="text-xs-left" v-show="displayVSZ">
-                    <v-tooltip bottom>
-                        <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VSZ, 2)}}</span>
-                        <span>{{props.item.VSZ}}KB</span>
-                    </v-tooltip>
-                </td>
-                <td class="text-xs-left" v-show="displayPid">{{ props.item.Pid }}</td>
-                <td class="text-xs-left" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
-                <td class="text-xs-left" v-show="displayState">{{ props.item.State }}</td>
-                <td class="text-xs-left" v-show="displayNice">{{ props.item.Nice }}</td>
-            </template>
+                </template>
+                <template slot="items" slot-scope="props">
+                    <td class="text-xs-left" v-show="displayCmd">{{ props.item.Cmd }}</td>
+                    <td class="text-xs-left" v-show="displayCPU">{{ props.item.CPU}}</td>
+                    <td class="text-xs-left" v-show="displayMEM">{{ props.item.MEM }}</td>
+                    <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
+                    <td class="text-xs-left" v-show="displayCPUTime">{{ props.item.CPUTime }}</td>
+                    <td class="text-xs-left" v-show="displaySZ">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SZ, 2)}}</span>
+                            <span>{{props.item.SZ}}KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayRSS">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.RSS, 2)}}</span>
+                            <span>{{props.item.RSS}}KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayDRS">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.DRS, 2)}}</span>
+                            <span>{{props.item.DRS}}KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayTRS">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.TRS, 2)}}</span>
+                            <span>{{props.item.TRS}}KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayVSZ">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VSZ, 2)}}</span>
+                            <span>{{props.item.VSZ}}KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayPid">{{ props.item.Pid }}</td>
+                    <td class="text-xs-left" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
+                    <td class="text-xs-left" v-show="displayState">{{ props.item.State }}</td>
+                    <td class="text-xs-left" v-show="displayNice">{{ props.item.Nice }}</td>
+                </template>
 
-            <!-- 没有数据时显示的内容 -->
-            <template slot="no-data">
-                <v-alert :value="true" color="info" icon="warning">
-                    Sorry, nothing to display here :(
+                <!-- 没有数据时显示的内容 -->
+                <template slot="no-data">
+                    <v-alert :value="true" color="info" icon="warning">
+                        Getting processes info from server, please wait... ^_^
+                    </v-alert>
+                </template>
+
+                <!-- 搜索没有匹配的结果时显示的内容 -->
+                <v-alert slot="no-results" :value="true" color="warning" icon="warning">
+                    Your search for "{{ search }}" found no results.
                 </v-alert>
-            </template>
+            </v-data-table>
+        </v-card>
 
-            <!-- 搜索没有匹配的结果时显示的内容 -->
-            <v-alert slot="no-results" :value="true" color="warning" icon="warning">
-                Your search for "{{ search }}" found no results.
-            </v-alert>
-        </v-data-table>
-    </v-card>
+        <div id="updatedTime" class="elevation-5">
+            <v-tooltip top>
+                <span slot='activator'><v-icon>update</v-icon>&ensp;{{ latestUpdate }}</span>
+                <span>Latest update time</span>
+            </v-tooltip>
+        </div>
     </div>
 </template>
 
@@ -112,6 +117,7 @@ export default {
                 x: 0,
                 y: 0
             },
+            latestUpdate: null,
             search: '',
             items: ['Cmd', 'CPU', 'MEM', 'User', 'CPUTime', 'SZ', 'RSS', 'DRS', 'TRS', 'VSZ', 'Pid', 'Nlwp', 'State', 'Nice'],
             selectedItems: [],
@@ -153,6 +159,10 @@ export default {
             // console.log("this.selectedItems: " + this.selectedItems);
             this.updateHeaders();
             this.updateDisplay();
+        },
+        info: function(){
+            let time = new Date();
+            this.latestUpdate = time.toLocaleTimeString();
         },
     },
     methods: {
@@ -239,4 +249,13 @@ export default {
 </script>
 
 <style scoped>
+#updatedTime {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+
+    background: #ffffff;
+
+    padding: 0.5em 1em 0.5em 1em;
+}
 </style>
