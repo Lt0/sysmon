@@ -94,7 +94,7 @@
         <div id="updatedTime" class="elevation-5">
             <v-tooltip top>
                 <span slot='activator'><v-icon>update</v-icon>&ensp;{{ latestUpdate }}</span>
-                <span>Latest update time</span>
+                <span>Latest Update &ensp;{{ latestUpdate }}</span>
             </v-tooltip>
         </div>
     </div>
@@ -256,6 +256,9 @@ export default {
 
     background: #ffffff;
 
-    padding: 0.5em 1em 0.5em 1em;
+    padding: 0.3em 0.5em 0.3em 0.5em;
+
+    opacity: 0.6;
+    border-radius: 3px;
 }
 </style>
