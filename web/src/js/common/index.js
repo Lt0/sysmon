@@ -1,5 +1,6 @@
 var rsc = require('./resources')
 var process = require('./processes')
+var fs = require('./fs')
 var fmtSize = require('./fmtSize')
 
 export default {
@@ -8,4 +9,5 @@ export default {
     rsc: rsc,
     process: process,
     fmtSize: fmtSize,
+    fs: fs,
 }
