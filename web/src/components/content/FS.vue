@@ -1,16 +1,22 @@
 <template>
     <div>
-        {{rsc.Storage}}
+        <div v-for="storage in info.Storage" :key="storage.index">
+            <disk-card :storage='storage'></disk-card>
+        </div>
     </div>
 </template>
 
 <script>
 import cm from '../../js/common'
-
+import diskCard from '@/components/content/fs/diskCard'
 export default {
     name: 'FS',
+    components: {
+        diskCard, 
+    },
     data () {
         return {
+            info: new Object(),     // 进程数据，由 processes updater 负责填充
             interval: 1000,
         }
     },

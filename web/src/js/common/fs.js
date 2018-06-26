@@ -6,7 +6,7 @@ let interval = 1000;
 
 function runUpdater(self) {
     axios.get(bapi.infoDisk).then(function(res){
-        self.rsc = res.data
+        self.info = res.data
         //console.log(self.rsc);
         updater = setTimeout(runUpdater, interval, self);
     }).catch(function(err){
@@ -25,6 +25,7 @@ function startUpdater(self){
 }
 
 function stopUpdater(){
+    console.log("stop fs updater.");
     clearTimeout(updater);
     updater = null;
 }
