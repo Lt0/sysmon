@@ -32,7 +32,7 @@ export default {
     display: flex;
     align-items: center;
 
-    cursor: pointer;
+    cursor: pointer;    
 }
 .color-indicator {
     height: 1em;
@@ -50,10 +50,13 @@ export default {
     user-select: none;
     -moz-user-select:none;
 
-    cursor:pointer
+    cursor:pointer;
 }
 .dynamic-label {
     text-align: left;
+
+    color: #888888;
+    font-size: 0.8em;
 }
 .hide-chart {
     text-decoration: line-through;
