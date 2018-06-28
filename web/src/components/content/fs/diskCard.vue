@@ -74,7 +74,7 @@ export default {
                 datasets: [
                     {
                         label: 'Total',
-                        backgroundColor: ['#36a2eb', '#ffce56'],
+                        backgroundColor: ['#36a2eb', '#80DEEA'],
                         data: [cm.fmtSize.str2GSize(this.storage.Used), cm.fmtSize.str2GSize(this.storage.Avail)]
                     }
                 ]
