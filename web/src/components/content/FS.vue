@@ -1,8 +1,12 @@
 <template>
     <div>
-        <div v-for="storage in info.Storage" :key="storage.index">
-            <disk-card :storage='storage'></disk-card>
-        </div>
+        <v-container fluid>
+            <v-layout wrap align-center>
+                    <v-flex v-for="storage in info.Storage" :key="storage.index" xs12 sm4 md4 lg3 xl2>
+                        <disk-card :storage='storage'></disk-card>
+                    </v-flex>
+            </v-layout>
+        </v-container>
     </div>
 </template>
 

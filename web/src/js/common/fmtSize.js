@@ -131,7 +131,37 @@ function sizeUnit(size){
     return "too large";
 }
 
+// str 为以 B/K/M/G/T/P 结尾的字符串
+function str2GSize(str, unit) {
+    let u = str.charAt(str.length-1);
+    let num = parseFloat(str);
+    let size = 0;
+    switch(u) {
+    case "B":
+        size = num/unitStep/unitStep/unitStep;
+        break;
+    case "K":
+        size = num/unitStep/unitStep;
+        break;
+    case "M":
+        size = num/unitStep;
+        break;
+    case "G":
+        size = num;
+        break;
+    case "T":
+        size = num*unitStep;
+        break;
+    case "P":
+        size = num*unitStep*unitStep;
+        break;
+    }
+
+    return size;
+}
+
 exports.fmtSize = fmtSize;
 exports.fmtKBSize = fmtKBSize;
 exports.sizeUnit = sizeUnit;
 exports.fmtSizeByUnit = fmtSizeByUnit;
+exports.str2GSize = str2GSize;

@@ -1,10 +1,16 @@
 <template>
     <div class="card">
-        <div>
-            <h2>{{storage.Fs}}</h2>
+        <div class="hdr">
+            <v-tooltip bottom>
+                <span slot="activator">
+                    <h2 class="hdr-title">{{storage.Fs}}</h2>
+                </span>
+                <span>Device: {{storage.Fs}}</span>
+            </v-tooltip>
+            
         </div>
         <div class="chart">
-            <doughnut :chart-data="datacollection"></doughnut>
+            <doughnut :chart-data="datacollection" :options="options"></doughnut>
         </div>
         <div class="detail">
             <h3>Details</h3>
@@ -13,7 +19,12 @@
             <div class="details-item">Used: {{storage.Used}}</div>
             <div class="details-item">Avail: {{storage.Avail}}</div>
             <div class="details-item">Use%: {{storage.UsePercent}}</div>
-            <div class="details-item">MountPoint: {{storage.MountPoint}}</div>
+            <v-tooltip bottom>
+                <span slot="activator">
+                    <div class="details-item">MountPoint: {{storage.MountPoint}}</div>
+                </span>
+                <span>MountPoint: {{storage.MountPoint}}</span>
+            </v-tooltip>
         </div>
         
     </div>
@@ -21,6 +32,19 @@
 
 <script>
 import Doughnut from '../../common/Doughnut.js'
+import cm from '../../../js/common'
+
+let tooltipsCallback = {
+  label: function(tooltipItem, data){
+    // tooltipItem 是一些控制项，包括 datasets 下标之类的
+    // data 是绘图时传进去的 data
+
+    // console.log("tooltipItem:", JSON.stringify(tooltipItem))
+    // console.log("data:", data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index])
+    let size = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+    return " " + cm.fmtSize.fmtKBSize(size*1024*1024, 1);
+  },
+}
 
 export default {
     name: 'diskCard',
@@ -30,6 +54,15 @@ export default {
         return {
             datacollection: null,
         }
+    },
+    computed: {
+        // options 是要通过 vue-chartjs 传给图表组件的 chartjs 配置
+        options: function(){
+            let self = this;
+            let op = {tooltips: {callbacks: null}};
+            op.tooltips.callbacks = tooltipsCallback;
+            return op;
+        },
     },
     mounted () {
       this.fillData()
@@ -42,7 +75,7 @@ export default {
                     {
                         label: 'Total',
                         backgroundColor: ['#36a2eb', '#ffce56'],
-                        data: [parseInt(this.storage.Used), parseInt(this.storage.Avail)]
+                        data: [cm.fmtSize.str2GSize(this.storage.Used), cm.fmtSize.str2GSize(this.storage.Avail)]
                     }
                 ]
             }
@@ -52,11 +85,16 @@ export default {
 </script>
 
 <style scoped>
+    .hdr {
+        width: 100%;
+    }
+    .hdr-title {
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis; 
+    }
     .card {
         background-color: #ffffff;
-        /* height: 40em; */
-        min-width: 16em;
-        max-width: 30em;
         
         margin: 1em;
         padding: 1em;
@@ -82,9 +120,16 @@ export default {
 
         color: #888888;
         font-size: 0.8em;
+        overflow: hidden;
+
+        width: 100%;
     }
 
     .details-item {
         padding: 0.3em 0em 0em 0em;
+
+        overflow: hidden; 
+        white-space: nowrap; 
+        text-overflow: ellipsis; 
     }
 </style>
