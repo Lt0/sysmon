@@ -78,4 +78,8 @@ export default {
 .container{
     padding: 0;
 }
+
+#main-flex {
+    max-width: 100%;
+}
 </style>

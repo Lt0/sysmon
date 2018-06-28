@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-container fluid>
+    <div id="fs">
+        <v-container id="fs-container">
             <v-layout wrap align-center>
                     <v-flex v-for="storage in info.Storage" :key="storage.index" xs12 sm4 md4 lg3 xl2>
                         <disk-card :storage='storage'></disk-card>
@@ -44,5 +44,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+#fs-container {
+    padding: 1em;
+}
 </style>
