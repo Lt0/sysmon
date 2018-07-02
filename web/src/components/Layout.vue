@@ -6,7 +6,7 @@
             <v-toolbar-title>System Monitor</v-toolbar-title>
 
             <v-spacer></v-spacer>
-            
+
             <more />
         </v-toolbar>
 
@@ -63,9 +63,9 @@ export default {
                 case 'fs':
                     this.$router.push('fs');
                     break;
-                case 'setting':
-                    this.$router.push('setting');
-                    break;
+                // case 'setting':
+                //     this.$router.push('setting');
+                //     break;
                 default:
                     console.log('unknow page to route: ', r);
             }
