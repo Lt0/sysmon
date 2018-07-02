@@ -16,7 +16,7 @@
             <v-data-table
                 :headers="headers"
                 :items="info.Processes"
-                hide-actions
+                :rows-per-page-items="[10,25,50,100,processNum]"
                 class="elevation-1"
                 must-sort
                 :search="search"
@@ -139,6 +139,15 @@ export default {
             headers: [],
         }
     },
+    computed: {
+        processNum: function() {
+            if(this.info.Processes) {
+                return this.info.Processes.length;
+            } else {
+                return 0;
+            }
+        }
+    },
     watch: {
         selectedItems: function(){
             this.updateHeaders();
@@ -252,7 +261,7 @@ export default {
 #updatedTime {
     position: fixed;
     bottom: 0px;
-    right: 0px;
+    left: 0px;
 
     background: #ffffff;
 
