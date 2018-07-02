@@ -1,6 +1,6 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer v-model="drawer" clipped fixed app ><drawer-left /></v-navigation-drawer>
+        <v-navigation-drawer v-model="drawer" clipped fixed app width="220"><drawer-left /></v-navigation-drawer>
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-toolbar-title>System Monitor</v-toolbar-title>
