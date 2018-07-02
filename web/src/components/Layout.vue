@@ -1,13 +1,13 @@
 <template>
     <v-app id="inspire">
-        <v-navigation-drawer v-model="drawer" clipped fixed app width="220"><drawer-left /></v-navigation-drawer>
+        <v-navigation-drawer v-model="drawer" clipped fixed app ><drawer-left /></v-navigation-drawer>
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-toolbar-title>System Monitor</v-toolbar-title>
 
             <v-spacer></v-spacer>
-
-            <v-btn icon><v-icon>more_vert</v-icon></v-btn>
+            
+            <more />
         </v-toolbar>
 
         <v-content>
@@ -31,11 +31,13 @@
 <script>
 import cm from '../js/common'
 import DrawerLeft from '@/components/DrawerLeft'
+import more from '@/components/more'
 
 export default {
     name: 'Layout',
     components: {
-        DrawerLeft
+        DrawerLeft,
+        more
     },
     data () {
         return {
