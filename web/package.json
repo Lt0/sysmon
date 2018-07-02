@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@mdi/font": "^2.4.85",
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
     "material-design-icons-iconfont": "^3.0.3",
