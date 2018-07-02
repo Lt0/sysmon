@@ -79,9 +79,9 @@
 
                 <!-- 没有数据时显示的内容 -->
                 <template slot="no-data">
-                    <v-alert :value="true" color="info" icon="warning">
-                        Getting processes info from server, please wait... ^_^
-                    </v-alert>
+                    <div id="wait-tips">
+                        <v-progress-circular indeterminate :width="3" color="primary"></v-progress-circular>
+                    </div>
                 </template>
 
                 <!-- 搜索没有匹配的结果时显示的内容 -->
@@ -269,5 +269,9 @@ export default {
 
     opacity: 0.6;
     border-radius: 3px;
+}
+
+#wait-tips {
+    padding: 5em 0em;
 }
 </style>
