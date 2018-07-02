@@ -1,17 +1,17 @@
 <template>
     <v-list>
         <v-list-tile @click="showResources">
-            <v-list-tile-action><v-icon>show_chart</v-icon></v-list-tile-action>
+            <v-list-tile-action><v-icon>mdi-chart-line-variant</v-icon></v-list-tile-action>
             <v-list-tile-content><v-list-tile-title> Resources </v-list-tile-title></v-list-tile-content>
         </v-list-tile>
 
         <v-list-tile @click="showProcesses">
-            <v-list-tile-action><v-icon>list</v-icon></v-list-tile-action>
+            <v-list-tile-action><v-icon>mdi-format-list-bulleted</v-icon></v-list-tile-action>
             <v-list-tile-content><v-list-tile-title>Processes</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
 
         <v-list-tile @click="showFS">
-            <v-list-tile-action><v-icon>storage</v-icon></v-list-tile-action>
+            <v-list-tile-action><v-icon>mdi-harddisk</v-icon></v-list-tile-action>
             <v-list-tile-content><v-list-tile-title>File Systems</v-list-tile-title></v-list-tile-content>
         </v-list-tile>
 
