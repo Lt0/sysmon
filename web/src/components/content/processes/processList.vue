@@ -93,7 +93,7 @@
 
         <div id="updatedTime" class="elevation-5">
             <v-tooltip top>
-                <span slot='activator'><v-icon>update</v-icon>&ensp;{{ latestUpdate }}</span>
+                <span slot='activator'><v-icon size="1.5em">update</v-icon>&ensp;{{ latestUpdate }}</span>
                 <span>Latest Update &ensp;{{ latestUpdate }}</span>
             </v-tooltip>
         </div>
@@ -258,6 +258,10 @@ export default {
 </script>
 
 <style scoped>
+.process-container {
+    padding: 0 0 3em 0;
+}
+
 #updatedTime {
     position: fixed;
     bottom: 0px;
@@ -269,6 +273,8 @@ export default {
 
     opacity: 0.6;
     border-radius: 3px;
+
+    font-size: 0.8em;
 }
 
 #wait-tips {
