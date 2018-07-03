@@ -1,24 +1,61 @@
 package process
 
 import (
+	"strings"
 	"bufio"
 	"path/filepath"
 	"strconv"
-	// "unicode"
 	"fmt"
-	"os/exec"
-	// "strings"
-	// "strconv"
-	// "path/filepath"
 	"os"
+	"os/user"
 	"io"
-	// "time"
-	
+
 	"github.com/astaxie/beego"
 )
 
 type AllProcessCtrl struct {
 	Controller *beego.Controller
+}
+
+
+type Process struct {
+	Pid 		string		// 进程号			stat
+	Task		[]string	// 所有线程
+	Nlwp		string		// 线程数			stat
+	State		string		// 进程状态			stat
+	Priority	string		// 动态优先级		stat
+	Nice		string		// 静态优先级		stat
+	Comm		string		// 可执行文件名		comm, stat
+	Cmdline		string		// 可执行文件路径	cmdline
+	Uid			string
+	User		string
+	TaskCPU		string		// 运行在哪个 CPU 上	stat
+
+	StartTime	string		// 系统开机后该进程启动的时间，单位为jiffies	stat
+	CPU			uint64		// cpu jiffies		stat
+	// CpuTime		time.Time
+
+	// SZ			string		// 进程占用的总内存，单位 page
+	RSS			string		// 真正具有数据页的物理内存（包含进程用到的所有共享库占用的全部内存）, byte			stat
+	// PSS			uint64		// 进程占用的实际物理内存大小，对于该进程用到的共享库，会根据使用该库的进程数量，按比例显示该进程占用的内存
+	// USS			uint64		// 进程独占的实际分配的私有内存。
+	// SHR			uint64		// 进程调用的共享库占用的内存。 
+	VSS			string		// 进程可访问的全部地址空间, byte			stat
+
+
+	// 以下和内存相关的数据从 /proc/$PID/status 文件中获取，字符串中自带 KB 的单位
+	// VmSize		string		// 虚拟地址空间大小，
+	// VmLck		string		// 已经锁住的物理内存的大小。锁住的物理内存不能交换到硬盘 
+	// VmPin		string		// 固定的内存大小
+	// VmHWM		string		// RSS 峰值大小（高峰）
+	// VmRSS		string		// 内存部分的大小。 它包含以下三个部分（VmRSS = RssAnon + RssFile + RssShmem）
+	// VmData		string		// 私有数据段的大小
+	// VmStk		string		// 堆栈段的大小
+	// VmExe		string		// 文本段的大小
+	// VmLib		string		// 共享库代码的大小
+	VmPTE		string		// 该进程的所有页表的大小
+	// VmPMD		string		// 二级页表大小
+	VmSwap		string		// 被交换到交换分区的匿名数据大小
 }
 
 type AllProcess struct {
@@ -31,55 +68,19 @@ func (p *AllProcessCtrl) Do() interface{} {
 	fmt.Println("do AllProcess")
 	p.All(&ap)
 
-	AllPidInfo(AllPids())
-
 	return ap
 }
 
 func (p *AllProcessCtrl) All(ap *AllProcess) {
-	filter := `tail -n +2 | sed 's/^\s*//g' | sed 's/\s\+/ /g'`
-	cmd := fmt.Sprintf("ps caxo %s | %s", psOutputFormatStr, filter)
-	out, err := exec.Command("sh", "-c", cmd).Output()
-	if err != nil {
-		fmt.Println("AllProcessCtrl", err)
-		return
+	for _, v := range(AllPids()) {
+		ap.Processes = append(ap.Processes, PidInfo(v))
 	}
-	ap.Processes = FormatProcStatus(out)
 }
 
-type PidStat struct {
-	Pid 		string		// 进程号			stat
-	// Tasks		[]pidInfo	// 所有线程信息
-	Nlwp		string		// 线程数			stat
-	State		string		// 进程状态			stat
-	Priority	string		// 动态优先级		stat
-	Nice		string		// 静态优先级		stat
-	Comm		string		// 可执行文件名		comm, stat
-	Cmdline		string		// 可执行文件路径	cmdline
-	// User		string
-	TaskCPU		string		// 运行在哪个 CPU 上	stat
+func PidInfo(pid string) Process {
+	var info Process
 
-	StartTime	string		// 系统开机后该进程启动的时间，单位为jiffies	stat
-	CPU			uint64		// cpu jiffies		stat
-	// CpuTime		time.Time
-
-	RSS			string		// 真正具有数据页的物理内存（包含进程用到的所有共享库占用的全部内存）			stat
-	// PSS			uint64		// 进程占用的实际物理内存大小，对于该进程用到的共享库，会根据使用该库的进程数量，按比例显示该进程占用的内存
-	// USS			uint64		// 进程独占的实际分配的私有内存。
-	// SHR			uint64		// 进程调用的共享库占用的内存。 
-	VSS			string		// 进程可访问的全部地址空间			stat
-}
-
-func AllPidInfo(pids []string) {
-	var all []PidStat
-	for _, v := range(pids) {
-		all = append(all, PidInfo(v))
-	}
-	fmt.Println("all:", all)
-}
-
-func PidInfo(pid string) PidStat {
-	var info PidStat
+	info.Pid = pid
 
 	// fill Pid, Comm, State, CPU, Priority, Nice, Nlwp, StartTime, VSS, RSS, TaskCPU by /proc/$PID/stat
 	f, err := os.Open(filepath.Join("/proc", pid, "stat"))
@@ -98,8 +99,6 @@ func PidInfo(pid string) PidStat {
 		s := string(b)
 
 		switch i {
-		case 0:
-			info.Pid = s
 		case 1:
 			info.Comm = s[1:len(s)-2]
 		case 2:
@@ -124,21 +123,45 @@ func PidInfo(pid string) PidStat {
 		default:
 		}
 	}
-
-
-	// fill cmdline by /proc/$PID/cmdline
-	cmdlineFile, err := os.Open(filepath.Join("/proc", pid, "cmdline"))
+	
+	// fill Uid, VmPTE, VmSwap from /proc/$PID/status
+	statusFile, err := os.Open(filepath.Join("/proc", pid, "status"))
 	if err != nil {
-		fmt.Printf("open /proc/%s/cmdline failed\n", pid)
+		fmt.Printf("open /proc/%s/status failed\n", pid)
 		return info
 	}
-	defer cmdlineFile.Close()
+	defer statusFile.Close()
 
-	cmdLineReader := bufio.NewReader(cmdlineFile)
-	cmdline, _ := cmdLineReader.ReadBytes('\n')
-	info.Cmdline = string(cmdline)
+	statusReader := bufio.NewReader(statusFile)
+	for {
+		b1, e := statusReader.ReadBytes(':')
+		
+		if e == io.EOF {
+			break;
+		}
+		t := string(b1[:len(b1)-1])
 
+		contentBytes, _ := statusReader.ReadBytes('\n')
+		content := string(contentBytes)
+		
+		switch t {
+		case "Uid":
+			ids := strings.Split(content, "\t")
+			info.Uid = ids[1]
+			ui, _ := user.LookupId(info.Uid)
+			info.User = ui.Username
+		case "VmPTE":
+			info.VmPTE = strings.TrimSpace(content)
+		case "VmSwap":
+			info.VmSwap = strings.TrimSpace(content)
+		}
+	}
 
-	
+	// fill theads id
+	info.Task = AllThreads(pid)
+
+	// fill cmdline
+	info.Cmdline = cmdline(pid)
+
 	return info
 }
