@@ -36,45 +36,34 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left" v-show="displayCmd">{{ props.item.Cmd }}</td>
-                    <td class="text-xs-left" v-show="displayCPU">{{ props.item.CPU}}</td>
-                    <td class="text-xs-left" v-show="displayMEM">{{ props.item.MEM }}</td>
-                    <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
-                    <td class="text-xs-left" v-show="displayCPUTime">{{ props.item.CPUTime }}</td>
-                    <td class="text-xs-left" v-show="displaySZ">
+                    <td class="text-xs-left" v-show="displayComm">{{ props.item.Comm }}</td>
+                    <td class="text-xs-left" v-show="displayCPU">{{ "cpu" }}</td>
+                    <td class="text-xs-left" v-show="displayMEM">{{ "mem" }}</td>
+                    <td class="text-xs-left" v-show="displayCPUTime">{{ "CPUTime" }}</td>
+                    <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
+                    <td class="text-xs-left" v-show="displayVmSize">
                         <v-tooltip bottom>
-                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SZ, 2)}}</span>
-                            <span>{{props.item.SZ}}KB</span>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSize, 1)}}</span>
+                            <span>{{props.item.VmSize}}</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayRSS">
+                    <td class="text-xs-left" v-show="displayVmRSS">
                         <v-tooltip bottom>
-                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.RSS, 2)}}</span>
-                            <span>{{props.item.RSS}}KB</span>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmRSS, 1)}}</span>
+                            <span>{{props.item.VmRSS}}</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayDRS">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.DRS, 2)}}</span>
-                            <span>{{props.item.DRS}}KB</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left" v-show="displayTRS">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.TRS, 2)}}</span>
-                            <span>{{props.item.TRS}}KB</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left" v-show="displayVSZ">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VSZ, 2)}}</span>
-                            <span>{{props.item.VSZ}}KB</span>
-                        </v-tooltip>
-                    </td>
+                    <td class="text-xs-left" v-show="displayVmPTE">{{ props.item.VmPTE }}</td>
+                    <td class="text-xs-left" v-show="displayVmSwap">{{ props.item.VmSwap }}</td>
                     <td class="text-xs-left" v-show="displayPid">{{ props.item.Pid }}</td>
                     <td class="text-xs-left" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
                     <td class="text-xs-left" v-show="displayState">{{ props.item.State }}</td>
                     <td class="text-xs-left" v-show="displayNice">{{ props.item.Nice }}</td>
+                    <td class="text-xs-left" v-show="displayPriority">{{ props.item.Priority }}</td>
+                    <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
+                    <td class="text-xs-left" v-show="displayUid">{{ props.item.Uid }}</td>
+                    <td class="text-xs-left" v-show="displayCmdline">{{ props.item.Cmdline }}</td>
+
                 </template>
 
                 <!-- 没有数据时显示的内容 -->
@@ -119,23 +108,27 @@ export default {
             },
             latestUpdate: null,
             search: '',
-            items: ['Cmd', 'CPU', 'MEM', 'User', 'CPUTime', 'SZ', 'RSS', 'DRS', 'TRS', 'VSZ', 'Pid', 'Nlwp', 'State', 'Nice'],
-            selectedItems: [],
+            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Cmdline'],  // 所有可显示的项目
+            selectedItems: [],  // 实际显示的项目
             selectTypes: null,
-            displayUser: false,
-            displayCmd: true,
+            
+            displayComm: true,
             displayCPU: true,
-            displayCPUTime: false,
             displayMEM: true,
-            displaySZ: false,
-            displayRSS: false,
-            displayDRS: false,
-            displayTRS: false,
-            displayVSZ: false,
+            displayCPUTime: false,
+            displayTaskCPU: false,
+            displayVmSize: false,
+            displayVmRSS: false,
+            displayVmPTE: false,
+            displayVmSwap: false,
             displayPid: false,
             displayNlwp: false,
             displayState: false,
             displayNice: false,
+            displayPriority: false,
+            displayUser: false,
+            displayUid: false,
+            displayCmdline: false,
             headers: [],
         }
     },
@@ -146,16 +139,16 @@ export default {
             } else {
                 return 0;
             }
-        }
+        },
     },
     watch: {
         selectedItems: function(){
             this.updateHeaders();
             this.updateDisplay();
         },
-        // 根据屏幕大小变化，调整显示的项目，每 135px 宽显示一个项目
+        // 根据屏幕大小变化，调整显示的项目，每 105px 宽显示一个项目
         windowSize: function(){
-            let num = Math.floor(this.windowSize.x/135);
+            let num = Math.floor(this.windowSize.x/125);
             this.selectedItems = [];
             for (let i = 0; i < num; i++){
                 if (this.items[i]){
@@ -165,7 +158,7 @@ export default {
                 }
                 
             }
-            // console.log("this.selectedItems: " + this.selectedItems);
+            console.log("this.selectedItems: " + this.selectedItems);
             this.updateHeaders();
             this.updateDisplay();
         },
@@ -188,52 +181,52 @@ export default {
             }
         },
         updateDisplay(){
-            this.displayUser = false;
-            this.displayCmd = false;
-            this.displayCPU = false;
-            this.displayCPUTime = false;
-            this.displayMEM = false;
-            this.displaySZ = false;
-            this.displayRSS = false;
-            this.displayDRS = false;
-            this.displayTRS = false;
-            this.displayVSZ = false;
-            this.displayPid = false;
-            this.displayNlwp = false;
-            this.displayState = false;
-            this.displayNice = false;
+            displayComm: true;
+            displayCPU: true;
+            displayMEM: true;
+            displayCPUTime: false;
+            displayTaskCPU: false;
+            displayVmSize: false;
+            displayVmRSS: false;
+            displayVmPTE: false;
+            displayVmSwap: false;
+            displayPid: false;
+            displayNlwp: false;
+            displayState: false;
+            displayNice: false;
+            displayPriority: false;
+            displayUser: false;
+            displayUid: false;
+            displayCmdline: false;
 
             for (let i in this.selectedItems){
                 switch(this.selectedItems[i]) {
-                    case 'User':
-                        this.displayUser = true;
-                        break;
-                    case 'Cmd':
-                        this.displayCmd = true;
+                    case 'Comm':
+                        this.displayComm = true;
                         break;
                     case 'CPU':
                         this.displayCPU = true;
                         break;
-                    case 'CPUTime':
-                        this.displayCPUTime = true;
-                        break;
                     case 'MEM':
                         this.displayMEM = true;
                         break;
-                    case 'SZ':
-                        this.displaySZ = true;
+                    case 'CPUTime':
+                        this.displayCPUTime = true;
                         break;
-                    case 'RSS':
-                        this.displayRSS = true;
+                    case 'TaskCPU':
+                        this.displayTaskCPU = true;
                         break;
-                    case 'DRS':
-                        this.displayDRS = true;
+                    case 'VmSize':
+                        this.displayVmSize = true;
                         break;
-                    case 'TRS':
-                        this.displayTRS = true;
+                    case 'VmRSS':
+                        this.displayVmRSS = true;
                         break;
-                    case 'VSZ':
-                        this.displayVSZ = true;
+                    case 'VmPTE':
+                        this.displayVmPTE = true;
+                        break;
+                    case 'VmSwap':
+                        this.displayVmSwap = true;
                         break;
                     case 'Pid':
                         this.displayPid = true;
@@ -246,6 +239,18 @@ export default {
                         break;
                     case 'Nice':
                         this.displayNice = true;
+                        break;
+                    case 'Priority':
+                        this.displayPriority = true;
+                        break;
+                    case 'User':
+                        this.displayUser = true;
+                        break;
+                    case 'Uid':
+                        this.displayUid = true;
+                        break;
+                    case 'Cmdline':
+                        this.displayCmdline = true;
                         break;
                 }
             }
