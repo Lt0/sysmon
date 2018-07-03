@@ -36,26 +36,26 @@ type Process struct {
 	// CpuTime		time.Time
 
 	// SZ			string		// 进程占用的总内存，单位 page
-	RSS			string		// 真正具有数据页的物理内存（包含进程用到的所有共享库占用的全部内存）, byte			stat
+	// RSS			string		// 真正具有数据页的物理内存（包含进程用到的所有共享库占用的全部内存）, byte			stat
 	// PSS			uint64		// 进程占用的实际物理内存大小，对于该进程用到的共享库，会根据使用该库的进程数量，按比例显示该进程占用的内存
 	// USS			uint64		// 进程独占的实际分配的私有内存。
 	// SHR			uint64		// 进程调用的共享库占用的内存。 
-	VSS			string		// 进程可访问的全部地址空间, byte			stat
+	// VSS			string		// 进程可访问的全部地址空间, byte			stat
 
 
-	// 以下和内存相关的数据从 /proc/$PID/status 文件中获取，字符串中自带 KB 的单位
-	// VmSize		string		// 虚拟地址空间大小，
+	// 以下和内存相关的数据从 /proc/$PID/status 文件中获取，单位为 KB，字符串中不带单位
+	VmSize		uint64		// 虚拟地址空间大小，
 	// VmLck		string		// 已经锁住的物理内存的大小。锁住的物理内存不能交换到硬盘 
 	// VmPin		string		// 固定的内存大小
 	// VmHWM		string		// RSS 峰值大小（高峰）
-	// VmRSS		string		// 内存部分的大小。 它包含以下三个部分（VmRSS = RssAnon + RssFile + RssShmem）
+	VmRSS		uint64		// 内存部分的大小。 它包含以下三个部分（VmRSS = RssAnon + RssFile + RssShmem）
 	// VmData		string		// 私有数据段的大小
 	// VmStk		string		// 堆栈段的大小
 	// VmExe		string		// 文本段的大小
 	// VmLib		string		// 共享库代码的大小
-	VmPTE		string		// 该进程的所有页表的大小
+	VmPTE		uint64		// 该进程的所有页表的大小
 	// VmPMD		string		// 二级页表大小
-	VmSwap		string		// 被交换到交换分区的匿名数据大小
+	VmSwap		uint64		// 被交换到交换分区的匿名数据大小
 }
 
 type AllProcess struct {
@@ -114,10 +114,10 @@ func PidInfo(pid string) Process {
 			info.Nlwp = s
 		case 21:
 			info.StartTime = s
-		case 22:
-			info.VSS = s
-		case 23:
-			info.RSS = s
+		// case 22:
+		// 	info.VSS = s
+		// case 23:
+		// 	info.RSS = s
 		case 38:
 			info.TaskCPU = s
 		default:
@@ -150,10 +150,18 @@ func PidInfo(pid string) Process {
 			info.Uid = ids[1]
 			ui, _ := user.LookupId(info.Uid)
 			info.User = ui.Username
+		case "VmSize":
+			str := strings.TrimSpace(content)
+			info.VmSize, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
+		case "VmRSS":
+			str := strings.TrimSpace(content)
+			info.VmRSS, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
 		case "VmPTE":
-			info.VmPTE = strings.TrimSpace(content)
+			str := strings.TrimSpace(content)
+			info.VmPTE, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
 		case "VmSwap":
-			info.VmSwap = strings.TrimSpace(content)
+			str := strings.TrimSpace(content)
+			info.VmSwap, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
 		}
 	}
 
