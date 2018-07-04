@@ -49,6 +49,8 @@ export default {
         
     },
     created () {
+        console.log("created layout");
+        cm.updateSysInfoAll();
         cm.bus.$on('changeContent', this.changeContentHandler);
     },
     methods: {

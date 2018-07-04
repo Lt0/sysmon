@@ -2,6 +2,7 @@ var rsc = require('./resources')
 var process = require('./processes')
 var fs = require('./fs')
 var fmtSize = require('./fmtSize')
+var sysInfo = require('./sysInfo')
 
 export default {
     bus: null,
@@ -10,4 +11,5 @@ export default {
     process: process,
     fmtSize: fmtSize,
     fs: fs,
+    sysInfo: sysInfo,
 }

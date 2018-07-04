@@ -163,11 +163,16 @@ export default {
             this.updateDisplay();
         },
         info: function(){
+            console.log("cm.sysInfo.hw.mem: ", cm.sysInfo.hw.mem)
+            this.callTest();
             let time = new Date();
             this.latestUpdate = time.toLocaleTimeString();
         },
     },
     methods: {
+        callTest() {
+            cm.sysInfo.setMem();
+        },
         updateHeaders(){
             // console.log("updateHeaders: " + this.selectedItems);
             this.headers = [];
