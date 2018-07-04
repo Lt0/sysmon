@@ -73,20 +73,25 @@ func (p *AllProcessCtrl) Do() interface{} {
 
 func (p *AllProcessCtrl) All(ap *AllProcess) {
 	for _, v := range(AllPids()) {
-		ap.Processes = append(ap.Processes, PidInfo(v))
+		info, err := PidInfo(v)
+		if err != nil {
+			fmt.Printf("not add %v cause: %v\n", v, err)
+			continue
+		}
+		ap.Processes = append(ap.Processes, info)
 	}
 }
 
-func PidInfo(pid string) Process {
+func PidInfo(pid string) (Process, error) {
 	var info Process
 
 	info.Pid = pid
 
-	// fill Pid, Comm, State, CPU, Priority, Nice, Nlwp, StartTime, VSS, RSS, TaskCPU by /proc/$PID/stat
+	// Fill Pid, Comm, State, CPU, Priority, Nice, Nlwp, StartTime, VSS, RSS, TaskCPU by /proc/$PID/stat
 	f, err := os.Open(filepath.Join("/proc", pid, "stat"))
 	if err != nil {
-		fmt.Printf("open /proc/%s/stat failed\n", pid)
-		return info
+		// fmt.Printf("open /proc/%s/stat failed\n", pid)
+		return info, fmt.Errorf("open /proc/%s/stat failed\n", pid)
 	}
 	defer f.Close()
 
@@ -119,16 +124,16 @@ func PidInfo(pid string) Process {
 		// case 23:
 		// 	info.RSS = s
 		case 38:
-			info.TaskCPU = s
+			info.TaskCPU = "cpu" + s
 		default:
 		}
 	}
 	
-	// fill Uid, VmPTE, VmSwap from /proc/$PID/status
+	// Fill Uid, VmPTE, VmSwap from /proc/$PID/status
 	statusFile, err := os.Open(filepath.Join("/proc", pid, "status"))
 	if err != nil {
-		fmt.Printf("open /proc/%s/status failed\n", pid)
-		return info
+		// fmt.Printf("open /proc/%s/status failed\n", pid)
+		return info, fmt.Errorf("open /proc/%s/status failed\n", pid)
 	}
 	defer statusFile.Close()
 
@@ -165,11 +170,11 @@ func PidInfo(pid string) Process {
 		}
 	}
 
-	// fill theads id
+	// Fill theads id
 	info.Task = AllThreads(pid)
 
-	// fill cmdline
+	// Fill cmdline
 	info.Cmdline = cmdline(pid)
 
-	return info
+	return info, nil
 }
