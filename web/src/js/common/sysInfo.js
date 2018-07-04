@@ -15,5 +15,5 @@ function updateSysInfoAll() {
     })
 }
 
-exports.all = SysInfo;
+exports.SysInfo = SysInfo;
 exports.updateSysInfoAll = updateSysInfoAll;
