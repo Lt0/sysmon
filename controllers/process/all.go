@@ -10,6 +10,7 @@ import (
 	"os/user"
 	"io"
 
+	"github.com/Lt0/sysmon/utils/proc/pid"
 	"github.com/astaxie/beego"
 )
 
@@ -21,17 +22,17 @@ type AllProcessCtrl struct {
 type Process struct {
 	Pid 		string		// 进程号			stat
 	Task		[]string	// 所有线程
-	Nlwp		string		// 线程数			stat
+	Nlwp		int64		// 线程数			stat
 	State		string		// 进程状态			stat
-	Priority	string		// 动态优先级		stat
-	Nice		string		// 静态优先级		stat
+	Priority	int64		// 动态优先级		stat
+	Nice		int64		// 静态优先级		stat
 	Comm		string		// 可执行文件名		comm, stat
 	Cmdline		string		// 可执行文件路径	cmdline
 	Uid			string
 	User		string
 	TaskCPU		string		// 运行在哪个 CPU 上	stat
 
-	StartTime	string		// 系统开机后该进程启动的时间，单位为jiffies	stat
+	StartTime	uint64		// 系统开机后该进程启动的时间，单位为jiffies	stat
 	CPU			uint64		// cpu jiffies		stat
 	// CpuTime		time.Time
 
@@ -82,58 +83,32 @@ func (p *AllProcessCtrl) All(ap *AllProcess) {
 	}
 }
 
-func PidInfo(pid string) (Process, error) {
+func PidInfo(pidStr string) (Process, error) {
 	var info Process
 
-	info.Pid = pid
+	info.Pid = pidStr
 
 	// Fill Pid, Comm, State, CPU, Priority, Nice, Nlwp, StartTime, VSS, RSS, TaskCPU by /proc/$PID/stat
-	f, err := os.Open(filepath.Join("/proc", pid, "stat"))
-	if err != nil {
-		// fmt.Printf("open /proc/%s/stat failed\n", pid)
-		return info, fmt.Errorf("open /proc/%s/stat failed\n", pid)
+	stat, _ := pid.Stat(pidStr)
+	if len(stat.Comm) > 2 {
+		info.Comm = stat.Comm[1:len(stat.Comm)-2]
+	} else {
+		info.Comm = stat.Comm
 	}
-	defer f.Close()
+	info.State = stat.State
+	info.CPU = uint64(stat.UTime) + uint64(stat.STime) + uint64(stat.CUTime) + uint64(stat.CSTime)
+	info.Priority = stat.Priority
+	info.Nice = stat.Nice
+	info.Nlwp = stat.NumThreads
+	info.StartTime = stat.StartTime
+	info.TaskCPU = "cpu" + strconv.Itoa(stat.Processor)
 
-	statReader := bufio.NewReader(f)
-	for i := 0; ; i++ {
-		b, e := statReader.ReadBytes(' ')
-		if e == io.EOF {
-			break;
-		}
-		s := string(b)
-
-		switch i {
-		case 1:
-			info.Comm = s[1:len(s)-2]
-		case 2:
-			info.State = s
-		case 13, 14, 15, 16:
-			n, _ := strconv.ParseUint(s, 10, 64)
-			info.CPU += n
-		case 17:
-			info.Priority = s
-		case 18:
-			info.Nice = s
-		case 19:
-			info.Nlwp = s
-		case 21:
-			info.StartTime = s
-		// case 22:
-		// 	info.VSS = s
-		// case 23:
-		// 	info.RSS = s
-		case 38:
-			info.TaskCPU = "cpu" + s
-		default:
-		}
-	}
 	
 	// Fill Uid, VmPTE, VmSwap from /proc/$PID/status
-	statusFile, err := os.Open(filepath.Join("/proc", pid, "status"))
+	statusFile, err := os.Open(filepath.Join("/proc", pidStr, "status"))
 	if err != nil {
-		// fmt.Printf("open /proc/%s/status failed\n", pid)
-		return info, fmt.Errorf("open /proc/%s/status failed\n", pid)
+		// fmt.Printf("open /proc/%s/status failed\n", pidStr)
+		return info, fmt.Errorf("open /proc/%s/status failed\n", pidStr)
 	}
 	defer statusFile.Close()
 
@@ -171,10 +146,10 @@ func PidInfo(pid string) (Process, error) {
 	}
 
 	// Fill theads id
-	info.Task = AllThreads(pid)
+	info.Task = AllThreads(pidStr)
 
 	// Fill cmdline
-	info.Cmdline = cmdline(pid)
+	info.Cmdline = cmdline(pidStr)
 
 	return info, nil
 }
