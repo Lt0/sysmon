@@ -1,14 +1,9 @@
 package process
 
 import (
-	"strings"
-	"bufio"
-	"path/filepath"
 	"strconv"
 	"fmt"
-	"os"
 	"os/user"
-	"io"
 
 	"github.com/Lt0/sysmon/utils/proc/pid"
 	"github.com/astaxie/beego"
@@ -28,7 +23,7 @@ type Process struct {
 	Nice		int64		// 静态优先级		stat
 	Comm		string		// 可执行文件名		comm, stat
 	Cmdline		string		// 可执行文件路径	cmdline
-	Uid			string
+	Uid			uint64
 	User		string
 	TaskCPU		string		// 运行在哪个 CPU 上	stat
 
@@ -76,7 +71,7 @@ func (p *AllProcessCtrl) All(ap *AllProcess) {
 	for _, v := range(AllPids()) {
 		info, err := PidInfo(v)
 		if err != nil {
-			fmt.Printf("not add %v cause: %v\n", v, err)
+			// fmt.Printf("not add %v cause by: %v\n", v, err)
 			continue
 		}
 		ap.Processes = append(ap.Processes, info)
@@ -103,47 +98,18 @@ func PidInfo(pidStr string) (Process, error) {
 	info.StartTime = stat.StartTime
 	info.TaskCPU = "cpu" + strconv.Itoa(stat.Processor)
 
-	
-	// Fill Uid, VmPTE, VmSwap from /proc/$PID/status
-	statusFile, err := os.Open(filepath.Join("/proc", pidStr, "status"))
+
+	status, err := pid.Status(pidStr)
 	if err != nil {
-		// fmt.Printf("open /proc/%s/status failed\n", pidStr)
-		return info, fmt.Errorf("open /proc/%s/status failed\n", pidStr)
+		return info, fmt.Errorf("run pid.Status failed: %v\n", err)
 	}
-	defer statusFile.Close()
-
-	statusReader := bufio.NewReader(statusFile)
-	for {
-		b1, e := statusReader.ReadBytes(':')
-		
-		if e == io.EOF {
-			break;
-		}
-		t := string(b1[:len(b1)-1])
-
-		contentBytes, _ := statusReader.ReadBytes('\n')
-		content := string(contentBytes)
-		
-		switch t {
-		case "Uid":
-			ids := strings.Split(content, "\t")
-			info.Uid = ids[1]
-			ui, _ := user.LookupId(info.Uid)
-			info.User = ui.Username
-		case "VmSize":
-			str := strings.TrimSpace(content)
-			info.VmSize, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
-		case "VmRSS":
-			str := strings.TrimSpace(content)
-			info.VmRSS, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
-		case "VmPTE":
-			str := strings.TrimSpace(content)
-			info.VmPTE, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
-		case "VmSwap":
-			str := strings.TrimSpace(content)
-			info.VmSwap, _ = strconv.ParseUint(str[:len(str)-3], 10, 64)
-		}
-	}
+	info.Uid = status.Uid[0]
+	ui, _ := user.LookupId(strconv.FormatUint(info.Uid, 10))
+	info.User = ui.Username
+	info.VmSize = status.VmSize
+	info.VmRSS = status.VmRSS
+	info.VmPTE = status.VmPTE
+	info.VmSwap = status.VmSwap
 
 	// Fill theads id
 	info.Task = AllThreads(pidStr)
