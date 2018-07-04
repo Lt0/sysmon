@@ -22,7 +22,11 @@ func init() {
                 &controllers.InfoController{},
             ),
         ),
-        
+        beego.NSNamespace("/sysInfo",
+            beego.NSInclude(
+                &controllers.SysInfoController{},
+            ),
+        ),
     )
 
     beego.AddNamespace(ns)
