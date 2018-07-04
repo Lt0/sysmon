@@ -6,6 +6,7 @@ import (
 	"os/user"
 
 	"github.com/Lt0/sysmon/utils/proc/pid"
+	"github.com/Lt0/sysmon/utils/proc"
 	"github.com/astaxie/beego"
 )
 
@@ -68,7 +69,7 @@ func (p *AllProcessCtrl) Do() interface{} {
 }
 
 func (p *AllProcessCtrl) All(ap *AllProcess) {
-	for _, v := range(AllPids()) {
+	for _, v := range(proc.AllPids()) {
 		info, err := PidInfo(v)
 		if err != nil {
 			// fmt.Printf("not add %v cause by: %v\n", v, err)
@@ -112,10 +113,11 @@ func PidInfo(pidStr string) (Process, error) {
 	info.VmSwap = status.VmSwap
 
 	// Fill theads id
-	info.Task = AllThreads(pidStr)
+	info.Task = pid.Task(pidStr)
 
 	// Fill cmdline
-	info.Cmdline = cmdline(pidStr)
+	cmdline, _ := pid.Cmdline(pidStr)
+	info.Cmdline = cmdline.Cmdline
 
 	return info, nil
 }
