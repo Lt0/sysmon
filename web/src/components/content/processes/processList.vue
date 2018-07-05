@@ -37,10 +37,10 @@
                 </template>
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-left" v-show="displayComm">{{ props.item.Comm }}</td>
-                    <td class="text-xs-left" v-show="displayCPU">{{ "cpu" }}</td>
+                    <td class="text-xs-left" v-show="displayCPU">{{props.item.CPU}}%</td>
                     <td class="text-xs-left" v-show="displayMEM">{{props.item.MEM}}%</td>
                     <td class="text-xs-left" v-show="displayCPUTime">{{ "CPUTime" }}</td>
-                    <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
+                    <td class="text-xs-left" v-show="displayTaskCPU">cpu{{ props.item.TaskCPU }}</td>
                     <td class="text-xs-left" v-show="displayVmSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSize, 1)}}</span>
@@ -135,6 +135,11 @@ export default {
             displayUid: false,
             displayCmdline: false,
             headers: [],
+
+            avgJiffies: 0,
+            preJiffies: 0,
+
+            prePidJiffies: {},
         }
     },
     computed: {
@@ -168,26 +173,47 @@ export default {
             this.updateDisplay();
         },
         info: function(){
+            this.updateJiffies();
+            this.formatInfo();
+
             let time = new Date();
             this.latestUpdate = time.toLocaleTimeString();
-            this.formatInfo();
         },
     },
     methods: {
         formatInfo() {
-            let processes = this.info.Processes
+            let tmpPrePidJiffies = {};
+            let processes = this.info.Processes;
             for(let i in processes) {
-                processes[i].MEM = (processes[i].VmRSS/serverInfo.SysInfo.HW.Mem.PhySize*100).toFixed(2);
+                let p = processes[i];
+                // format MEM
+                p.MEM = (p.VmRSS/serverInfo.SysInfo.HW.Mem.PhySize*100).toFixed(2);
+
+                // format CPU
+                if(!this.prePidJiffies[p.Pid]) {
+                    p.CPU = (p.UsedCPU/this.avgJiffies*100).toFixed(2);
+                } else {
+                    p.CPU = ((p.UsedCPU-this.prePidJiffies[p.Pid])/this.avgJiffies*100).toFixed(2);
+                }
+                tmpPrePidJiffies[p.Pid] = p.UsedCPU;
+                // format CPU end
             }
+            this.prePidJiffies = tmpPrePidJiffies;
+        },
+        updateJiffies() {
+            let c = this.info.Cores[0];
+            let cur = c.User + c.Nice + c.System + c.Idle + c.Iowait + c.Irq + c.Softirq + c.Steal + c.Guest + c.Guest_nice
+            this.avgJiffies = (cur - this.preJiffies)/this.info.CoreNum;
+            this.preJiffies = cur;
         },
         updateHeaders(){
             // console.log("updateHeaders: " + this.selectedItems);
             this.headers = [];
             for (let item in this.selectedItems){
                 let t = this.selectedItems[item];
-                if (this.selectedItems[item] == 'CPU'){
-                    t += "(%)";
-                }
+                // if (this.selectedItems[item] == 'CPU'){
+                //     t += "(%)";
+                // }
                 let hdr = {text: t, value: this.selectedItems[item]};
                 this.headers.push(hdr);
             }
