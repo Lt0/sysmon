@@ -38,7 +38,7 @@
                 <template slot="items" slot-scope="props">
                     <td class="text-xs-left" v-show="displayComm">{{ props.item.Comm }}</td>
                     <td class="text-xs-left" v-show="displayCPU">{{ "cpu" }}</td>
-                    <td class="text-xs-left" v-show="displayMEM">{{ "mem" }}</td>
+                    <td class="text-xs-left" v-show="displayMEM">{{props.item.MEM}}%</td>
                     <td class="text-xs-left" v-show="displayCPUTime">{{ "CPUTime" }}</td>
                     <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
                     <td class="text-xs-left" v-show="displayVmSize">
@@ -93,6 +93,10 @@
 import selection from '@/components/common/selection'
 import cm from '../../../js/common'
 
+// 获取 server 信息，当前仅获取 SysInfo
+let serverInfo = {};
+cm.sysInfo.getSysInfo(serverInfo)
+
 export default {
     name: 'processList',
     components: {
@@ -102,6 +106,7 @@ export default {
     data() {
         return {
             cm: cm,
+            serverInfo: serverInfo,
             windowSize: {
                 x: 0,
                 y: 0
@@ -163,22 +168,24 @@ export default {
             this.updateDisplay();
         },
         info: function(){
-            console.log("cm.sysInfo.hw.mem: ", cm.sysInfo.hw.mem)
-            this.callTest();
             let time = new Date();
             this.latestUpdate = time.toLocaleTimeString();
+            this.formatInfo();
         },
     },
     methods: {
-        callTest() {
-            cm.sysInfo.setMem();
+        formatInfo() {
+            let processes = this.info.Processes
+            for(let i in processes) {
+                processes[i].MEM = (processes[i].VmRSS/serverInfo.SysInfo.HW.Mem.PhySize*100).toFixed(2);
+            }
         },
         updateHeaders(){
             // console.log("updateHeaders: " + this.selectedItems);
             this.headers = [];
             for (let item in this.selectedItems){
                 let t = this.selectedItems[item];
-                if (this.selectedItems[item] == 'CPU' || this.selectedItems[item] == 'MEM'){
+                if (this.selectedItems[item] == 'CPU'){
                     t += "(%)";
                 }
                 let hdr = {text: t, value: this.selectedItems[item]};

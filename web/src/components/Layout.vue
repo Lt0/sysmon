@@ -49,7 +49,6 @@ export default {
         
     },
     created () {
-        console.log("created layout");
         cm.bus.$on('changeContent', this.changeContentHandler);
     },
     methods: {
