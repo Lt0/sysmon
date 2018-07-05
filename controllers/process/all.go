@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"fmt"
 	"os/user"
+	"time"
 
 	"github.com/Lt0/sysmon/utils/proc/pid"
 	"github.com/Lt0/sysmon/utils/proc"
@@ -26,10 +27,10 @@ type Process struct {
 	Cmdline		string		// 可执行文件路径	cmdline
 	Uid			uint64
 	User		string
-	TaskCPU		string		// 运行在哪个 CPU 上	stat
+	TaskCPU		int			// 运行在哪个 CPU 上	stat
 
 	StartTime	uint64		// 系统开机后该进程启动的时间，单位为jiffies	stat
-	CPU			uint64		// cpu jiffies		stat
+	UsedCPU		uint64		// 该进程所使用的 CPU，单位为 jiffies		stat
 	// CpuTime		time.Time
 
 	// SZ			string		// 进程占用的总内存，单位 page
@@ -54,22 +55,29 @@ type Process struct {
 	// VmPMD		string		// 二级页表大小
 	VmSwap		uint64		// 被交换到交换分区的匿名数据大小
 	VmShare		uint64		// 共享部分的内存
+
+	
 }
 
 type AllProcess struct {
-	Processes 	[]Process
+	TimeStamp 	time.Time
+	CoreNum		int			// 设备的内核总数
+	Cores		[]proc.CPU	// 每个 CPU 核心的信息
+	Processes 	[]Process	// 所有的线程信息
 }
 
 func (p *AllProcessCtrl) Do() interface{} {
 	var ap AllProcess
 
 	fmt.Println("do AllProcess")
-	p.All(&ap)
+	ap.TimeStamp = time.Now()
+	p.AllPidInfo(&ap)
+	ap.Cores, ap.CoreNum = coresInfo()
 
 	return ap
 }
 
-func (p *AllProcessCtrl) All(ap *AllProcess) {
+func (p *AllProcessCtrl) AllPidInfo(ap *AllProcess) {
 	for _, v := range(proc.AllPids()) {
 		info, err := PidInfo(v)
 		if err != nil {
@@ -93,12 +101,12 @@ func PidInfo(pidStr string) (Process, error) {
 		info.Comm = stat.Comm
 	}
 	info.State = stat.State
-	info.CPU = uint64(stat.UTime) + uint64(stat.STime) + uint64(stat.CUTime) + uint64(stat.CSTime)
+	info.UsedCPU = uint64(stat.UTime) + uint64(stat.STime) + uint64(stat.CUTime) + uint64(stat.CSTime)
 	info.Priority = stat.Priority
 	info.Nice = stat.Nice
 	info.Nlwp = stat.NumThreads
 	info.StartTime = stat.StartTime
-	info.TaskCPU = "cpu" + strconv.Itoa(stat.Processor)
+	info.TaskCPU = stat.Processor
 
 
 	status, err := pid.Status(pidStr)
@@ -127,4 +135,10 @@ func PidInfo(pidStr string) (Process, error) {
 	info.VmShare = statm.Share
 
 	return info, nil
+}
+
+func coresInfo() ([]proc.CPU, int) {
+	totalStat, _ := proc.Stat()
+
+	return totalStat.CPUs, len(totalStat.CPUs) - 1
 }
