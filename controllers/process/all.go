@@ -53,6 +53,7 @@ type Process struct {
 	VmPTE		uint64		// 该进程的所有页表的大小
 	// VmPMD		string		// 二级页表大小
 	VmSwap		uint64		// 被交换到交换分区的匿名数据大小
+	VmShare		uint64		// 共享部分的内存
 }
 
 type AllProcess struct {
@@ -87,7 +88,7 @@ func PidInfo(pidStr string) (Process, error) {
 	// Fill Pid, Comm, State, CPU, Priority, Nice, Nlwp, StartTime, VSS, RSS, TaskCPU by /proc/$PID/stat
 	stat, _ := pid.Stat(pidStr)
 	if len(stat.Comm) > 2 {
-		info.Comm = stat.Comm[1:len(stat.Comm)-2]
+		info.Comm = stat.Comm[1:len(stat.Comm)-1]
 	} else {
 		info.Comm = stat.Comm
 	}
@@ -118,6 +119,12 @@ func PidInfo(pidStr string) (Process, error) {
 	// Fill cmdline
 	cmdline, _ := pid.Cmdline(pidStr)
 	info.Cmdline = cmdline.Cmdline
+
+	statm, err := pid.Statm(pidStr)
+	if err != nil {
+		return info, fmt.Errorf("run pid.Statm failed: %v\n", err)
+	}
+	info.VmShare = statm.Share
 
 	return info, nil
 }
