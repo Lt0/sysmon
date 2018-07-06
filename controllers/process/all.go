@@ -114,7 +114,10 @@ func PidInfo(pidStr string) (Process, error) {
 		return info, fmt.Errorf("run pid.Status failed: %v\n", err)
 	}
 	info.Uid = status.Uid[0]
-	ui, _ := user.LookupId(strconv.FormatUint(info.Uid, 10))
+	ui, err := user.LookupId(strconv.FormatUint(info.Uid, 10))
+	if err != nil {
+		return info, err
+	}
 	info.User = ui.Username
 	info.VmSize = status.VmSize
 	info.VmRSS = status.VmRSS
