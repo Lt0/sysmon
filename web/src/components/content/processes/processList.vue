@@ -40,7 +40,7 @@
                     <td class="text-xs-left" v-show="displayCPU">{{props.item.CPU}}%</td>
                     <td class="text-xs-left" v-show="displayMEM">{{props.item.MEM}}%</td>
                     <td class="text-xs-left" v-show="displayCPUTime">{{ "CPUTime" }}</td>
-                    <td class="text-xs-left" v-show="displayTaskCPU">cpu{{ props.item.TaskCPU }}</td>
+                    <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
                     <td class="text-xs-left" v-show="displayVmSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSize, 1)}}</span>
@@ -197,6 +197,9 @@ export default {
                 }
                 tmpPrePidJiffies[p.Pid] = p.UsedCPU;
                 // format CPU end
+
+                //format TaskCPU
+                p.TaskCPU = "cpu" + p.TaskCPU;
             }
             this.prePidJiffies = tmpPrePidJiffies;
         },
