@@ -41,9 +41,8 @@ docker run --name sysmon --restart=always -d -p 4096:2048 -it sysmon
 ```
 bee run -gendoc=true
 ```
-
-浏览器访问 localhost:2048 即可访问默认网页
 浏览器访问 localhost:2048/swagger 即可查看后端 API
+如果要调试前端，需要参考下面的说明启动前端服务，然后通过浏览器访问 localhost:2047 进行调试
 
 ### 前端
 参考 web 目录下的 README.md

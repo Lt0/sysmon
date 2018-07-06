@@ -9,7 +9,7 @@ Note: If your network is slow when connecting to npm repository, please use cnpm
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# serve with hot reload at 0.0.0.0:2047, if you have run server and the server has served on 0.0.0.0:208, you can visit 0.0.0.0:2047 on browser to debug.
 npm run dev
 
 # build for production with minification
