@@ -27,7 +27,7 @@ type IOInfo struct {
 
 func IO(pid string) (IOInfo, error) {
 	var info IOInfo
-	f, err := os.Open(filepath.Join("/proc", pid, "io"))
+	f, err := os.Open(filepath.Join(procfs, pid, "io"))
 	if err != nil {
 		return info, err
 	}

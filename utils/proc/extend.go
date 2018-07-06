@@ -6,11 +6,11 @@ import (
 	"strconv"
 )
 
-// return all pids in /proc
+// return all pids in procfs
 func AllPids() []string {
-	p, err := os.Open("/proc")
+	p, err := os.Open(procfs)
 	if err != nil {
-		fmt.Println("can not open /proc")
+		fmt.Println("can not open", procfs)
 		return nil
 	}
 
@@ -19,7 +19,7 @@ func AllPids() []string {
 	var files []string
 	files, err = p.Readdirnames(0)
 	if err != nil {
-		fmt.Println("Readdirnames /proc failed")
+		fmt.Printf("Readdirnames %v failed\n", procfs)
 		return nil
 	}
 

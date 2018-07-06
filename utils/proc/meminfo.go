@@ -7,6 +7,7 @@ import (
 	"io"
 	"strings"
 	"strconv"
+	"path/filepath"
 )
 
 // unit of mem info is KB
@@ -62,9 +63,9 @@ type Meminfo struct {
 func GetMeminfo() (Meminfo, error) {
 	var mi Meminfo
 
-	f, err := os.Open("/proc/meminfo")
+	f, err := os.Open(filepath.Join(procfs, "meminfo"))
 	if err != nil {
-		return mi, fmt.Errorf("open /proc/meminfo failed\n")
+		return mi, fmt.Errorf("open %v/meminfo failed: %v\n", procfs, err)
 	}
 	defer f.Close()
 

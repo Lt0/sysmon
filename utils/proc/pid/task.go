@@ -9,9 +9,9 @@ import (
 type TaskInfo []string
 
 func Task(pid string) TaskInfo {
-	t, err := os.Open(filepath.Join("/proc", pid, "task"))
+	t, err := os.Open(filepath.Join(procfs, pid, "task"))
 	if err != nil {
-		fmt.Println("can not open /proc")
+		fmt.Println("can not open", procfs)
 		return nil
 	}
 
@@ -20,7 +20,7 @@ func Task(pid string) TaskInfo {
 	var tasks TaskInfo
 	tasks, err = t.Readdirnames(0)
 	if err != nil {
-		fmt.Println("Readdirnames /proc failed")
+		fmt.Println("Readdirnames failed")
 		return nil
 	}
 	return tasks

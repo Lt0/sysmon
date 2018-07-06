@@ -67,9 +67,9 @@ type PidStatInfo struct {
 
 func Stat(pid string) (PidStatInfo, error) {
 	var stat PidStatInfo
-	f, err := os.Open(filepath.Join("/proc", pid, "stat"))
+	f, err := os.Open(filepath.Join(procfs, pid, "stat"))
 	if err != nil {
-		return stat, fmt.Errorf("GetStat: open /proc/%s/pid failed, err: %v\n", pid, err)
+		return stat, fmt.Errorf("GetStat: open %v/%s/pid failed, err: %v\n", procfs, pid, err)
 	}
 	defer f.Close()
 

@@ -63,9 +63,9 @@ type StatusInfo struct{
 
 func Status(pid string) (StatusInfo, error) {
 	var status StatusInfo
-	f, err := os.Open(filepath.Join("/proc", pid, "status"))
+	f, err := os.Open(filepath.Join(procfs, pid, "status"))
 	if err != nil {
-		return status, fmt.Errorf("Pid Status: open /proc/%v/status failed: %v\n", pid, err)
+		return status, fmt.Errorf("Pid Status: open %v/%v/status failed: %v\n", procfs, pid, err)
 	}
 	defer f.Close()
 

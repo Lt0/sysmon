@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type StatInfo struct {
@@ -41,9 +42,9 @@ type CPU struct {
 
 func Stat() (StatInfo, error) {
 	var stat StatInfo
-	f, err := os.Open("/proc/stat")
+	f, err := os.Open(filepath.Join(procfs, "stat"))
 	if err != nil {
-		return stat, fmt.Errorf("Stat Open /proc/stat failed: %v\n", err)
+		return stat, fmt.Errorf("Stat Open %v/stat failed: %v\n", procfs, err)
 	}
 	defer f.Close()
 

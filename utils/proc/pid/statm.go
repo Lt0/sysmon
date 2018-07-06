@@ -38,9 +38,9 @@ type StatmInfo struct {
 func Statm(pid string) (StatmInfo, error) {
 	var statm StatmInfo
 
-	f, err := os.Open(filepath.Join("/proc", pid, "statm"))
+	f, err := os.Open(filepath.Join(procfs, pid, "statm"))
 	if err != nil {
-		return statm, fmt.Errorf("Statm: Open /proc/%v/statm failed: %v\n", pid, err)
+		return statm, fmt.Errorf("Statm: Open %v/%v/statm failed: %v\n", procfs, pid, err)
 	}
 	defer f.Close()
 
