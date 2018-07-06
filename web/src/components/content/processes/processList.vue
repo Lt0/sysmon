@@ -39,7 +39,12 @@
                     <td class="text-xs-left" v-show="displayComm">{{ props.item.Comm }}</td>
                     <td class="text-xs-left" v-show="displayCPU">{{props.item.CPU}}%</td>
                     <td class="text-xs-left" v-show="displayMEM">{{props.item.MEM}}%</td>
-                    <td class="text-xs-left" v-show="displayCPUTime">{{ "CPUTime" }}</td>
+                    <td class="text-xs-left" v-show="displayCPUTime">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ timeParseSec(props.item.CPUTime) }}</span>
+                            <span>{{props.item.CPUTime}} sec</span>
+                        </v-tooltip>
+                    </td>
                     <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
                     <td class="text-xs-left" v-show="displayVmSize">
                         <v-tooltip bottom>
@@ -140,6 +145,8 @@ export default {
             preJiffies: 0,
 
             prePidJiffies: {},
+
+            secJiffies: 0,  // 单个核心从系统启动以来平均每秒产生的节拍数
         }
     },
     computed: {
@@ -168,7 +175,7 @@ export default {
                 }
                 
             }
-            console.log("this.selectedItems: " + this.selectedItems);
+            // console.log("this.selectedItems: " + this.selectedItems);
             this.updateHeaders();
             this.updateDisplay();
         },
@@ -198,8 +205,12 @@ export default {
                 tmpPrePidJiffies[p.Pid] = p.UsedCPU;
                 // format CPU end
 
-                //format TaskCPU
+                // format TaskCPU
                 p.TaskCPU = "cpu" + p.TaskCPU;
+
+                // format CPUTime
+                // 进程一共消耗的节拍数/单个核心一秒一共能产生的节拍数 = 进程使用单个核心的 CPU 时长（sec）
+                p.CPUTime = parseInt(p.UsedCPU/this.secJiffies);
             }
             this.prePidJiffies = tmpPrePidJiffies;
         },
@@ -208,6 +219,8 @@ export default {
             let cur = c.User + c.Nice + c.System + c.Idle + c.Iowait + c.Irq + c.Softirq + c.Steal + c.Guest + c.Guest_nice
             this.avgJiffies = (cur - this.preJiffies)/this.info.CoreNum;
             this.preJiffies = cur;
+
+            this.secJiffies = cur/this.info.UpTime.Uptime/this.info.CoreNum;
         },
         updateHeaders(){
             // console.log("updateHeaders: " + this.selectedItems);
@@ -298,6 +311,26 @@ export default {
         },
         onResize(){
             this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+        },
+        timeParseSec(sec) {
+            sec = parseInt(sec)
+            let h = parseInt(sec/3600).toString();
+            if(h.length < 2) {
+                h = "0" + h
+            }
+
+            sec = sec%3600;
+            let m = parseInt(sec/60).toString();
+            if(m.length < 2) {
+                m = "0" + m
+            }
+
+            let s = (sec%60).toString()
+            if(s.length < 2) {
+                s = "0" + s
+            }
+
+            return h + ":" + m + ":" + s
         },
     },
 }
