@@ -3,6 +3,7 @@
 > sysmon frontend
 
 ## Build Setup
+Note: If your network is slow when connecting to npm repository, please use cnpm instead of npm(check https://npm.taobao.org/ for how to use cnpm).
 
 ``` bash
 # install dependencies
