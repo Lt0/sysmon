@@ -41,21 +41,15 @@ type Process struct {
 	// VSS			string		// 进程可访问的全部地址空间, byte			stat
 
 
-	// 以下和内存相关的数据从 /proc/$PID/status 文件中获取，单位为 KB，字符串中不带单位
+	// 以下和内存相关的数据从 /proc/$PID/status 和 /proc/$PID/statm 文件中获取，单位为 KB，字符串中不带单位
 	VmSize		uint64		// 虚拟地址空间大小，
-	// VmLck		string		// 已经锁住的物理内存的大小。锁住的物理内存不能交换到硬盘 
-	// VmPin		string		// 固定的内存大小
-	// VmHWM		string		// RSS 峰值大小（高峰）
 	VmRSS		uint64		// 内存部分的大小。 它包含以下三个部分（VmRSS = RssAnon + RssFile + RssShmem）
-	// VmData		string		// 私有数据段的大小
-	// VmStk		string		// 堆栈段的大小
-	// VmExe		string		// 文本段的大小
-	// VmLib		string		// 共享库代码的大小
 	VmPTE		uint64		// 该进程的所有页表的大小
-	// VmPMD		string		// 二级页表大小
 	VmSwap		uint64		// 被交换到交换分区的匿名数据大小
 	VmShare		uint64		// 共享部分的内存
 
+	IOReadBytes		uint64		// 从磁盘读取的字节数
+	IOWriteBytes	uint64		// 写入磁盘的字节数
 	
 }
 
@@ -138,6 +132,14 @@ func PidInfo(pidStr string) (Process, error) {
 		return info, fmt.Errorf("run pid.Statm failed: %v\n", err)
 	}
 	info.VmShare = statm.Share
+
+	ioInfo, err := pid.IO(pidStr)
+	if err != nil {
+		fmt.Println("io failed: err:", err)
+		return info, fmt.Errorf("run pid.IO failed: %v\n", err)
+	}
+	info.IOReadBytes = ioInfo.ReadBytes
+	info.IOWriteBytes = ioInfo.WriteBytes
 
 	return info, nil
 }
