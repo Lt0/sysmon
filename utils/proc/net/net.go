@@ -5,3 +5,4 @@ package net
 
 // proc filesystem mount point, default is /proc
 var procfs = "/proc"
+var netfs = "net"
