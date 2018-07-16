@@ -147,7 +147,7 @@ export default {
             latestUpdate: null,
             search: '',
             items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
-            selectedItems: [],  // 实际显示的项目
+            selectedItems: [],  // 实际显示的项目，由 selection 返回
             selectTypes: null,
             
             displayComm: true,
@@ -283,39 +283,44 @@ export default {
             this.secJiffies = cur/this.info.UpTime.Uptime/this.info.CoreNum;
         },
         updateHeaders(){
-            // console.log("updateHeaders: " + this.selectedItems);
             this.headers = [];
-            for (let item in this.selectedItems){
-                let t = this.selectedItems[item];
-                // if (this.selectedItems[item] == 'CPU'){
-                //     t += "(%)";
-                // }
-                let hdr = {text: t, value: this.selectedItems[item]};
-                this.headers.push(hdr);
+
+            for(let i in this.items) {
+                for (let j in this.selectedItems){
+                    if(this.items[i] == this.selectedItems[j]) {
+                        let t = this.selectedItems[j];
+                        // if (this.selectedItems[j] == 'CPU'){
+                        //     t += "(%)";
+                        // }
+                        let hdr = {text: t, value: this.selectedItems[j]};
+                        this.headers.push(hdr);
+                        break;
+                    }
+                }
             }
         },
         updateDisplay(){
-            displayComm: true;
-            displayCPU: true;
-            displayMEM: true;
-            displayCPUTime: false;
-            displayTaskCPU: false;
-            displayRRate: false;
-            displayWRate: false;
-            displayVmSize: false;
-            displayVmRSS: false;
-            displayVmPTE: false;
-            displayVmSwap: false;
-            displayPid: false;
-            displayNlwp: false;
-            displayState: false;
-            displayNice: false;
-            displayPriority: false;
-            displayUser: false;
-            displayUid: false;
-            displayRead: false;
-            displayWrite: false;
-            displayCmdline: false;
+            this.displayComm = false;
+            this.displayCPU = false;
+            this.displayMEM = false;
+            this.displayCPUTime = false;
+            this.displayTaskCPU = false;
+            this.displayRRate = false;
+            this.displayWRate = false;
+            this.displayVmSize = false;
+            this.displayVmRSS = false;
+            this.displayVmPTE = false;
+            this.displayVmSwap = false;
+            this.displayPid = false;
+            this.displayNlwp = false;
+            this.displayState = false;
+            this.displayNice = false;
+            this.displayPriority = false;
+            this.displayUser = false;
+            this.displayUid = false;
+            this.displayRead = false;
+            this.displayWrite = false;
+            this.displayCmdline = false;
 
             for (let i in this.selectedItems){
                 switch(this.selectedItems[i]) {
