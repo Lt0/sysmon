@@ -125,6 +125,7 @@
 <script>
 import selection from '@/components/common/selection'
 import cm from '../../../js/common'
+import tips from '../../../js/tips'
 
 // 获取 server 信息，当前仅获取 SysInfo
 let serverInfo = {};
@@ -289,10 +290,15 @@ export default {
                 for (let j in this.selectedItems){
                     if(this.items[i] == this.selectedItems[j]) {
                         let t = this.selectedItems[j];
+                        let hdr = {};
                         // if (this.selectedItems[j] == 'CPU'){
                         //     t += "(%)";
                         // }
-                        let hdr = {text: t, value: this.selectedItems[j]};
+                        // tips.processes.hdr.Comm
+                        switch(this.selectedItems[j]) {
+                            default:
+                                hdr = {text: t, value: t};
+                        }
                         this.headers.push(hdr);
                         break;
                     }
