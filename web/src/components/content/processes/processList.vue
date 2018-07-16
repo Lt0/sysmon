@@ -36,66 +36,66 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left" v-show="displayCMD">{{ props.item.Comm }}</td>
-                    <td class="text-xs-left" v-show="displayCPU">{{props.item.CPU}}%</td>
-                    <td class="text-xs-left" v-show="displayMEM">{{props.item.MEM}}%</td>
-                    <td class="text-xs-left" v-show="displayCPUTime">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCMD">{{ props.item.Comm }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCPU">{{props.item.CPU}}%</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayMEM">{{props.item.MEM}}%</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCPUTime">
                         <v-tooltip bottom>
                             <span slot="activator">{{ timeParseSec(props.item.CPUTime) }}</span>
                             <span>{{props.item.CPUTime}} sec</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
 
-                    <td class="text-xs-left" v-show="displayRRate">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayRRate">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.RRate, 1)}}</span>
                             <span>{{props.item.RRate}} byte(s)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayWRate">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayWRate">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.WRate, 1)}}</span>
                             <span>{{props.item.WRate}} byte(s)</span>
                         </v-tooltip>
                     </td>
 
-                    <td class="text-xs-left" v-show="displayVmSize">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSize, 1)}}</span>
                             <span>{{props.item.VmSize}}</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayVmRSS">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmRSS">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmRSS, 1)}}</span>
                             <span>{{props.item.VmRSS}}</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayVmPTE">{{ props.item.VmPTE }}</td>
-                    <td class="text-xs-left" v-show="displayVmSwap">{{ props.item.VmSwap }}</td>
-                    <td class="text-xs-left" v-show="displayPid">{{ props.item.Pid }}</td>
-                    <td class="text-xs-left" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
-                    <td class="text-xs-left" v-show="displayState">{{ props.item.State }}</td>
-                    <td class="text-xs-left" v-show="displayNice">{{ props.item.Nice }}</td>
-                    <td class="text-xs-left" v-show="displayPriority">{{ props.item.Priority }}</td>
-                    <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
-                    <td class="text-xs-left" v-show="displayUid">{{ props.item.Uid }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmPTE">{{ props.item.VmPTE }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmSwap">{{ props.item.VmSwap }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayPid">{{ props.item.Pid }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayState">{{ props.item.State }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayNice">{{ props.item.Nice }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayPriority">{{ props.item.Priority }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayUser">{{ props.item.User }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayUid">{{ props.item.Uid }}</td>
 
-                    <td class="text-xs-left" v-show="displayRead">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayRead">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.Read, 1)}}</span>
                             <span>{{props.item.Read}} byte(s)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayWrite">
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayWrite">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.Write, 1)}}</span>
                             <span>{{props.item.Write}} byte(s)</span>
                         </v-tooltip>
                     </td>
 
-                    <td class="text-xs-left" v-show="displayCmdline">{{ props.item.Cmdline }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCmdline">{{ props.item.Cmdline }}</td>
 
                 </template>
 
@@ -413,6 +413,9 @@ export default {
 
             return h + ":" + m + ":" + s
         },
+        clickItem(pid){
+            console.log("click item pid: ", pid)
+        }
     },
 }
 </script>
