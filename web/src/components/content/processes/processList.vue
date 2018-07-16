@@ -30,13 +30,13 @@
                             {{ props.header.text }}
                         </span>
                         <span>
-                            <!-- 表头的 tooltip -->
-                            {{ props.header.text }}
+                            <!-- 表头的 tooltip, updateHeaders 时填充 -->
+                            {{ props.header.tips }}
                         </span>
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left" v-show="displayComm">{{ props.item.Comm }}</td>
+                    <td class="text-xs-left" v-show="displayCMD">{{ props.item.Comm }}</td>
                     <td class="text-xs-left" v-show="displayCPU">{{props.item.CPU}}%</td>
                     <td class="text-xs-left" v-show="displayMEM">{{props.item.MEM}}%</td>
                     <td class="text-xs-left" v-show="displayCPUTime">
@@ -147,11 +147,11 @@ export default {
             },
             latestUpdate: null,
             search: '',
-            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
+            items: ['CMD', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目，由 selection 返回
             selectTypes: null,
             
-            displayComm: true,
+            displayCMD: true,
             displayCPU: true,
             displayMEM: true,
             displayCPUTime: false,
@@ -290,15 +290,9 @@ export default {
                 for (let j in this.selectedItems){
                     if(this.items[i] == this.selectedItems[j]) {
                         let t = this.selectedItems[j];
-                        let hdr = {};
-                        // if (this.selectedItems[j] == 'CPU'){
-                        //     t += "(%)";
-                        // }
-                        // tips.processes.hdr.Comm
-                        switch(this.selectedItems[j]) {
-                            default:
-                                hdr = {text: t, value: t};
-                        }
+                        let hdr = {text: t, value: t};
+                        // 每一项表头的 tips 都定义在 tips.processes.hdr 这个对象的同名项中
+                        hdr.tips = tips.processes.hdr[this.selectedItems[j]];
                         this.headers.push(hdr);
                         break;
                     }
@@ -306,7 +300,7 @@ export default {
             }
         },
         updateDisplay(){
-            this.displayComm = false;
+            this.displayCMD = false;
             this.displayCPU = false;
             this.displayMEM = false;
             this.displayCPUTime = false;
@@ -330,8 +324,8 @@ export default {
 
             for (let i in this.selectedItems){
                 switch(this.selectedItems[i]) {
-                    case 'Comm':
-                        this.displayComm = true;
+                    case 'CMD':
+                        this.displayCMD = true;
                         break;
                     case 'CPU':
                         this.displayCPU = true;
