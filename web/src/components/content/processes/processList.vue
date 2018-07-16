@@ -46,6 +46,20 @@
                         </v-tooltip>
                     </td>
                     <td class="text-xs-left" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
+
+                    <td class="text-xs-left" v-show="displayRRate">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtSize(props.item.RRate, 1)}}</span>
+                            <span>{{props.item.RRate}} byte(s)</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayWRate">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtSize(props.item.WRate, 1)}}</span>
+                            <span>{{props.item.WRate}} byte(s)</span>
+                        </v-tooltip>
+                    </td>
+
                     <td class="text-xs-left" v-show="displayVmSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSize, 1)}}</span>
@@ -67,6 +81,20 @@
                     <td class="text-xs-left" v-show="displayPriority">{{ props.item.Priority }}</td>
                     <td class="text-xs-left" v-show="displayUser">{{ props.item.User }}</td>
                     <td class="text-xs-left" v-show="displayUid">{{ props.item.Uid }}</td>
+
+                    <td class="text-xs-left" v-show="displayRead">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtSize(props.item.Read, 1)}}</span>
+                            <span>{{props.item.Read}} byte(s)</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayWrite">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtSize(props.item.Write, 1)}}</span>
+                            <span>{{props.item.Write}} byte(s)</span>
+                        </v-tooltip>
+                    </td>
+
                     <td class="text-xs-left" v-show="displayCmdline">{{ props.item.Cmdline }}</td>
 
                 </template>
@@ -118,7 +146,7 @@ export default {
             },
             latestUpdate: null,
             search: '',
-            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Cmdline'],  // 所有可显示的项目
+            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目
             selectTypes: null,
             
@@ -127,6 +155,8 @@ export default {
             displayMEM: true,
             displayCPUTime: false,
             displayTaskCPU: false,
+            displayRRate: false,
+            displayWRate: false,
             displayVmSize: false,
             displayVmRSS: false,
             displayVmPTE: false,
@@ -138,6 +168,8 @@ export default {
             displayPriority: false,
             displayUser: false,
             displayUid: false,
+            displayRead: false,
+            displayWrite: false,
             displayCmdline: false,
             headers: [],
 
@@ -147,6 +179,9 @@ export default {
             prePidJiffies: {},
 
             secJiffies: 0,  // 单个核心从系统启动以来平均每秒产生的节拍数
+
+            PreIOReadBytes: {},
+            PreIOWriteBytes: {},
         }
     },
     computed: {
@@ -190,6 +225,9 @@ export default {
     methods: {
         formatInfo() {
             let tmpPrePidJiffies = {};
+            let tmpPreIOReadBytes = {};
+            let tmpPreIOWriteBytes = {};
+
             let processes = this.info.Processes;
             for(let i in processes) {
                 let p = processes[i];
@@ -211,8 +249,30 @@ export default {
                 // format CPUTime
                 // 进程一共消耗的节拍数/单个核心一秒一共能产生的节拍数 = 进程使用单个核心的 CPU 时长（sec）
                 p.CPUTime = parseInt(p.UsedCPU/this.secJiffies);
+
+                // format Read/Write
+                p.Read = p.IOReadBytes;
+                p.Write = p.IOWriteBytes;
+
+                // format IO R/W
+                if(!this.PreIOReadBytes[p.Pid]) {
+                    p.RRate = p.IOReadBytes;
+                } else {
+                    p.RRate = p.IOReadBytes - this.PreIOReadBytes[p.Pid];
+                }
+                tmpPreIOReadBytes[p.Pid] = p.IOReadBytes;
+
+                if(!this.PreIOWriteBytes[p.Pid]) {
+                    p.WRate = p.IOWriteBytes;
+                } else {
+                    p.WRate = p.IOWriteBytes - this.PreIOWriteBytes[p.Pid];
+                }
+                tmpPreIOWriteBytes[p.Pid] = p.IOWriteBytes;
             }
+
             this.prePidJiffies = tmpPrePidJiffies;
+            this.PreIOReadBytes = tmpPreIOReadBytes;
+            this.PreIOWriteBytes = tmpPreIOWriteBytes;
         },
         updateJiffies() {
             let c = this.info.Cores[0];
@@ -240,6 +300,8 @@ export default {
             displayMEM: true;
             displayCPUTime: false;
             displayTaskCPU: false;
+            displayRRate: false;
+            displayWRate: false;
             displayVmSize: false;
             displayVmRSS: false;
             displayVmPTE: false;
@@ -251,6 +313,8 @@ export default {
             displayPriority: false;
             displayUser: false;
             displayUid: false;
+            displayRead: false;
+            displayWrite: false;
             displayCmdline: false;
 
             for (let i in this.selectedItems){
@@ -269,6 +333,12 @@ export default {
                         break;
                     case 'TaskCPU':
                         this.displayTaskCPU = true;
+                        break;
+                    case 'RRate':
+                        this.displayRRate = true;
+                        break;
+                    case 'WRate':
+                        this.displayWRate = true;
                         break;
                     case 'VmSize':
                         this.displayVmSize = true;
@@ -302,6 +372,12 @@ export default {
                         break;
                     case 'Uid':
                         this.displayUid = true;
+                        break;
+                    case 'Read':
+                        this.displayRead = true;
+                        break;
+                    case 'Write':
+                        this.displayWrite = true;
                         break;
                     case 'Cmdline':
                         this.displayCmdline = true;

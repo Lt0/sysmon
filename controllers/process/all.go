@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/Lt0/sysmon/utils/proc/pid"
-	procNet "github.com/Lt0/sysmon/utils/proc/net"
 	"github.com/Lt0/sysmon/utils/proc"
 	"github.com/astaxie/beego"
 )
@@ -49,11 +48,8 @@ type Process struct {
 	VmSwap		uint64		// 被交换到交换分区的匿名数据大小
 	VmShare		uint64		// 共享部分的内存
 
-	IOReadBytes		uint64		// 从磁盘读取的字节数
-	IOWriteBytes	uint64		// 写入磁盘的字节数
-	
-	Rx				uint64		// 从网络接收的字节数
-	Tx				uint64		// 上传字节数
+	IOReadBytes		uint64		// 从磁盘读取的字节数, IOReadBytes
+	IOWriteBytes	uint64		// 写入磁盘的字节数, IOWriteBytes
 }
 
 type AllProcess struct {
@@ -143,17 +139,6 @@ func PidInfo(pidStr string) (Process, error) {
 	}
 	info.IOReadBytes = ioInfo.ReadBytes
 	info.IOWriteBytes = ioInfo.WriteBytes
-
-	var netDev procNet.Dev
-	err = netDev.Update()
-	if err != nil {
-		return info, fmt.Errorf("run procNet.Dev() failed: %v\n", err)
-	}
-	info.Rx = netDev.CountRx()
-	info.Tx = netDev.CountTx()
-	fmt.Println("info.Rx:", info.Rx)
-	fmt.Println("info.Tx:", info.Tx)
-
 
 	return info, nil
 }
