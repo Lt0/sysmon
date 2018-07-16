@@ -36,7 +36,7 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCMD">{{ props.item.Comm }}</td>
+                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayComm">{{ props.item.Comm }}</td>
                     <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCPU">{{props.item.CPU}}%</td>
                     <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayMEM">{{props.item.MEM}}%</td>
                     <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCPUTime">
@@ -147,11 +147,11 @@ export default {
             },
             latestUpdate: null,
             search: '',
-            items: ['CMD', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
+            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目，由 selection 返回
             selectTypes: null,
             
-            displayCMD: true,
+            displayComm: true,
             displayCPU: true,
             displayMEM: true,
             displayCPUTime: false,
@@ -300,7 +300,7 @@ export default {
             }
         },
         updateDisplay(){
-            this.displayCMD = false;
+            this.displayComm = false;
             this.displayCPU = false;
             this.displayMEM = false;
             this.displayCPUTime = false;
@@ -324,8 +324,8 @@ export default {
 
             for (let i in this.selectedItems){
                 switch(this.selectedItems[i]) {
-                    case 'CMD':
-                        this.displayCMD = true;
+                    case 'Comm':
+                        this.displayComm = true;
                         break;
                     case 'CPU':
                         this.displayCPU = true;
