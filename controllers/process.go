@@ -23,26 +23,14 @@ func (c *ProcessController) AllProcess() {
 	c.ServeJSON()
 }
 
-// // @Title Active Processes Status
-// // @Description Get Active Processes Status
-// // @Success 200 {object} models.Object
-// // @Failure 403 :objectId is empty
-// // @router /active [get]
-// func (c *ProcessController) ActiveProcess() {
-// 	fmt.Println("ActiveProcess")
-// 	handler := &process.ActiveProcessCtrl{Controller: &c.Controller}
-// 	c.Data["json"] = handler.Do()
-// 	c.ServeJSON()
-// }
-
-// // @Title My Processes Status
-// // @Description Get My Processes Status
-// // @Success 200 {object} models.Object
-// // @Failure 403 :objectId is empty
-// // @router /my [get]
-// func (c *ProcessController) MyProcess() {
-// 	fmt.Println("MyProcess")
-// 	handler := &process.MyProcessCtrl{Controller: &c.Controller}
-// 	c.Data["json"] = handler.Do()
-// 	c.ServeJSON()
-// }
+// @Title Process Details
+// @Description Get Process Details
+// @Param	pid	query	int	true	"which process to get"
+// @Success 200 {object} models.Object
+// @Failure 403 :objectId is empty
+// @router /details [get]
+func (c *ProcessController) Details() {
+	handler := &process.DetailsCtrl{Controller: &c.Controller}
+	c.Data["json"] = handler.Do()
+	c.ServeJSON()
+}
