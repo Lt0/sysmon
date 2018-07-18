@@ -5,18 +5,37 @@
         <v-dialog v-model="dialog" lazy scrollable >
         <v-card>
             <v-toolbar dark color="teal lighten-1">
-                <v-toolbar-title>Details of pid {{ detailsCtrl.pid }}</v-toolbar-title>
+                <v-toolbar-title><span>Details of pid {{ detailsCtrl.pid }}</span></v-toolbar-title>
                 <v-spacer></v-spacer>
-
-                    <v-btn icon dark @click.native="closeProcessDetailsHandler()">
-                        <v-icon>close</v-icon>
-                    </v-btn>
-
+                <v-btn icon dark @click.native="closeProcessDetailsHandler()"><v-icon>close</v-icon></v-btn>
             </v-toolbar>
             <!-- <v-card-title class="headline"> </v-card-title> -->
 
             <v-card-text>
-                <process-list :info='detailsCtrl.info' @show-process-details="showProcessDetailsHandler($event)" />
+                <v-tabs centered v-model="tabs">
+                    <v-tab>
+                        <v-tooltip bottom>
+                            <span slot="activator">thread</span>
+                            <span>{{tips.processes.detailsTabs.thread}}</span>
+                        </v-tooltip>
+                    </v-tab>
+
+                    <v-tab>
+                        <v-tooltip bottom>
+                            <span slot="activator">limit</span>
+                            <span>{{tips.processes.detailsTabs.limit}}</span>
+                        </v-tooltip>
+                    </v-tab>
+
+                    <v-tabs-items v-model="tabs">
+                        <v-tab-item>
+                            <process-list :info='detailsCtrl.info' @show-process-details="showProcessDetailsHandler($event)" />
+                        </v-tab-item>
+                        <v-tab-item>
+                            <details-limits :limitsInfo='detailsCtrl.info.Limits'></details-limits>
+                        </v-tab-item>
+                    </v-tabs-items>
+                </v-tabs>
             </v-card-text>
         </v-card>
         </v-dialog>
@@ -25,7 +44,9 @@
 
 <script>
 import cm from '../../js/common'
+import tips from '../../js/tips'
 import processList from '@/components/content/processes/processList'
+import detailsLimits from '@/components/content/processes/detailsLimits'
 
 let infoCtrl = {
     type: "all",
@@ -44,6 +65,7 @@ export default {
     name: 'Processes',
     components: {
         processList, 
+        detailsLimits, 
     },
     data () {
         return {
@@ -54,6 +76,8 @@ export default {
             detailsCtrl: detailsCtrl,
 
             dialog: false,
+            tabs: null,
+            tips: tips,
         }
     },
     beforeRouteEnter: (to, from, next) => {

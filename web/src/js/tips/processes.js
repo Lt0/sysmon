@@ -32,5 +32,19 @@ let state = {
     W: "paging"
 }
 
+let detailsTabs = {
+    thread: "进程中的所有线程信息",
+    limit: "进程的资源限制",
+}
+
+let limits = {
+    Limit: "所限制的资源",
+    SoftLimit: "当前系统生效的设置值",
+    HardLimit: "系统中所能设定的最大值",
+    Units: "衡量单位",
+}
+
 exports.hdr = hdr;
 exports.state = state;
+exports.detailsTabs = detailsTabs;
+exports.limits = limits;
