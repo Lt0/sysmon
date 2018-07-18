@@ -1,6 +1,7 @@
 package proc
 
 import (
+	"path/filepath"
 	"os"
 	"fmt"
 	"strconv"
@@ -8,9 +9,17 @@ import (
 
 // return all pids in procfs
 func AllPids() []string {
-	p, err := os.Open(procfs)
+	return pids(procfs)
+}
+
+func AllThreadPids(pid string) []string {
+	return pids(filepath.Join(procfs, pid, "task"))
+}
+
+func pids(path string) []string {
+	p, err := os.Open(path)
 	if err != nil {
-		fmt.Println("can not open", procfs)
+		fmt.Println("can not open", path)
 		return nil
 	}
 
@@ -19,7 +28,7 @@ func AllPids() []string {
 	var files []string
 	files, err = p.Readdirnames(0)
 	if err != nil {
-		fmt.Printf("Readdirnames %v failed\n", procfs)
+		fmt.Printf("Readdirnames %v failed\n", path)
 		return nil
 	}
 
