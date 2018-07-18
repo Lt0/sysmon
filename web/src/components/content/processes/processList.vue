@@ -36,66 +36,103 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayComm">{{ props.item.Comm }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCPU">{{props.item.CPU}}%</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayMEM">{{props.item.MEM}}%</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCPUTime">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayComm">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ props.item.Comm }}</span>
+                            <span>{{props.item.Cmdline || props.item.Comm}}</span>
+                        </v-tooltip>
+                    </td>
+
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayCPU">{{props.item.CPU}}%</td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayMEM">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{props.item.MEM}}%</span>
+                            <span>{{cm.fmtSize.fmtKBSize(props.item.VmRSS, 1)}}</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayCPUTime">
                         <v-tooltip bottom>
                             <span slot="activator">{{ timeParseSec(props.item.CPUTime) }}</span>
                             <span>{{props.item.CPUTime}} sec</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayTaskCPU">{{ props.item.TaskCPU }}</td>
 
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayRRate">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayRRate">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.RRate, 1)}}</span>
                             <span>{{props.item.RRate}} byte(s)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayWRate">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayWRate">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.WRate, 1)}}</span>
                             <span>{{props.item.WRate}} byte(s)</span>
                         </v-tooltip>
                     </td>
 
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmSize">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayVmSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSize, 1)}}</span>
-                            <span>{{props.item.VmSize}}</span>
+                            <span>{{props.item.VmSize}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmRSS">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayVmRSS">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmRSS, 1)}}</span>
-                            <span>{{props.item.VmRSS}}</span>
+                            <span>{{props.item.VmRSS}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmPTE">{{ props.item.VmPTE }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayVmSwap">{{ props.item.VmSwap }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayPid">{{ props.item.Pid }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayNlwp">{{ props.item.Nlwp }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayState">{{ props.item.State }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayNice">{{ props.item.Nice }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayPriority">{{ props.item.Priority }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayUser">{{ props.item.User }}</td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayUid">{{ props.item.Uid }}</td>
 
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayRead">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayPid">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ props.item.Pid }}</span>
+                            <span>线程 ID(s): {{ props.item.Task }}</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayNlwp">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ props.item.Nlwp }}</span>
+                            <span>线程 ID(s): {{ props.item.Task }}</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayState">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{ props.item.State }}</span>
+                            <span>{{ tips.processes.state[props.item.State] }}</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayNice">{{ props.item.Nice }}</td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayPriority">{{ props.item.Priority }}</td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayUser">{{ props.item.User }}</td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayUid">{{ props.item.Uid }}</td>
+
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayVmPTE">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmPTE, 1)}}</span>
+                            <span>{{props.item.VmPTE}} KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayVmSwap">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.VmSwap, 1)}}</span>
+                            <span>{{props.item.VmSwap}} KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayRead">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.Read, 1)}}</span>
                             <span>{{props.item.Read}} byte(s)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayWrite">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayWrite">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtSize(props.item.Write, 1)}}</span>
                             <span>{{props.item.Write}} byte(s)</span>
                         </v-tooltip>
                     </td>
 
-                    <td class="text-xs-left" @click="clickItem(props.item.Pid)" v-show="displayCmdline">{{ props.item.Cmdline }}</td>
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayCmdline">{{ props.item.Cmdline }}</td>
 
                 </template>
 
@@ -140,6 +177,7 @@ export default {
     data() {
         return {
             cm: cm,
+            tips: tips,
             serverInfo: serverInfo,
             windowSize: {
                 x: 0,
@@ -147,10 +185,9 @@ export default {
             },
             latestUpdate: null,
             search: '',
-            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'VmPTE', 'VmSwap', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
+            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'VmPTE', 'VmSwap', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目，由 selection 返回
             selectTypes: null,
-            
             displayComm: true,
             displayCPU: true,
             displayMEM: true,
@@ -160,8 +197,6 @@ export default {
             displayWRate: false,
             displayVmSize: false,
             displayVmRSS: false,
-            displayVmPTE: false,
-            displayVmSwap: false,
             displayPid: false,
             displayNlwp: false,
             displayState: false,
@@ -169,6 +204,8 @@ export default {
             displayPriority: false,
             displayUser: false,
             displayUid: false,
+            displayVmPTE: false,
+            displayVmSwap: false,
             displayRead: false,
             displayWrite: false,
             displayCmdline: false,
@@ -245,7 +282,10 @@ export default {
                 // format CPU end
 
                 // format TaskCPU
-                p.TaskCPU = "cpu" + p.TaskCPU;
+                p.TaskCPU = p.TaskCPU.toString();
+                if(p.TaskCPU.substr(0, 1) != 'c') {
+                    p.TaskCPU = "cpu" + p.TaskCPU;
+                }
 
                 // format CPUTime
                 // 进程一共消耗的节拍数/单个核心一秒一共能产生的节拍数 = 进程使用单个核心的 CPU 时长（sec）
@@ -309,8 +349,6 @@ export default {
             this.displayWRate = false;
             this.displayVmSize = false;
             this.displayVmRSS = false;
-            this.displayVmPTE = false;
-            this.displayVmSwap = false;
             this.displayPid = false;
             this.displayNlwp = false;
             this.displayState = false;
@@ -318,6 +356,8 @@ export default {
             this.displayPriority = false;
             this.displayUser = false;
             this.displayUid = false;
+            this.displayVmPTE = false;
+            this.displayVmSwap = false;
             this.displayRead = false;
             this.displayWrite = false;
             this.displayCmdline = false;
@@ -351,12 +391,6 @@ export default {
                     case 'VmRSS':
                         this.displayVmRSS = true;
                         break;
-                    case 'VmPTE':
-                        this.displayVmPTE = true;
-                        break;
-                    case 'VmSwap':
-                        this.displayVmSwap = true;
-                        break;
                     case 'Pid':
                         this.displayPid = true;
                         break;
@@ -377,6 +411,12 @@ export default {
                         break;
                     case 'Uid':
                         this.displayUid = true;
+                        break;
+                    case 'VmPTE':
+                        this.displayVmPTE = true;
+                        break;
+                    case 'VmSwap':
+                        this.displayVmSwap = true;
                         break;
                     case 'Read':
                         this.displayRead = true;
@@ -414,7 +454,8 @@ export default {
             return h + ":" + m + ":" + s
         },
         clickItem(pid){
-            console.log("click item pid: ", pid)
+            console.log("click item pid: ", pid);
+            this.$emit('show-process-details', pid);
         }
     },
 }

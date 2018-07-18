@@ -1,12 +1,44 @@
 <template>
     <div>
-        <process-list :info='info' />
+        <process-list :info='infoCtrl.info' @show-process-details="showProcessDetailsHandler($event)" />
+
+        <v-dialog v-model="dialog" lazy scrollable >
+        <v-card>
+            <v-toolbar dark color="teal lighten-1">
+                <v-toolbar-title>Details of pid {{ detailsCtrl.pid }}</v-toolbar-title>
+                <v-spacer></v-spacer>
+
+                    <v-btn icon dark @click.native="closeProcessDetailsHandler()">
+                        <v-icon>close</v-icon>
+                    </v-btn>
+
+            </v-toolbar>
+            <!-- <v-card-title class="headline"> </v-card-title> -->
+
+            <v-card-text>
+                <process-list :info='detailsCtrl.info' @show-process-details="showProcessDetailsHandler($event)" />
+            </v-card-text>
+        </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
 import cm from '../../js/common'
 import processList from '@/components/content/processes/processList'
+
+let infoCtrl = {
+    type: "all",
+    updater: null,
+    interval: 1000,         // 更新时间间隔
+    info: new Object(),
+}
+let detailsCtrl = {
+    type: "details",
+    updater: null,
+    interval: 1000,         // 更新时间间隔
+    info: new Object(),
+}
 
 export default {
     name: 'Processes',
@@ -15,15 +47,19 @@ export default {
     },
     data () {
         return {
-            info: new Object(),     // 进程数据，由 processes updater 负责填充
-            interval: 1000,         // 更新时间间隔
-            type: "all",
+            // 进程数据控制结构，由 processes updater 负责填充
+            infoCtrl: infoCtrl,
+
+            // 单个进程的详细信息控制结构，打开 dialog 的时候启动 updater，关闭 dialog 的时候停止 updater
+            detailsCtrl: detailsCtrl,
+
+            dialog: false,
         }
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
             // console.log("processes beforeRouteEnter next");
-            cm.process.startUpdater(vm, vm.type);
+            cm.process.startUpdater(vm.infoCtrl, vm.infoCtrl.type);
         })
     },
     beforeRouteUpdate: (to, from, next) => {
@@ -31,10 +67,26 @@ export default {
         next();
     },
     beforeRouteLeave: (to, from, next) => {
-        // console.log("processes beforeRouteLeave");
-        cm.process.stopUpdater();
+        // 调用 beforeRouteLeave 的时候无法访问 this 对象，所以使用外部定义的指针
+        cm.process.stopUpdater(infoCtrl);
+        cm.process.stopUpdater(detailsCtrl);
         next();
     },
+
+    methods: {
+        showProcessDetailsHandler(pid) {
+            this.closeProcessDetailsHandler();
+
+            this.detailsCtrl.pid = pid;
+            cm.process.startUpdater(this.detailsCtrl);
+            this.dialog = true;
+        },
+        closeProcessDetailsHandler(){
+            this.dialog = false;
+            cm.process.stopUpdater(this.detailsCtrl);
+        }
+    },
+
 }
 </script>
 

@@ -2,45 +2,38 @@ var axios = require('axios');
 var bapi = require('./backendAPI');
 var dd = require('./dataDef');
 
-let updater = null;
 let interval = 1000;
 
-// type: all, my, active
-function runUpdater(self, type){
-    
-}
-
-function runUpdater(self, api) {
+function runUpdater(ctrl, api) {
     // console.log("api: " + api);
     axios.get(api).then(function(res){
-        self.info = res.data
-        //console.log(self.rsc);
-        updater = setTimeout(runUpdater, interval, self, api);
+        ctrl.info = res.data
+        //console.log(ctrl.rsc);
+        ctrl.updater = setTimeout(runUpdater, interval, ctrl, api);
+        // console.log(ctrl.type, ctrl.pid + " updater: ", ctrl.updater);
     }).catch(function(err){
         console.log("get info all failed: " + err);
-        updater = setTimeout(runUpdater, interval, self, api);
+        ctrl.updater = setTimeout(runUpdater, interval, ctrl, api);
     })
 }
-function startUpdater(self, type){
-    if (updater) {
-        console.log("processes updater already updated before.");
+function startUpdater(ctrl){
+    if (ctrl.updater) {
+        console.log("processes updater of this ctrl already updated before.");
         return;
     }
 
-    interval = self.interval;
+    if(ctrl.interval) {
+        interval = ctrl.interval;
+    }
 
-    switch (type){
+    switch (ctrl.type){
         case "all": 
             console.log("run updater for all processes");
-            runUpdater(self, bapi.processAll);
+            runUpdater(ctrl, bapi.processAll);
             break;
-        case "my":
-            console.log("run updater for my processes");
-            runUpdater(self, bapi.processMy);
-            break;
-        case "active":
-            console.log("run updater for active processes");
-            runUpdater(self, bapi.processActive);
+        case "details":
+            console.log("run updater for process details of ", ctrl.pid);
+            runUpdater(ctrl, bapi.processDetails + "?pid=" + ctrl.pid);
             break;
         default:
             console.log("runUPdater: unknow type: " + type);
@@ -48,10 +41,15 @@ function startUpdater(self, type){
     }
 }
 
-function stopUpdater(){
+function stopUpdater(ctrl){
+    if(!ctrl.updater) {
+        console.log("updater of this ctrl already stoped before.");
+        return;
+    }
+
     console.log("stop processes updater");
-    clearTimeout(updater);
-    updater = null;
+    clearTimeout(ctrl.updater);
+    ctrl.updater = null;
 }
 
 exports.startUpdater = startUpdater;
