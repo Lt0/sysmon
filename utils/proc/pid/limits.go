@@ -39,16 +39,22 @@ func Limits(pid string) (LimitsInfo, error) {
 
 		l := string(b)
 		vs := strings.Fields(l)
+		fmt.Println("length:", len(l))
 		if len(vs) < 4 {
 			return info, fmt.Errorf("Invalid string slice: %v\n", vs)
 		}
 
+		if vs[0] == "Limit" {
+			continue
+		}
+
 		var item limitsItem
-		item.Limit = vs[0]
-		item.SoftLimit = vs[1]
-		item.HardLimit = vs[2]
-		item.Units = vs[3]
+		item.Limit = strings.TrimSpace(l[:25])
+		item.SoftLimit = strings.TrimSpace(l[25:46])
+		item.HardLimit = strings.TrimSpace(l[46:67])
+		item.Units = strings.TrimSpace(l[67:])
 		info.Limits = append(info.Limits, item)
+		fmt.Println("item: ", item)
 	}
 
 	return info, nil
