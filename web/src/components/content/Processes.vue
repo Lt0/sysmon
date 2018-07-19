@@ -31,6 +31,12 @@
                             <span>{{tips.processes.detailsTabs.stack}}</span>
                         </v-tooltip>
                     </v-tab>
+                    <v-tab>
+                        <v-tooltip bottom>
+                            <span slot="activator">smaps</span>
+                            <span>{{tips.processes.detailsTabs.smaps}}</span>
+                        </v-tooltip>
+                    </v-tab>
 
                     <v-tabs-items v-model="tabs">
                         <v-tab-item>
@@ -41,6 +47,9 @@
                         </v-tab-item>
                         <v-tab-item>
                             <details-stack :stacksInfo='detailsCtrl.info.Stacks'></details-stack>
+                        </v-tab-item>
+                        <v-tab-item>
+                            <details-smaps :smapsInfo='detailsCtrl.info.Smaps'></details-smaps>
                         </v-tab-item>
                     </v-tabs-items>
                 </v-tabs>
@@ -56,6 +65,7 @@ import tips from '../../js/tips'
 import processList from '@/components/content/processes/processList'
 import detailsLimits from '@/components/content/processes/detailsLimits'
 import detailsStack from '@/components/content/processes/detailsStack'
+import detailsSmaps from '@/components/content/processes/detailsSmaps'
 
 let infoCtrl = {
     type: "all",
@@ -76,6 +86,7 @@ export default {
         processList, 
         detailsLimits, 
         detailsStack, 
+        detailsSmaps, 
     },
     data () {
         return {
@@ -120,7 +131,6 @@ export default {
             cm.process.stopUpdater(this.detailsCtrl);
         }
     },
-
 }
 </script>
 
