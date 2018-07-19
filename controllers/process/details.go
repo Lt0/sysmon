@@ -29,6 +29,7 @@ type detailsInfo struct {
 	Limits		pid.LimitsInfo
 	Stacks		[]stacksInfo
 	Smaps		pid.SmapsInfo
+	NumaMaps	pid.NumaMapsInfo
 }
 
 type stacksInfo struct {
@@ -47,6 +48,7 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.fillLimits()
 	p.fillStack()
 	p.fillSmaps()
+	p.fillNumaMaps()
 
 	return p.details
 }
@@ -101,4 +103,12 @@ func (p *DetailsCtrl) fillSmaps() {
 		fmt.Println("fillSmaps: ", err)
 	}
 	p.details.Smaps = info
+}
+
+func (p *DetailsCtrl) fillNumaMaps() {
+	info, err := pid.NumaMaps(strconv.Itoa(p.pid))
+	if err != nil {
+		fmt.Println("fillNumaMaps: ", err)
+	}
+	p.details.NumaMaps = info
 }
