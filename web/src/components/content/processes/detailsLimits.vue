@@ -2,7 +2,7 @@
     <div>
         <v-data-table
             :headers="headers"
-            :items="limitsInfo.Limits"
+            :items="Limits"
             hide-actions
         >
             <!-- 定制表头 -->
@@ -46,6 +46,15 @@ export default {
                 {text: "Units", value: "Units", tips: tips.processes.limits.Units},
             ],
         }
+    },
+    computed: {
+        Limits: function() {
+            if(this.limitsInfo) {
+                return this.limitsInfo.Limits;
+            }
+
+            return [];
+        },
     },
 }
 </script>>
