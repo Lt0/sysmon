@@ -34,7 +34,10 @@ type MapsItem struct {
 	Referenced		uint64
 	Anonymous		uint64
 	AnonHugePages	uint64
+	SharedHugetlb	uint64
+	PrivateHugetlb	uint64
 	Swap			uint64
+	SwapPss			uint64
 	KernelPageSize	uint64
 	MMUPageSize		uint64
 	Locked			uint64
@@ -60,39 +63,48 @@ func Smaps(pid string) (SmapsInfo, error) {
 			}
 
 			s := string(b)
-			switch i {
-			case 0:
-				parseItemHdr(s, &item)
-			case 1:
-				item.Size = parseValue(s)
-			case 2:
-				item.Rss = parseValue(s)
-			case 3:
-				item.Pss = parseValue(s)
-			case 4:
-				item.SharedClean = parseValue(s)
-			case 5:
-				item.SharedDirty = parseValue(s)
-			case 6:
-				item.PrivateClean = parseValue(s)
-			case 7:
-				item.PrivateDirty = parseValue(s)
-			case 8:
-				item.Referenced = parseValue(s)
-			case 9:
-				item.Anonymous = parseValue(s)
-			case 10:
-				item.AnonHugePages = parseValue(s)
-			case 11:
-				item.Swap = parseValue(s)
-			case 12:
-				item.KernelPageSize = parseValue(s)
-			case 13:
-				item.MMUPageSize = parseValue(s)
-			case 14:
-				item.Locked = parseValue(s)
-			case 15:
+			vs := strings.Fields(s)
+			// fmt.Printf("s: %v: vs[1]: %v\n", s, vs[1])
+			switch vs[0] {
+			case "Size:":
+				item.Size = parseValue(vs[1])
+			case "Rss:":
+				item.Rss = parseValue(vs[1])
+			case "Pss:":
+				item.Pss = parseValue(vs[1])
+			case "Shared_Clean:":
+				item.SharedClean = parseValue(vs[1])
+			case "Shared_Dirty:":
+				item.SharedDirty = parseValue(vs[1])
+			case "Private_Clean:":
+				item.PrivateClean = parseValue(vs[1])
+			case "Private_Dirty:":
+				item.PrivateDirty = parseValue(vs[1])
+			case "Referenced:":
+				item.Referenced = parseValue(vs[1])
+			case "Anonymous:":
+				item.Anonymous = parseValue(vs[1])
+			case "AnonHugePages:":
+				item.AnonHugePages = parseValue(vs[1])
+			case "Shared_Hugetlb:":
+				item.SharedHugetlb = parseValue(vs[1])
+			case "Private_Hugetlb:":
+				item.PrivateHugetlb = parseValue(vs[1])
+			case "Swap:":
+				item.Swap = parseValue(vs[1])
+			case "SwapPss:":
+				item.SwapPss = parseValue(vs[1])
+			case "KernelPageSize:":
+				item.KernelPageSize = parseValue(vs[1])
+			case "MMUPageSize:":
+				item.MMUPageSize = parseValue(vs[1])
+			case "Locked:": 
+				item.Locked = parseValue(vs[1])
+			case "VmFlags:":
 				item.VmFlags = parseVmFlags(s)
+				break
+			default:
+				parseItemHdr(s, &item)
 			}
 		}
 		info.Mappings = append(info.Mappings, item)
@@ -109,8 +121,14 @@ func parseItemHdr(s string, item *MapsItem) {
 	}
 
 	addrs := strings.Split(vs[0], "-")
+	if len(addrs) < 1 {
+		return
+	}
 	item.StartAddr = addrs[0]
-	item.EndAddr = addrs[1]
+
+	if len(addrs) > 1 {
+		item.EndAddr = addrs[1]
+	}
 
 	if len(vs) > 1 {
 		item.Perm = vs[1]
@@ -131,10 +149,9 @@ func parseItemHdr(s string, item *MapsItem) {
 }
 
 func parseValue(s string) uint64 {
-	vs := strings.Fields(s)
-	num, err := strconv.ParseUint(vs[1], 10, 64)
+	num, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
-		fmt.Println("ParseUint failed")
+		fmt.Printf("pid.smaps: parseValue(%s) ParseUint failed: err: %v\n", s, err)
 	}
 	return num
 }
