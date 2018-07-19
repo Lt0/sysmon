@@ -68,7 +68,7 @@ func Statm(pid string) (StatmInfo, error) {
 		case 7:
 			statm.Dt, _ = strconv.ParseUint(s, 10, 64)
 		default:
-			fmt.Println("unknow value in statm:", s)
+			// fmt.Println("unknow value in statm:", s)
 		}
 	}
 
