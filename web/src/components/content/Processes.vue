@@ -19,11 +19,16 @@
                             <span>{{tips.processes.detailsTabs.thread}}</span>
                         </v-tooltip>
                     </v-tab>
-
                     <v-tab>
                         <v-tooltip bottom>
                             <span slot="activator">limit</span>
                             <span>{{tips.processes.detailsTabs.limit}}</span>
+                        </v-tooltip>
+                    </v-tab>
+                    <v-tab>
+                        <v-tooltip bottom>
+                            <span slot="activator">stack</span>
+                            <span>{{tips.processes.detailsTabs.stack}}</span>
                         </v-tooltip>
                     </v-tab>
 
@@ -33,6 +38,9 @@
                         </v-tab-item>
                         <v-tab-item>
                             <details-limits :limitsInfo='detailsCtrl.info.Limits'></details-limits>
+                        </v-tab-item>
+                        <v-tab-item>
+                            <details-stack :stacksInfo='detailsCtrl.info.Stacks'></details-stack>
                         </v-tab-item>
                     </v-tabs-items>
                 </v-tabs>
@@ -47,6 +55,7 @@ import cm from '../../js/common'
 import tips from '../../js/tips'
 import processList from '@/components/content/processes/processList'
 import detailsLimits from '@/components/content/processes/detailsLimits'
+import detailsStack from '@/components/content/processes/detailsStack'
 
 let infoCtrl = {
     type: "all",
@@ -66,6 +75,7 @@ export default {
     components: {
         processList, 
         detailsLimits, 
+        detailsStack, 
     },
     data () {
         return {

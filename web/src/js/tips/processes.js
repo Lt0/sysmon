@@ -35,6 +35,7 @@ let state = {
 let detailsTabs = {
     thread: "进程中的所有线程信息",
     limit: "进程的资源限制",
+    stack: "所有线程的内部调用状态"
 }
 
 let limits = {
@@ -44,7 +45,12 @@ let limits = {
     Units: "衡量单位",
 }
 
+let stack = {
+
+}
+
 exports.hdr = hdr;
 exports.state = state;
 exports.detailsTabs = detailsTabs;
 exports.limits = limits;
+exports.stack = stack;
