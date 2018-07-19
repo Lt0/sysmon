@@ -27,7 +27,8 @@ type detailsInfo struct {
 
 	// 进程的详细信息
 	Limits		pid.LimitsInfo
-	Stacks	[]stacksInfo
+	Stacks		[]stacksInfo
+	Smaps		pid.SmapsInfo
 }
 
 type stacksInfo struct {
@@ -45,6 +46,7 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.fillProcesses()
 	p.fillLimits()
 	p.fillStack()
+	p.fillSmaps()
 
 	return p.details
 }
@@ -91,4 +93,12 @@ func (p *DetailsCtrl) fillStack() {
 		sinfo.Stack = info
 		p.details.Stacks = append(p.details.Stacks, sinfo)
 	}
+}
+
+func (p *DetailsCtrl) fillSmaps() {
+	info, err := pid.Smaps(strconv.Itoa(p.pid))
+	if err != nil {
+		fmt.Println("fillSmaps: ", err)
+	}
+	p.details.Smaps = info
 }
