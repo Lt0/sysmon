@@ -14,6 +14,7 @@ type DetailsCtrl struct {
 	Controller *beego.Controller
 
 	pid	int
+	threads []string
 	details detailsInfo
 }
 
@@ -26,17 +27,24 @@ type detailsInfo struct {
 
 	// 进程的详细信息
 	Limits		pid.LimitsInfo
+	Stacks	[]stacksInfo
+}
+
+type stacksInfo struct {
+	Pid		string
+	Stack	pid.StackInfo
 }
 
 func (p *DetailsCtrl) Do() interface{} {
 	p.param()
-
+	p.threads = proc.AllThreadPids(strconv.Itoa(p.pid))
 	p.details.TimeStamp = time.Now()
 	p.details.Cores, p.details.CoreNum = coresInfo()
 	p.details.UpTime = uptimeInfo()
 
 	p.fillProcesses()
 	p.fillLimits()
+	p.fillStack()
 
 	return p.details
 }
@@ -52,7 +60,7 @@ func (p *DetailsCtrl) param() {
 }
 
 func (p *DetailsCtrl) fillProcesses() {
-	for _, v := range(proc.AllThreadPids(strconv.Itoa(p.pid))) {
+	for _, v := range(p.threads) {
 		info, err := PidInfo(v)
 		if err != nil {
 			// fmt.Printf("not add %v cause by: %v\n", v, err)
@@ -67,5 +75,20 @@ func (p *DetailsCtrl) fillLimits() {
 	p.details.Limits, err = pid.Limits(strconv.Itoa(p.pid))
 	if err != nil {
 		fmt.Println("fillLimits: ", err)
+	}
+}
+
+func (p *DetailsCtrl) fillStack() {
+	for _, v := range(p.threads) {
+		info, err := pid.Stack(v)
+		if err != nil {
+			// fmt.Printf("not add %v cause by: %v\n", v, err)
+			continue
+		}
+
+		var sinfo stacksInfo
+		sinfo.Pid = v
+		sinfo.Stack = info
+		p.details.Stacks = append(p.details.Stacks, sinfo)
 	}
 }

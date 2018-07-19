@@ -2,7 +2,7 @@ package pid
 
 import (
 	"bufio"
-	"fmt"
+	// "fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -39,11 +39,6 @@ func Limits(pid string) (LimitsInfo, error) {
 
 		l := string(b)
 		vs := strings.Fields(l)
-		fmt.Println("length:", len(l))
-		if len(vs) < 4 {
-			return info, fmt.Errorf("Invalid string slice: %v\n", vs)
-		}
-
 		if vs[0] == "Limit" {
 			continue
 		}
@@ -54,7 +49,6 @@ func Limits(pid string) (LimitsInfo, error) {
 		item.HardLimit = strings.TrimSpace(l[46:67])
 		item.Units = strings.TrimSpace(l[67:])
 		info.Limits = append(info.Limits, item)
-		fmt.Println("item: ", item)
 	}
 
 	return info, nil
