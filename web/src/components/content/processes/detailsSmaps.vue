@@ -35,7 +35,7 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left" v-show="displayFile">{{props.item.File}}</td>
+                    <td class="text-xs-left file-item" v-show="displayFile">{{props.item.File}}</td>
                     <td class="text-xs-left" v-show="displaySize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Size, 1)}}</span>
@@ -96,10 +96,28 @@
                             <span>{{props.item.AnonHugePages}} KB</span>
                         </v-tooltip>
                     </td>
+                    <td class="text-xs-left" v-show="displaySharedHugetlb">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SharedHugetlb, 1)}}</span>
+                            <span>{{props.item.SharedHugetlb}} KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displayPrivateHugetlb">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.PrivateHugetlb, 1)}}</span>
+                            <span>{{props.item.PrivateHugetlb}} KB</span>
+                        </v-tooltip>
+                    </td>
                     <td class="text-xs-left" v-show="displaySwap">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Swap, 1)}}</span>
                             <span>{{props.item.Swap}} KB</span>
+                        </v-tooltip>
+                    </td>
+                    <td class="text-xs-left" v-show="displaySwapPss">
+                        <v-tooltip bottom>
+                            <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SwapPss, 1)}}</span>
+                            <span>{{props.item.SwapPss}} KB</span>
                         </v-tooltip>
                     </td>
                     <td class="text-xs-left" v-show="displayKernelPageSize">
@@ -166,7 +184,7 @@ export default {
             },
             // latestUpdate: null,
             search: '',
-            items: ['File', 'Size', 'Rss', 'Pss', 'SharedClean', 'SharedDirty', 'PrivateClean', 'PrivateDirty', 'Referenced', 'Anonymous', 'AnonHugePages', 'Swap', 'KernelPageSize', 'MMUPageSize', 'Locked', 'VmFlags', 'StartAddr', 'EndAddr', 'Perm', 'Offset', 'Dev', 'INode'],  // 所有可显示的项目
+            items: ['File', 'Size', 'Rss', 'Pss', 'SharedClean', 'SharedDirty', 'PrivateClean', 'PrivateDirty', 'Referenced', 'Anonymous', 'AnonHugePages', 'SharedHugetlb', 'PrivateHugetlb', 'Swap', 'SwapPss', 'KernelPageSize', 'MMUPageSize', 'Locked', 'VmFlags', 'StartAddr', 'EndAddr', 'Perm', 'Offset', 'Dev', 'INode'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目，由 selection 返回
             selectTypes: null,
             displayFile: true,
@@ -180,7 +198,10 @@ export default {
             displayReferenced: false,
             displayAnonymous: false,
             displayAnonHugePages: false,
+            displaySharedHugetlb: false,
+            displayPrivateHugetlb: false,
             displaySwap: false,
+            displaySwapPss: false,
             displayKernelPageSize: false,
             displayMMUPageSize: false,
             displayLocked: false,
@@ -208,9 +229,9 @@ export default {
             this.updateHeaders();
             this.updateDisplay();
         },
-        // 根据屏幕大小变化，调整显示的项目，每 105px 宽显示一个项目
+        // 根据屏幕大小变化，调整显示的项目，每 150px 宽显示一个项目
         windowSize: function(){
-            let num = Math.floor(this.windowSize.x/125);
+            let num = Math.floor(this.windowSize.x/150);
             this.selectedItems = [];
             for (let i = 0; i < num; i++){
                 if (this.items[i]){
@@ -254,7 +275,10 @@ export default {
             this.displayReferenced = false;
             this.displayAnonymous = false;
             this.displayAnonHugePages = false;
+            this.displaySharedHugetlb = false;
+            this.displayPrivateHugetlb = false;
             this.displaySwap = false;
+            this.displaySwapPss = false;
             this.displayKernelPageSize = false;
             this.displayMMUPageSize = false;
             this.displayLocked = false;
@@ -301,8 +325,17 @@ export default {
                     case 'AnonHugePages':
                         this.displayAnonHugePages = true;
                         break;
+                    case 'SharedHugetlb':
+                        this.displaySharedHugetlb = true;
+                        break;
+                    case 'PrivateHugetlb':
+                        this.displayPrivateHugetlb = true;
+                        break;
                     case 'Swap':
                         this.displaySwap = true;
+                        break;
+                    case 'SwapPss':
+                        this.displaySwapPss = true;
                         break;
                     case 'KernelPageSize':
                         this.displayKernelPageSize = true;
@@ -351,5 +384,9 @@ export default {
 
 #wait-tips {
     padding: 5em 0em;
+}
+
+.file-item {
+    word-break: break-all;
 }
 </style>

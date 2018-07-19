@@ -50,35 +50,36 @@ let stack = {
 
 }
 
+// check details from man 5 proc(ubuntu 16.04)
 // https://lkml.org/lkml/2012/10/22/481
 let smapsHdrVmFlags = `
-    RD  - readable\n
-    WR  - writeable
-    EX  - executable
-    SH  - shared
-    MR  - may read
-    MW  - may write
-    ME  - may execute
-    MS  - may share
-    GD  - stack segment growns down
-    PF  - pure PFN range
-    DW  - disabled write to the mapped file
-    LO  - pages are locked in memory
-    IO  - memory mapped I/O area
-    SR  - sequential read advise provided
-    RR  - random read advise provided
-    DC  - do not copy area on fork
-    DE  - do not expand area on remapping
-    AC  - area is accountable
-    NR  - swap space is not reserved for the area
-    HT  - area uses huge tlb pages
-    NL  - non-linear mapping
-    AR  - architecture specific flag
-    DD  - do not include area into core dump
-    MM  - mixed map area
-    HG  - huge page advise flag
-    NH  - no-huge page advise flag
-    MG  - mergable advise flag
+    RD: readable;  
+    WR: writeable;  
+    EX: executable; 
+    SH: shared; 
+    MR: may read; 
+    MW: may write; 
+    ME: may execute; 
+    MS: may share; 
+    GD: stack segment growns down; 
+    PF: pure PFN range; 
+    DW: disabled write to the mapped file; 
+    LO: pages are locked in memory; 
+    IO: memory mapped I/O area; 
+    SR: sequential read advise provided; 
+    RR: random read advise provided; 
+    DC: do not copy area on fork; 
+    DE: do not expand area on remapping; 
+    AC: area is accountable; 
+    NR: swap space is not reserved for the area; 
+    HT: area uses huge tlb pages; 
+    NL: non-linear mapping; 
+    AR: architecture specific flag; 
+    DD: do not include area into core dump; 
+    MM: mixed map area; 
+    HG: huge page advise flag; 
+    NH: no-huge page advise flag; 
+    MG: mergable advise flag; 
 `
 let smapsHdr = {
     File: "映射的文件，中括号括起来的表示不是真正的文件，[stack:N] 表示线程号为 N 的线程对应的栈在内存中的映射情况", 
@@ -92,11 +93,14 @@ let smapsHdr = {
     Referenced: "", 
     Anonymous: "匿名页大小，包含 AnonHugePages",  
     AnonHugePages: "Transparent HugePages (THP)，THP 与 Hugepages 不是一回事，Hugepages 在 /proc/meminfo中是被独立统计的，而 AnonHugePages 是被包含在 AnonPages 之中的，与进程的 RSS/PSS 是有重叠的", 
+    SharedHugetlb: "Shared Hugetlb",
+    PrivateHugetlb: "Private Hugetlb", 
     Swap: "交换到 swap 分区的大小", 
+    SwapPss: "Swap Pss", 
     KernelPageSize: "内核的内存页面大小", 
     MMUPageSize: "体系结构 MMU 一个页面大小", 
     Locked: "被 mlock() 系统调用锁定的内存大小。被锁定的内存因为不能 pageout/swapout，会从 Active/Inactive LRU list 移到 Unevictable LRU list 上。", 
-    VmFlags: "VMA associated flags, " + smapsHdrVmFlags, 
+    VmFlags: "VmFlags field represents the kernel flags associated with the particular virtual memory area in two letter encoded manner. The codes are the following: " + smapsHdrVmFlags, 
     StartAddr: "映射的起始虚拟地址", 
     EndAddr: "映射的结束虚拟地址", 
     Perm: "虚拟内存的权限，r=读, w=写, x=可执行, s=共享, p=私有", 
