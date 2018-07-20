@@ -12,8 +12,8 @@ import (
 type Process struct {
 	Pid 		string		// 进程号			stat
 	Task		[]string	// 所有线程
-	Nlwp		int64		// 线程数			stat
-	State		string		// 进程状态			stat
+	Threads		uint64		// 线程数			status
+	State		string		// 进程状态			status
 	Priority	int64		// 动态优先级		stat
 	Nice		int64		// 静态优先级		stat
 	Comm		string		// 可执行文件名		comm, stat
@@ -57,11 +57,9 @@ func PidInfo(pidStr string) (Process, error) {
 	} else {
 		info.Comm = stat.Comm
 	}
-	info.State = stat.State
 	info.UsedCPU = uint64(stat.UTime) + uint64(stat.STime) + uint64(stat.CUTime) + uint64(stat.CSTime)
 	info.Priority = stat.Priority
 	info.Nice = stat.Nice
-	info.Nlwp = stat.NumThreads
 	info.StartTime = stat.StartTime
 	info.TaskCPU = stat.Processor
 
@@ -76,6 +74,9 @@ func PidInfo(pidStr string) (Process, error) {
 		return info, err
 	}
 	info.User = ui.Username
+
+	info.State = status.State
+	info.Threads = status.Threads
 	info.VmSize = status.VmSize
 	info.VmRSS = status.VmRSS
 	info.VmPTE = status.VmPTE

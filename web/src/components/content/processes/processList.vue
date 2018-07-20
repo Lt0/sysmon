@@ -90,9 +90,9 @@
                             <span>线程 ID(s): {{ props.item.Task }}</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayNlwp">
+                    <td class="text-xs-left" @dblclick.stop="clickItem(props.item.Pid)" v-show="displayThreads">
                         <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.Nlwp }}</span>
+                            <span slot="activator">{{ props.item.Threads }}</span>
                             <span>线程 ID(s): {{ props.item.Task }}</span>
                         </v-tooltip>
                     </td>
@@ -185,7 +185,7 @@ export default {
             },
             latestUpdate: null,
             search: '',
-            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'Pid', 'Nlwp', 'State', 'Nice', 'Priority', 'User', 'Uid', 'VmPTE', 'VmSwap', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
+            items: ['Comm', 'CPU', 'MEM', 'CPUTime', 'TaskCPU', 'RRate', 'WRate', 'VmSize', 'VmRSS', 'Pid', 'Threads', 'State', 'Nice', 'Priority', 'User', 'Uid', 'VmPTE', 'VmSwap', 'Read', 'Write', 'Cmdline'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目，由 selection 返回
             selectTypes: null,
             displayComm: true,
@@ -198,7 +198,7 @@ export default {
             displayVmSize: false,
             displayVmRSS: false,
             displayPid: false,
-            displayNlwp: false,
+            displayThreads: false,
             displayState: false,
             displayNice: false,
             displayPriority: false,
@@ -350,7 +350,7 @@ export default {
             this.displayVmSize = false;
             this.displayVmRSS = false;
             this.displayPid = false;
-            this.displayNlwp = false;
+            this.displayThreads = false;
             this.displayState = false;
             this.displayNice = false;
             this.displayPriority = false;
@@ -394,8 +394,8 @@ export default {
                     case 'Pid':
                         this.displayPid = true;
                         break;
-                    case 'Nlwp':
-                        this.displayNlwp = true;
+                    case 'Threads':
+                        this.displayThreads = true;
                         break;
                     case 'State':
                         this.displayState = true;
