@@ -19,9 +19,7 @@ type Mapping struct {
 	Policy		string	// 对该范围内存生效的内存策略，请注意，有效策略不一定是该内存范围的进程安装的策略。 具体而言，如果进程为该范围安装了“default”策略，则该范围的有效策略将是进程策略，其可能是也可能不是“default”。
 	Nodes		[]NodePages	// 各个 NUMA 节点上分配的内存页数。
 	File		string	// 内存范围所对应的文件。 如果文件被映射为私有，则写访问可能已在此内存范围中生成COW（写时复制）页。 这些页面显示为匿名页面。
-	Heap		string	// 由堆使用的内存
-	Stack		string	// 由栈使用的内存
-	Huge		string	// Huge 内存范围，显示的是大页内存而不是常规页。
+	MapType		string	// 该字段可能为空，以下是可能的类型：Heap: 由堆使用的内存; Stack: 由栈使用的内存; Huge: Huge 内存范围，显示的是大页内存而不是常规页。
 	Anon		string	// 该范围内的匿名内存页数
 	Dirty		string	// 需要回写磁盘的页数
 	Mapped		string	// 映射的内存页面总数（如果和 dirty 以及 anon 的页数不同的话）。
@@ -80,18 +78,16 @@ func parseNumaMapLine(s string) (Mapping, error) {
 	for _, v := range(vs[2:]) {
 		v = strings.TrimSpace(v)
 		kvpaire := strings.Split(v, "=")
-		if len(kvpaire) < 2 {
+
+		// kvpaire == 1 means kvpaire[0] is MapType
+		if len(kvpaire) == 1 {
+			mapping.MapType = kvpaire[0]
 			continue
 		}
+		
 		switch kvpaire[0] {
 		case "file":
 			mapping.File = kvpaire[1]
-		case "heap":
-			mapping.Heap = kvpaire[1]
-		case "stack":
-			mapping.Stack = kvpaire[1]
-		case "huge":
-			mapping.Huge = kvpaire[1]
 		case "anon":
 			mapping.Anon = kvpaire[1]
 		case "dirty":
