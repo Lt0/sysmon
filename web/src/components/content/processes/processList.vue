@@ -212,7 +212,8 @@ export default {
             headers: [],
 
             USER_HZ: 100, // 单个核心从系统启动以来平均每秒产生的节拍数
-            prePidJiffies: {},
+            preUsedCPU: {},
+            preTimeStamp: 0,
             PreIOReadBytes: {},
             PreIOWriteBytes: {},
         }
@@ -248,7 +249,6 @@ export default {
             this.updateDisplay();
         },
         info: function(){
-            // this.updateJiffies();
             this.formatInfo();
 
             let time = new Date();
@@ -257,10 +257,11 @@ export default {
     },
     methods: {
         formatInfo() {
-            let tmpPrePidJiffies = {};
+            let tmpPreUsedCPU = {};
             let tmpPreIOReadBytes = {};
             let tmpPreIOWriteBytes = {};
 
+            let timeOffset = (this.info.TimeStamp - this.preTimeStamp)/1000000000;
             let processes = this.info.Processes;
             for(let i in processes) {
                 let p = processes[i];
@@ -268,14 +269,13 @@ export default {
                 p.MEM = (p.VmRSS/serverInfo.SysInfo.HW.Mem.PhySize*100).toFixed(2);
 
                 // format CPU
-                if(!this.prePidJiffies[p.Pid]) {
-                    // p.CPU = (p.UsedCPU/this.USER_HZ*100).toFixed(2);
-                    p.CPU = p.UsedCPU.toFixed(2);
+                if(!this.preUsedCPU[p.Pid]) {
+                    p.CPU = "0.00";
                 } else {
-                    // p.CPU = ((p.UsedCPU-this.prePidJiffies[p.Pid])/this.USER_HZ*100).toFixed(2);
-                    p.CPU = (p.UsedCPU-this.prePidJiffies[p.Pid]).toFixed(2);
+                    // p.CPU = ((p.UsedCPU-this.preUsedCPU[p.Pid])/this.USER_HZ*100).toFixed(2);
+                    p.CPU = ((p.UsedCPU-this.preUsedCPU[p.Pid])/timeOffset).toFixed(2);
                 }
-                tmpPrePidJiffies[p.Pid] = p.UsedCPU;
+                tmpPreUsedCPU[p.Pid] = p.UsedCPU;
                 // format CPU end
 
                 // format TaskCPU
@@ -308,7 +308,9 @@ export default {
                 tmpPreIOWriteBytes[p.Pid] = p.IOWriteBytes;
             }
 
-            this.prePidJiffies = tmpPrePidJiffies;
+            this.preUsedCPU = tmpPreUsedCPU;
+            // console.log("this.preStartTime: " + this.preStartTime)
+            this.preTimeStamp = this.info.TimeStamp;
             this.PreIOReadBytes = tmpPreIOReadBytes;
             this.PreIOWriteBytes = tmpPreIOWriteBytes;
         },

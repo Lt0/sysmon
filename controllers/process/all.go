@@ -13,7 +13,7 @@ type AllProcessCtrl struct {
 }
 
 type AllProcess struct {
-	TimeStamp 	time.Time
+	TimeStamp 	int64
 	CoreNum		int				// 设备的内核总数
 	Cores		[]proc.CPU		// 每个 CPU 核心的信息
 	UpTime		proc.UpTimeInfo	// 系统启动时间和 idle 时间
@@ -24,7 +24,8 @@ func (p *AllProcessCtrl) Do() interface{} {
 	var ap AllProcess
 
 	fmt.Println("do AllProcess")
-	ap.TimeStamp = time.Now()
+	t := time.Now()
+	ap.TimeStamp = t.UnixNano()
 	p.AllPidInfo(&ap)
 	ap.Cores, ap.CoreNum = coresInfo()
 	ap.UpTime = uptimeInfo()
