@@ -19,7 +19,7 @@ type DetailsCtrl struct {
 }
 
 type detailsInfo struct {
-	TimeStamp 	time.Time
+	TimeStamp 	int64
 	CoreNum		int				// 设备的内核总数
 	Cores		[]proc.CPU		// 每个 CPU 核心的信息
 	UpTime		proc.UpTimeInfo	// 系统启动时间和 idle 时间
@@ -38,9 +38,10 @@ type stacksInfo struct {
 }
 
 func (p *DetailsCtrl) Do() interface{} {
+	p.fillTimeStamp()
+
 	p.param()
 	p.threads = proc.AllThreadPids(strconv.Itoa(p.pid))
-	p.details.TimeStamp = time.Now()
 	p.details.Cores, p.details.CoreNum = coresInfo()
 	p.details.UpTime = uptimeInfo()
 
@@ -61,6 +62,11 @@ func (p *DetailsCtrl) param() {
 
 	fmt.Println("pid:", pid)
 	p.pid = pid
+}
+
+func (p *DetailsCtrl) fillTimeStamp() {
+	t := time.Now()
+	p.details.TimeStamp = t.UnixNano()
 }
 
 func (p *DetailsCtrl) fillProcesses() {
