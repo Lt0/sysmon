@@ -149,8 +149,8 @@
 
                 <!-- 没有数据时显示的内容 -->
                 <template slot="no-data">
-                    <div id="wait-tips">
-                        <v-progress-circular indeterminate :width="3" color="primary"></v-progress-circular>
+                    <div>
+                        Nothing to show
                     </div>
                 </template>
 
@@ -381,11 +381,6 @@ export default {
 .smaps-container {
     padding: 0 0 3em 0;
 }
-
-#wait-tips {
-    padding: 5em 0em;
-}
-
 .file-item {
     word-break: break-all;
 }
