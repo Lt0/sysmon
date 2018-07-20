@@ -37,6 +37,12 @@
                             <span>{{tips.processes.detailsTabs.smaps}}</span>
                         </v-tooltip>
                     </v-tab>
+                    <v-tab>
+                        <v-tooltip bottom>
+                            <span slot="activator">numa maps</span>
+                            <span>{{tips.processes.detailsTabs.numaMaps}}</span>
+                        </v-tooltip>
+                    </v-tab>
 
                     <v-tabs-items v-model="tabs">
                         <v-tab-item>
@@ -50,6 +56,9 @@
                         </v-tab-item>
                         <v-tab-item>
                             <details-smaps :smapsInfo='detailsCtrl.info.Smaps'></details-smaps>
+                        </v-tab-item>
+                        <v-tab-item>
+                            <details-numa-maps :numaMapsInfo='detailsCtrl.info.NumaMaps'></details-numa-maps>
                         </v-tab-item>
                     </v-tabs-items>
                 </v-tabs>
@@ -66,6 +75,7 @@ import processList from '@/components/content/processes/processList'
 import detailsLimits from '@/components/content/processes/detailsLimits'
 import detailsStack from '@/components/content/processes/detailsStack'
 import detailsSmaps from '@/components/content/processes/detailsSmaps'
+import detailsNumaMaps from '@/components/content/processes/detailsNumaMaps'
 
 let infoCtrl = {
     type: "all",
@@ -87,6 +97,7 @@ export default {
         detailsLimits, 
         detailsStack, 
         detailsSmaps, 
+        detailsNumaMaps, 
     },
     data () {
         return {

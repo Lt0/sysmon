@@ -36,7 +36,8 @@ let detailsTabs = {
     thread: "进程中的所有线程信息",
     limit: "进程的资源限制",
     stack: "所有线程的内部调用状态",
-    smaps: "整个进程的内存映射信息"
+    smaps: "整个进程的内存映射信息",
+    numaMaps: "整个进程的内存在 NUMA 节点之间的映射关系",
 }
 
 let limits = {
@@ -109,9 +110,26 @@ let smapsHdr = {
     INode: "映像文件的的磁盘节点（inode）", 
 }
 
+let numaMapsHdr = {
+    Addr: "内存范围的起始地址", 
+    Policy: "对该范围内存生效的内存策略，请注意，有效策略不一定是该内存范围的进程安装的策略。 具体而言，如果进程为该范围安装了“default”策略，则该范围的有效策略将是进程策略，其可能是也可能不是“default”。", 
+    File: "内存范围所对应的文件。 如果文件被映射为私有，则写访问可能已在此内存范围中生成COW（写时复制）页。 这些页面显示为匿名页面", 
+    Nodes: "各个 NUMA 节点上分配的内存页数。", 
+    MapType: "内存用途，该字段可能为空，以下是可能的类型：Heap: 由堆使用的内存; Stack: 由栈使用的内存; Huge: Huge 内存范围，显示的是大页内存而不是常规页。", 
+    Anon: "该范围内的匿名内存页数", 
+    Dirty: "需要回写磁盘的页数", 
+    Mapped: "映射的内存页面总数（如果和 dirty 以及 anon 的页数不同的话）", 
+    MapMax: "扫描期间遇到的最大mapcount（映射单个页面的进程数）。 这可以用作在给定存储器范围内发生的共享程度的指示符", 
+    SwapCache: "在交换设备上具有关联条目的页数", 
+    Active: "活动列表中的页数。仅当与此范围内的页数不同时，才会显示此字段。 这意味着存储器范围中存在一些非活动页面，这些页面很快就会被交换器从内存中删除", 
+    WriteBack: "当前正在回写到磁盘的页数", 
+    KernelPageSizeKB: "内核页大小", 
+}
+
 exports.hdr = hdr;
 exports.state = state;
 exports.detailsTabs = detailsTabs;
 exports.limits = limits;
 exports.stack = stack;
 exports.smapsHdr = smapsHdr;
+exports.numaMapsHdr = numaMapsHdr;
