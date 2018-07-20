@@ -20,6 +20,8 @@
                 must-sort
                 :search="search"
                 id="process-table"
+
+                :rows-per-page-items='[10,25,50, {text: "ALL", value: -1}]'
                 rows-per-page-text = ""
             >
                 <!-- 定制表头 -->
@@ -36,49 +38,49 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left file-item" v-show="displayAddr">{{props.item.Addr}}</td>
-                    <td class="text-xs-left file-item" v-show="displayPolicy">{{props.item.Policy}}</td>
-                    <td class="text-xs-left file-item" v-show="displayFile">{{props.item.File}}</td>
-                    <td class="text-xs-left file-item" v-show="displayNodes">{{props.item.Nodes}}</td>
-                    <td class="text-xs-left file-item" v-show="displayMapType">{{props.item.MapType}}</td>
-                    <td class="text-xs-left" v-show="displayAnon">
+                    <td class="text-xs-left file-item" v-if="displayAddr">{{props.item.Addr}}</td>
+                    <td class="text-xs-left file-item" v-if="displayPolicy">{{props.item.Policy}}</td>
+                    <td class="text-xs-left file-item" v-if="displayFile">{{props.item.File}}</td>
+                    <td class="text-xs-left file-item" v-if="displayNodes">{{props.item.Nodes}}</td>
+                    <td class="text-xs-left file-item" v-if="displayMapType">{{props.item.MapType}}</td>
+                    <td class="text-xs-left" v-if="displayAnon">
                         <v-tooltip bottom>
                             <span slot="activator">{{ props.item.Anon }}</span>
                             <span>{{cm.fmtSize.fmtKBSize(props.item.Anon * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Anon * (props.item.KernelPageSizeKB || 4)}} KB)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayDirty">
+                    <td class="text-xs-left" v-if="displayDirty">
                         <v-tooltip bottom>
                             <span slot="activator">{{ props.item.Dirty }}</span>
                             <span>{{cm.fmtSize.fmtKBSize(props.item.Dirty * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Dirty * (props.item.KernelPageSizeKB || 4)}} KB)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayMapped">
+                    <td class="text-xs-left" v-if="displayMapped">
                         <v-tooltip bottom>
                             <span slot="activator">{{ props.item.Mapped }}</span>
                             <span>{{cm.fmtSize.fmtKBSize(props.item.Mapped * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Mapped * (props.item.KernelPageSizeKB || 4)}} KB)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left file-item" v-show="displayMapMax">{{props.item.MapMax}}</td>
-                    <td class="text-xs-left" v-show="displaySwapCache">
+                    <td class="text-xs-left file-item" v-if="displayMapMax">{{props.item.MapMax}}</td>
+                    <td class="text-xs-left" v-if="displaySwapCache">
                         <v-tooltip bottom>
                             <span slot="activator">{{ props.item.SwapCache }}</span>
                             <span>{{cm.fmtSize.fmtKBSize(props.item.SwapCache * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.SwapCache * (props.item.KernelPageSizeKB || 4)}} KB)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayActive">
+                    <td class="text-xs-left" v-if="displayActive">
                         <v-tooltip bottom>
                             <span slot="activator">{{ props.item.Active }}</span>
                             <span>{{cm.fmtSize.fmtKBSize(props.item.Active * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Active * (props.item.KernelPageSizeKB || 4)}} KB)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayWriteBack">
+                    <td class="text-xs-left" v-if="displayWriteBack">
                         <v-tooltip bottom>
                             <span slot="activator">{{ props.item.WriteBack }}</span>
                             <span>{{cm.fmtSize.fmtKBSize(props.item.WriteBack * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.WriteBack * (props.item.KernelPageSizeKB || 4)}} KB)</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left file-item" v-show="displayKernelPageSizeKB">{{props.item.KernelPageSizeKB}}</td>
+                    <td class="text-xs-left file-item" v-if="displayKernelPageSizeKB">{{props.item.KernelPageSizeKB}}</td>
                     
                 </template>
 
@@ -100,6 +102,8 @@
 import selection from '@/components/common/selection'
 import cm from '../../../js/common'
 import tips from '../../../js/tips'
+
+import Vuetify from 'vuetify'
 
 export default {
     name: 'detailsNumaMaps',
@@ -133,6 +137,8 @@ export default {
             displayWriteBack: false,
             displayKernelPageSizeKB: false,
             headers: [],
+
+            // rowsPerPageItems: [5,10,25,{text: Vuetify.dataIterator.rowsPerPageAll, value: -1}],
         }
     },
     computed: {

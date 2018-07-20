@@ -20,6 +20,9 @@
                 must-sort
                 :search="search"
                 id="process-table"
+
+                :rows-per-page-items='[10,25,50, {text: "ALL", value: -1}]'
+                rows-per-page-text = ""
             >
                 <!-- 定制表头 -->
                 <template slot="headerCell" slot-scope="props">
@@ -35,116 +38,116 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left file-item" v-show="displayFile">{{props.item.File}}</td>
-                    <td class="text-xs-left" v-show="displaySize">
+                    <td class="text-xs-left file-item" v-if="displayFile">{{props.item.File}}</td>
+                    <td class="text-xs-left" v-if="displaySize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Size, 1)}}</span>
                             <span>{{props.item.Size}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayRss">
+                    <td class="text-xs-left" v-if="displayRss">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Rss, 1)}}</span>
                             <span>{{props.item.Rss}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayPss">
+                    <td class="text-xs-left" v-if="displayPss">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Pss, 1)}}</span>
                             <span>{{props.item.Pss}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displaySharedClean">
+                    <td class="text-xs-left" v-if="displaySharedClean">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SharedClean, 1)}}</span>
                             <span>{{props.item.SharedClean}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displaySharedDirty">
+                    <td class="text-xs-left" v-if="displaySharedDirty">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SharedDirty, 1)}}</span>
                             <span>{{props.item.SharedDirty}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayPrivateClean">
+                    <td class="text-xs-left" v-if="displayPrivateClean">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.PrivateClean, 1)}}</span>
                             <span>{{props.item.PrivateClean}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayPrivateDirty">
+                    <td class="text-xs-left" v-if="displayPrivateDirty">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.PrivateDirty, 1)}}</span>
                             <span>{{props.item.PrivateDirty}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayReferenced">
+                    <td class="text-xs-left" v-if="displayReferenced">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Referenced, 1)}}</span>
                             <span>{{props.item.Referenced}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayAnonymous">
+                    <td class="text-xs-left" v-if="displayAnonymous">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Anonymous, 1)}}</span>
                             <span>{{props.item.Anonymous}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayAnonHugePages">
+                    <td class="text-xs-left" v-if="displayAnonHugePages">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.AnonHugePages, 1)}}</span>
                             <span>{{props.item.AnonHugePages}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displaySharedHugetlb">
+                    <td class="text-xs-left" v-if="displaySharedHugetlb">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SharedHugetlb, 1)}}</span>
                             <span>{{props.item.SharedHugetlb}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayPrivateHugetlb">
+                    <td class="text-xs-left" v-if="displayPrivateHugetlb">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.PrivateHugetlb, 1)}}</span>
                             <span>{{props.item.PrivateHugetlb}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displaySwap">
+                    <td class="text-xs-left" v-if="displaySwap">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Swap, 1)}}</span>
                             <span>{{props.item.Swap}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displaySwapPss">
+                    <td class="text-xs-left" v-if="displaySwapPss">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.SwapPss, 1)}}</span>
                             <span>{{props.item.SwapPss}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayKernelPageSize">
+                    <td class="text-xs-left" v-if="displayKernelPageSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.KernelPageSize, 1)}}</span>
                             <span>{{props.item.KernelPageSize}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayMMUPageSize">
+                    <td class="text-xs-left" v-if="displayMMUPageSize">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.MMUPageSize, 1)}}</span>
                             <span>{{props.item.MMUPageSize}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayLocked">
+                    <td class="text-xs-left" v-if="displayLocked">
                         <v-tooltip bottom>
                             <span slot="activator">{{cm.fmtSize.fmtKBSize(props.item.Locked, 1)}}</span>
                             <span>{{props.item.Locked}} KB</span>
                         </v-tooltip>
                     </td>
-                    <td class="text-xs-left" v-show="displayVmFlags">{{props.item.VmFlags}}</td>
-                    <td class="text-xs-left" v-show="displayStartAddr">{{props.item.StartAddr}}</td>
-                    <td class="text-xs-left" v-show="displayEndAddr">{{props.item.EndAddr}}</td>
-                    <td class="text-xs-left" v-show="displayPerm">{{props.item.Perm}}</td>
-                    <td class="text-xs-left" v-show="displayOffset">{{props.item.Offset}}</td>
-                    <td class="text-xs-left" v-show="displayDev">{{props.item.Dev}}</td>
-                    <td class="text-xs-left" v-show="displayINode">{{props.item.INode}}</td>
+                    <td class="text-xs-left" v-if="displayVmFlags">{{props.item.VmFlags}}</td>
+                    <td class="text-xs-left" v-if="displayStartAddr">{{props.item.StartAddr}}</td>
+                    <td class="text-xs-left" v-if="displayEndAddr">{{props.item.EndAddr}}</td>
+                    <td class="text-xs-left" v-if="displayPerm">{{props.item.Perm}}</td>
+                    <td class="text-xs-left" v-if="displayOffset">{{props.item.Offset}}</td>
+                    <td class="text-xs-left" v-if="displayDev">{{props.item.Dev}}</td>
+                    <td class="text-xs-left" v-if="displayINode">{{props.item.INode}}</td>
                 </template>
 
                 <!-- 没有数据时显示的内容 -->
