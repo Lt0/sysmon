@@ -14,7 +14,8 @@
             <v-container fluid fill-height class="container" id="main-container">
                 <v-layout justify-center id="main-layout">
                 <v-flex id="main-flex">
-                    <keep-alive>
+                    <!-- https://cn.vuejs.org/v2/api/#keep-alive -->
+                    <keep-alive include="Resources">
                         <router-view></router-view>
                     </keep-alive>
                 </v-flex>
