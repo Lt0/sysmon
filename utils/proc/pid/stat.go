@@ -75,20 +75,24 @@ func Stat(pid string) (PidStatInfo, error) {
 
 	r := bufio.NewReader(f)
 
-	for i := 1; ; i++ {
-		b, err := r.ReadBytes(' ')
+	b, _ := r.ReadBytes(' ')
+	s := strings.TrimSpace(string(b))
+	stat.Pid, _ = strconv.Atoi(s)
+
+	b, _ = r.ReadBytes(')')
+	s = strings.TrimSpace(string(b))
+	stat.Comm = s
+	
+
+	for i := 2; ; i++ {
+		b, err = r.ReadBytes(' ')
 		if err == io.EOF {
 			break
 		}
 		
-		s := string(b)
-		s = strings.TrimSpace(s)
+		s = strings.TrimSpace(string(b))
 
 		switch i {
-		case 1:
-			stat.Pid, _ = strconv.Atoi(s)
-		case 2:
-			stat.Comm = s
 		case 3:
 			stat.State = s
 		case 4:
@@ -190,7 +194,7 @@ func Stat(pid string) (PidStatInfo, error) {
 		case 52:
 			stat.ExitCode, _ = strconv.Atoi(s)
 		default:
-			fmt.Printf("unknon info: index: %d, value: %v\n", i, s)
+			// fmt.Printf("unknon info: index: %d, value: %v\n", i, s)
 		}
 	}
 
