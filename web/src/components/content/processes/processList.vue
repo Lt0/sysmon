@@ -211,13 +211,8 @@ export default {
             displayCmdline: false,
             headers: [],
 
-            avgJiffies: 0,
-            preJiffies: 0,
-
+            USER_HZ: 100, // 单个核心从系统启动以来平均每秒产生的节拍数
             prePidJiffies: {},
-
-            secJiffies: 0,  // 单个核心从系统启动以来平均每秒产生的节拍数
-
             PreIOReadBytes: {},
             PreIOWriteBytes: {},
         }
@@ -253,7 +248,7 @@ export default {
             this.updateDisplay();
         },
         info: function(){
-            this.updateJiffies();
+            // this.updateJiffies();
             this.formatInfo();
 
             let time = new Date();
@@ -274,9 +269,11 @@ export default {
 
                 // format CPU
                 if(!this.prePidJiffies[p.Pid]) {
-                    p.CPU = (p.UsedCPU/this.avgJiffies*100).toFixed(2);
+                    // p.CPU = (p.UsedCPU/this.USER_HZ*100).toFixed(2);
+                    p.CPU = p.UsedCPU.toFixed(2);
                 } else {
-                    p.CPU = ((p.UsedCPU-this.prePidJiffies[p.Pid])/this.avgJiffies*100).toFixed(2);
+                    // p.CPU = ((p.UsedCPU-this.prePidJiffies[p.Pid])/this.USER_HZ*100).toFixed(2);
+                    p.CPU = (p.UsedCPU-this.prePidJiffies[p.Pid]).toFixed(2);
                 }
                 tmpPrePidJiffies[p.Pid] = p.UsedCPU;
                 // format CPU end
@@ -288,8 +285,8 @@ export default {
                 }
 
                 // format CPUTime
-                // 进程一共消耗的节拍数/单个核心一秒一共能产生的节拍数 = 进程使用单个核心的 CPU 时长（sec）
-                p.CPUTime = parseInt(p.UsedCPU/this.secJiffies);
+                // 进程一共消耗的节拍数/单个核心一秒一共能产生的节拍数（USER_HZ, x86 架构下为 100） = 进程使用单个核心的 CPU 时长（sec）
+                p.CPUTime = p.UsedCPU/this.USER_HZ;
 
                 // format Read/Write
                 p.Read = p.IOReadBytes;
@@ -314,14 +311,6 @@ export default {
             this.prePidJiffies = tmpPrePidJiffies;
             this.PreIOReadBytes = tmpPreIOReadBytes;
             this.PreIOWriteBytes = tmpPreIOWriteBytes;
-        },
-        updateJiffies() {
-            let c = this.info.Cores[0];
-            let cur = c.User + c.Nice + c.System + c.Idle + c.Iowait + c.Irq + c.Softirq + c.Steal + c.Guest + c.Guest_nice
-            this.avgJiffies = (cur - this.preJiffies)/this.info.CoreNum;
-            this.preJiffies = cur;
-
-            this.secJiffies = cur/this.info.UpTime.Uptime/this.info.CoreNum;
         },
         updateHeaders(){
             this.headers = [];
@@ -434,7 +423,6 @@ export default {
             this.windowSize = { x: window.innerWidth, y: window.innerHeight }
         },
         timeParseSec(sec) {
-            sec = parseInt(sec)
             let h = parseInt(sec/3600).toString();
             if(h.length < 2) {
                 h = "0" + h
@@ -446,8 +434,8 @@ export default {
                 m = "0" + m
             }
 
-            let s = (sec%60).toString()
-            if(s.length < 2) {
+            let s = (sec%60).toFixed(2).toString()
+            if(s.length < 5) {
                 s = "0" + s
             }
 

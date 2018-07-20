@@ -13,7 +13,7 @@ let hdr = {
     VmSwap: "交换到 swap 分区的匿名私有页的大小（不包括 shmem 交换所使用的内存）",
     Pid: "进程 ID",
     Threads: "进程内的线程数",
-    State: "进程状态（R: 运行, S: 睡眠, D: 不可中断的睡眠, Z: 僵尸, T: 处于被跟踪状态或停止状态, W: paging）",
+    State: "进程状态（R: 运行, S: 睡眠, D: 不可中断的睡眠, Z: 僵尸, T: 处于被跟踪状态或停止状态, X: dead",
     Nice: "进程的静态优先级",
     Priority: "进程的动态优先级",
     User: "启动进程的用户",
@@ -35,9 +35,9 @@ let state = {
     "R (running)": "正在运行",
     "S (sleeping)": "可中断的睡眠",
     "D (disk sleep)": "不可中断的睡眠",
-    "T (stopped)": "进程已停止",
+    "T (stopped)": "处于被停止状态（基于信号）",
     "Z (zombie)": "僵尸",
-    "T (tracing stop)": "处于被跟踪状态或停止状态（基于信号）",
+    "T (tracing stop)": "处于被跟踪状态（基于信号）",
     "X (dead)": "进程挂了",
 }
 

@@ -57,7 +57,7 @@ func PidInfo(pidStr string) (Process, error) {
 	} else {
 		info.Comm = stat.Comm
 	}
-	info.UsedCPU = uint64(stat.UTime) + uint64(stat.STime) + uint64(stat.CUTime) + uint64(stat.CSTime)
+	info.UsedCPU = uint64(stat.UTime) + uint64(stat.STime) + uint64(stat.CUTime) + uint64(stat.CSTime) + uint64(stat.GuestTime) + uint64(stat.CGuestTime)
 	info.Priority = stat.Priority
 	info.Nice = stat.Nice
 	info.StartTime = stat.StartTime
