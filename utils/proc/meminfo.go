@@ -178,6 +178,8 @@ func GetMeminfo() (Meminfo, error) {
 			mi.DirectMap4k = v 
 		case "DirectMap2M":
 			mi.DirectMap2M = v 
+		case "DirectMap1G":
+			mi.DirectMap1G = v 
 		default:
 			fmt.Println("Not record:", ts)
 		}
