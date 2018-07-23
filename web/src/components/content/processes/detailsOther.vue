@@ -6,15 +6,31 @@
                 <th></th>
             </tr>
             <tr>
-                <td>oom_adj</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">oom_adj</span>
+                        <pre>{{ tips.processes.other.oomAdj }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.OOMAdj }}</td>
             </tr>
+
             <tr>
-                <td>oom_score</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">oom_score</span>
+                        <pre>{{ tips.processes.other.oomScore }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.OOMScore }}</td>
             </tr>
             <tr>
-                <td>oom_score_adj</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">oom_score_adj</span>
+                        <pre>{{ tips.processes.other.oomScoreAdj }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.OOMScoreAdj }}</td>
             </tr>
             <tr>
@@ -241,6 +257,7 @@ export default {
     props: ['info'],
     data() {
         return {
+            tips: tips,
             limitsHeaders: [
                 {text: "Limit", value: "Limit", tips: tips.processes.limits.Limit},
                 {text: "Soft Limit", value: "SoftLimit", tips: tips.processes.limits.SoftLimit},
@@ -325,6 +342,10 @@ export default {
 }
 td {
     padding: 0em 1em 0em 0em;
+}
+
+pre {
+    text-align: left;
 }
 </style>
 

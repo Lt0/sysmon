@@ -43,10 +43,11 @@ let state = {
 
 let detailsTabs = {
     thread: "进程中的所有线程信息",
-    limit: "进程的资源限制",
+    // limit: "进程的资源限制",
     stack: "所有线程的内部调用状态",
     smaps: "整个进程的内存映射信息",
     numaMaps: "整个进程的内存在 NUMA 节点之间的映射关系",
+    other: "进程相关的其它信息"
 }
 
 let limits = {
@@ -62,7 +63,7 @@ let stack = {
 
 // check details from man 5 proc(ubuntu 16.04)
 // https://lkml.org/lkml/2012/10/22/481
-let smapsHdrVmFlags = `
+let smapsHdrVmFlags = `VmFlags field represents the kernel flags associated with the particular virtual memory area in two letter encoded manner. The codes are the following: 
     RD: readable;  
     WR: writeable;  
     EX: executable; 
@@ -110,7 +111,7 @@ let smapsHdr = {
     KernelPageSize: "内核的内存页面大小", 
     MMUPageSize: "体系结构 MMU 一个页面大小", 
     Locked: "被 mlock() 系统调用锁定的内存大小。被锁定的内存因为不能 pageout/swapout，会从 Active/Inactive LRU list 移到 Unevictable LRU list 上。", 
-    VmFlags: "VmFlags field represents the kernel flags associated with the particular virtual memory area in two letter encoded manner. The codes are the following: " + smapsHdrVmFlags, 
+    VmFlags: smapsHdrVmFlags, 
     StartAddr: "映射的起始虚拟地址", 
     EndAddr: "映射的结束虚拟地址", 
     Perm: "虚拟内存的权限，r=读, w=写, x=可执行, s=共享, p=私有", 
@@ -135,6 +136,63 @@ let numaMapsHdr = {
     KernelPageSizeKB: "内核页大小", 
 }
 
+let oomAdj = `在内存不足（OOM）的情况下，系统根据各个进程的该文件的值来权衡要杀死的进程。 
+内核使用这个进行进程的 oom_score 值的位移操作：有效值在 -16 到 +15 的范围内，再加上特殊值 -17，它会为此进程完全禁用OOM查杀。 
+正分会增加这个过程被 OOM 杀手杀死的可能性; 负分数降低了可能性。
+该文件的默认值为0; 新进程继承其父进程的oom_adj设置。 进程必须具有特权（CAP_SYS_RESOURCE）才能更新此文件。
+从Linux 2.6.36开始，不推荐使用此文件，而使用/ proc / [pid] / oom_score_adj。
+`
+
+let oomScore = `此文件显示内核为此进程提供的当前分数，以便为OOM杀手选择进程。 得分越高意味着OOM杀手更有可能选择该过程。 此分数的取决于进程运行过程使用的内存量，决策因素如下：
+1. 该进程是否使用fork（2）（+）创建了很多子进程;
+2. 进程是否已运行很长时间，或者是否占用了大量CPU时间（ - ）;
+3. 该进程是否具有低的 nice 值（即> 0）（+）;
+4. 流程是否具有特权（ - ）; 和
+5. 该进程是否进行直接硬件访问（ - ）。
+oom_score还反映了进程的oom_score_adj或oom_adj设置指定的调整。`
+
+let oomScoreAdj = `
+This file can be used to adjust the badness heuristic used to select which process gets killed in out-of-memory conditions.
+
+The badness heuristic assigns a value to each candidate task ranging from 0 (never kill) to 1000 (always kill) to
+determine which process is targeted.  The units are roughly a proportion along that range of allowed  memory  the
+process  may allocate from, based on an estimation of its current memory and swap use.  For example, if a task is
+using all allowed memory, its badness score will be 1000.  If it is using half of its allowed memory,  its  score
+will be 500.
+
+There  is an additional factor included in the badness score: root processes are given 3% extra memory over other
+tasks.
+
+The amount of "allowed" memory depends on the context in which the OOM-killer was called.  If it is  due  to  the
+memory  assigned  to  the allocating task's cpuset being exhausted, the allowed memory represents the set of mems
+assigned to that cpuset (see cpuset(7)).  If it is due to a mempolicy's node(s) being exhausted, the allowed mem‐
+ory  represents  the  set  of mempolicy nodes.  If it is due to a memory limit (or swap limit) being reached, the
+allowed memory is that configured limit.  Finally, if it is due to the entire system being  out  of  memory,  the
+allowed memory represents all allocatable resources.
+
+The  value  of  oom_score_adj  is  added  to the badness score before it is used to determine which task to kill.
+Acceptable values range from -1000 (OOM_SCORE_ADJ_MIN) to +1000 (OOM_SCORE_ADJ_MAX).  This allows user  space  to
+control  the preference for OOM-killing, ranging from always preferring a certain task or completely disabling it
+from OOM-killing.  The lowest possible value, -1000, is equivalent to disabling  OOM-killing  entirely  for  that
+task, since it will always report a badness score of 0.
+
+Consequently, it is very simple for user space to define the amount of memory to consider for each task.  Setting
+a oom_score_adj value of +500, for example, is roughly equivalent to allowing the remainder of tasks sharing  the
+same system, cpuset, mempolicy, or memory controller resources to use at least 50% more memory.  A value of -500,
+on the other hand, would be roughly equivalent to discounting 50% of the task's allowed memory from being consid‐
+ered as scoring against the task.
+
+For  backward  compatibility  with  previous  kernels,  /proc/[pid]/oom_adj can still be used to tune the badness
+score.  Its value is scaled linearly with oom_score_adj.
+
+Writing to /proc/[pid]/oom_score_adj or /proc/[pid]/oom_adj will change the other with its scaled value.`
+
+let other = {
+    oomAdj: oomAdj, 
+    oomScore: oomScore,
+    oomScoreAdj: oomScoreAdj,
+}
+
 exports.hdr = hdr;
 exports.state = state;
 exports.detailsTabs = detailsTabs;
@@ -142,3 +200,4 @@ exports.limits = limits;
 exports.stack = stack;
 exports.smapsHdr = smapsHdr;
 exports.numaMapsHdr = numaMapsHdr;
+exports.other = other;

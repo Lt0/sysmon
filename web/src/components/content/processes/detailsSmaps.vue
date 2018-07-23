@@ -31,10 +31,10 @@
                             <!-- 表头显示内容 -->
                             {{ props.header.text }}
                         </span>
-                        <span>
+                        <pre class="hdr-tips">
                             <!-- 表头的 tooltip, updateHeaders 时填充 -->
                             {{ props.header.tips }}
-                        </span>
+                        </pre>
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
@@ -386,5 +386,8 @@ export default {
 }
 .file-item {
     word-break: break-all;
+}
+.hdr-tips {
+    text-align: left;
 }
 </style>
