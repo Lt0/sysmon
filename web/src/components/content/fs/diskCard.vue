@@ -21,9 +21,9 @@
             <div class="details-item">Use%: {{storage.UsePercent}}</div>
             <v-tooltip bottom>
                 <span slot="activator">
-                    <div class="details-item">MountPoint: {{storage.MountPoint}}</div>
+                    <div class="details-item">Mount Point: {{storage.MountPoint}}</div>
                 </span>
-                <span>MountPoint: {{storage.MountPoint}}</span>
+                <span>Mount Point: {{storage.MountPoint}}</span>
             </v-tooltip>
         </div>
         
