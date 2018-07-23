@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 	"io"
+	"io/ioutil"
 	"bufio"
 	"fmt"
 	"path/filepath"
@@ -210,4 +211,9 @@ func Status(pid string) (StatusInfo, error) {
 	}
 
 	return status, nil
+}
+
+func StatusRawData(pid string) string {
+	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "status"))
+	return string(buf)
 }

@@ -25,7 +25,7 @@ func (c *ProcessController) AllProcess() {
 
 // @Title Process Details
 // @Description Get Process Details
-// @Param	pid	query	int	true	"which process to get"
+// @Param	pid	query	string	true	"which process to get"
 // @Success 200 {object} models.Object
 // @Failure 403 :objectId is empty
 // @router /details [get]

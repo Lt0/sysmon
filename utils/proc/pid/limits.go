@@ -4,6 +4,7 @@ import (
 	"bufio"
 	// "fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -52,4 +53,10 @@ func Limits(pid string) (LimitsInfo, error) {
 	}
 
 	return info, nil
+}
+
+
+func LimitsRawData(pid string) string {
+	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "limits"))
+	return string(buf)
 }

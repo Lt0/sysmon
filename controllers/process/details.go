@@ -1,7 +1,7 @@
 package process
 
 import (
-	"strconv"
+	// "strconv"
 	"fmt"
 	"time"
 
@@ -13,7 +13,7 @@ import (
 type DetailsCtrl struct {
 	Controller *beego.Controller
 
-	pid	int
+	pid	string
 	threads []string
 	details detailsInfo
 }
@@ -30,9 +30,33 @@ type detailsInfo struct {
 	Stacks		[]stacksInfo
 	Smaps		pid.SmapsInfo
 	NumaMaps	pid.NumaMapsInfo
+	CWD			string
+	OOMAdj		int
+	OOMScore	int
+	OOMScoreAdj	int
+	FD			pid.FDInfo
+	MapFiles	pid.MapFilesInfo
 
 	// raw data, 文件的原始数据
-	RDSched		string
+	RDSched				string
+	// RDLimits			string
+	RDStatus			string
+	RDEnviron			string
+	RDCPUSet			string
+	RDMountInfo			string	
+	RDMounts			string	
+	RDMountStats		string	
+	RDCGroup			string
+	RDAutoGroup			string
+	RDCoredumpFilter	string
+	RDUidMap			string
+	RDGidMap			string
+	RDLoginUid			string
+	RDPersonality		string
+	RDProjidMap			string
+	RDSessionID			string
+	RDSetGroup			string
+	RDSyscall			string
 }
 
 type stacksInfo struct {
@@ -44,7 +68,7 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.fillTimeStamp()
 
 	p.param()
-	p.threads = proc.AllThreadPids(strconv.Itoa(p.pid))
+	p.threads = proc.AllThreadPids(p.pid)
 	p.details.Cores, p.details.CoreNum = coresInfo()
 	p.details.UpTime = uptimeInfo()
 
@@ -53,16 +77,37 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.fillStack()
 	p.fillSmaps()
 	p.fillNumaMaps()
+	p.details.CWD = pid.CWD(p.pid)
+	p.details.OOMAdj = pid.OOMAdj(p.pid)
+	p.details.OOMScore = pid.OOMScore(p.pid)
+	p.details.FD = pid.FD(p.pid)
+	p.details.MapFiles = pid.MapFiles(p.pid)
 
-	p.details.RDSched = pid.RawData(strconv.Itoa(p.pid))
+	p.details.RDSched = pid.SchedRawData(p.pid)
+	// p.details.RDLimits = pid.LimitsRawData(p.pid)
+	p.details.RDStatus = pid.StatusRawData(p.pid)
+	p.details.RDEnviron = pid.EnvironRawData(p.pid)
+	p.details.RDCPUSet = pid.CPUSetRawData(p.pid)
+	p.details.RDMountInfo = pid.MountInfoRawData(p.pid)
+	p.details.RDMounts = pid.MountsRawData(p.pid)
+	p.details.RDMountStats = pid.MountStatsRawData(p.pid)
+	p.details.RDCGroup = pid.CGroupRawData(p.pid)
+	p.details.RDAutoGroup = pid.AutoGroupRawData(p.pid)
+	p.details.RDCoredumpFilter = pid.CoredumpFilterRawData(p.pid)
+	p.details.RDUidMap = pid.UidMapRawData(p.pid)
+	p.details.RDGidMap = pid.GidMapRawData(p.pid)
+	p.details.RDLoginUid = pid.LoginUidRawData(p.pid)
+	p.details.RDPersonality = pid.PersonalityRawData(p.pid)
+	p.details.RDProjidMap = pid.ProjidMapRawData(p.pid)
+	p.details.RDSessionID = pid.SessionIDRawData(p.pid)
+	p.details.RDSetGroup = pid.SetGroupRawData(p.pid)
+	p.details.RDSyscall = pid.SyscallRawData(p.pid)
+	
 	return p.details
 }
 
 func (p *DetailsCtrl) param() {
-	pid, err := p.Controller.GetInt("pid")
-	if err != nil {
-		fmt.Println("get param failed:", err)
-	}
+	pid := p.Controller.GetString("pid")
 
 	fmt.Println("pid:", pid)
 	p.pid = pid
@@ -86,7 +131,7 @@ func (p *DetailsCtrl) fillProcesses() {
 
 func (p *DetailsCtrl) fillLimits() {
 	var err error
-	p.details.Limits, err = pid.Limits(strconv.Itoa(p.pid))
+	p.details.Limits, err = pid.Limits(p.pid)
 	if err != nil {
 		fmt.Println("fillLimits: ", err)
 	}
@@ -108,7 +153,7 @@ func (p *DetailsCtrl) fillStack() {
 }
 
 func (p *DetailsCtrl) fillSmaps() {
-	info, err := pid.Smaps(strconv.Itoa(p.pid))
+	info, err := pid.Smaps(p.pid)
 	if err != nil {
 		fmt.Println("fillSmaps: ", err)
 	}
@@ -116,7 +161,7 @@ func (p *DetailsCtrl) fillSmaps() {
 }
 
 func (p *DetailsCtrl) fillNumaMaps() {
-	info, err := pid.NumaMaps(strconv.Itoa(p.pid))
+	info, err := pid.NumaMaps(p.pid)
 	if err != nil {
 		fmt.Println("fillNumaMaps: ", err)
 	}

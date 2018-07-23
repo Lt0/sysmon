@@ -19,12 +19,12 @@
                             <span>{{tips.processes.detailsTabs.thread}}</span>
                         </v-tooltip>
                     </v-tab>
-                    <v-tab>
+                    <!-- <v-tab>
                         <v-tooltip bottom>
                             <span slot="activator">limit</span>
                             <span>{{tips.processes.detailsTabs.limit}}</span>
                         </v-tooltip>
-                    </v-tab>
+                    </v-tab> -->
                     <v-tab>
                         <v-tooltip bottom>
                             <span slot="activator">stack</span>
@@ -54,9 +54,9 @@
                         <v-tab-item>
                             <process-list :info='detailsCtrl.info' @show-process-details="showProcessDetailsHandler($event)" />
                         </v-tab-item>
-                        <v-tab-item>
+                        <!-- <v-tab-item>
                             <details-limits :limitsInfo='detailsCtrl.info.Limits'></details-limits>
-                        </v-tab-item>
+                        </v-tab-item> -->
                         <v-tab-item>
                             <details-stack :stacksInfo='detailsCtrl.info.Stacks'></details-stack>
                         </v-tab-item>

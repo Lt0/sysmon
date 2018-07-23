@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"bufio"
 	"path/filepath"
+	"bytes"
 )
 
 // comment for /proc/pid/cmdline
@@ -29,7 +30,9 @@ func Cmdline(pid string) (CmdlineInfo, error) {
 	r := bufio.NewReader(f)
 	cmdline, _ := r.ReadBytes('\n')
 	if len(cmdline) > 1 {
-		ci.Cmdline = string(cmdline[:len(cmdline)-1])
+		cmdline := bytes.Replace(cmdline[:len(cmdline)-1], []byte{0}, []byte{' '}, -1) 
+
+		ci.Cmdline = string(cmdline)
 	}
 	
 	return ci, nil
