@@ -30,6 +30,9 @@ type detailsInfo struct {
 	Stacks		[]stacksInfo
 	Smaps		pid.SmapsInfo
 	NumaMaps	pid.NumaMapsInfo
+
+	// raw data, 文件的原始数据
+	RDSched		string
 }
 
 type stacksInfo struct {
@@ -51,6 +54,7 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.fillSmaps()
 	p.fillNumaMaps()
 
+	p.details.RDSched = pid.SchedRawData(strconv.Itoa(p.pid))
 	return p.details
 }
 
