@@ -221,7 +221,7 @@ export default {
     computed: {
         Smaps: function() {
             if(this.smapsInfo) {
-                return this.smapsInfo.Mappings;
+                return this.smapsInfo.Mappings || [];
             }
 
             return [];

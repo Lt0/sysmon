@@ -32,6 +32,9 @@
 // score.  Its value is scaled linearly with oom_score_adj.
 // 
 // Writing to /proc/[pid]/oom_score_adj or /proc/[pid]/oom_adj will change the other with its scaled value.
+
+// 本文件可用于调整进程在 out-of-memory 的情况下被杀死的权重
+// 该文件的有效值为 0(任何情况下都不 kill 该进程)~1000(一旦内存不足立即 kill 该进程)，
 package pid
 
 import (

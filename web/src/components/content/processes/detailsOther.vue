@@ -33,218 +33,321 @@
                 </td>
                 <td>{{ this.info.OOMScoreAdj }}</td>
             </tr>
+
             <tr>
-                <td>login uid</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">login uid</span>
+                        <pre>{{ tips.processes.other.loginUid }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.RDLoginUid }}</td>
             </tr>
+
             <tr>
-                <td>session id</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">session id</span>
+                        <pre>{{ tips.processes.other.sessionID }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.RDSessionID }}</td>
             </tr>
+
             <tr>
-                <td>setgroup</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">setgroup</span>
+                        <pre>{{ tips.processes.other.setGroup }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.RDSetGroup }}</td>
             </tr>
+
             <tr>
-                <td>cpu set</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">cpu set</span>
+                        <pre>{{ tips.processes.other.cpuSet }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.RDCPUSet }}</td>
             </tr>
+
             <tr>
-                <td>coredump filter</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">coredump filter</span>
+                        <pre>{{ tips.processes.other.coredumpFilter }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.RDCoredumpFilter }}</td>
             </tr>
+
             <tr>
-                <td>personality</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">personality</span>
+                        <pre>{{ tips.processes.other.personality }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.RDPersonality }}</td>
             </tr>
+
             <tr>
-                <td>cwd</td>
+                <td>
+                    <v-tooltip bottom>
+                        <span slot="activator">cwd</span>
+                        <pre>{{ tips.processes.other.cwd }}</pre>
+                    </v-tooltip>
+                </td>
                 <td>{{ this.info.CWD }}</td>
             </tr>
+
         </table>
 
-        <!-- sched -->
-        <div class="info-card">
-            <h2>Sched</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ Sched }}</pre>
+        <v-expansion-panel expand>
+            <!-- sched -->
+            <v-expansion-panel-content lazy>
+            <div slot="header">
+                <v-tooltip bottom>
+                    <h5 slot="activator">Sched</h5>
+                    <pre>{{ tips.processes.other.schedHdr }}</pre>
+                </v-tooltip>
             </div>
-        </div>
+            <div class="info-card">
+                <table>
+                    <tr v-for="item in Sched.Items" :key=item.id>
+                        <td>
+                            <v-tooltip bottom>
+                                <span slot="activator">{{ item.Name }}</span>
+                                <pre>{{ tips.processes.other.sched[item.Name] || "no tips" }}</pre>
+                            </v-tooltip>
+                        </td>
+                        <td>{{ item.Val }}</td>
+                    </tr>
+                </table>
+                <br>
+                <pre>{{ Sched.Other }}</pre>
+            </div>
+        </v-expansion-panel-content>
 
         <!-- limits -->
-        <div class="info-card">
-            <h2>Limits</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <!-- <pre class="rawData">{{ Limits }}</pre> -->
-                <div>
-                    <v-data-table
-                        :headers="limitsHeaders"
-                        :items="Limits"
-                        hide-actions
-                    >
-                        <!-- 定制表头 -->
-                        <template slot="headerCell" slot-scope="props">
-                            <v-tooltip bottom>
-                                <span slot="activator">
-                                    <!-- 表头显示内容 -->
-                                    {{ props.header.text }}
-                                </span>
-                                <span>
-                                    <!-- 表头的 tooltip, updateHeaders 时填充 -->
-                                    {{ props.header.tips }}
-                                </span>
-                            </v-tooltip>
-                        </template>
-                        <template slot="items" slot-scope="props">
-                            <td class="text-xs-left">{{props.item.Limit}}</td>
-                            <td class="text-xs-left">{{props.item.SoftLimit}}</td>
-                            <td class="text-xs-left">{{props.item.HardLimit}}</td>
-                            <td class="text-xs-left">{{props.item.Units}}</td>
-                        </template>
-                        <!-- 没有数据时显示的内容 -->
-                        <template slot="no-data">
-                            no limits info
-                        </template>
-                    </v-data-table>
+        <v-expansion-panel-content lazy>
+            <div slot="header">
+                <v-tooltip bottom>
+                    <h5 slot="activator">Limits</h5>
+                    <pre>{{ tips.processes.other.limitsHdr }}</pre>
+                </v-tooltip>
+            </div>
+            <div class="info-card">
+                <v-data-table
+                    :headers="limitsHeaders"
+                    :items="Limits"
+                    hide-actions
+                >
+                    <!-- 定制表头 -->
+                    <template slot="headerCell" slot-scope="props">
+                        <v-tooltip bottom>
+                            <span slot="activator">
+                                <!-- 表头显示内容 -->
+                                {{ props.header.text }}
+                            </span>
+                            <span>
+                                <!-- 表头的 tooltip, updateHeaders 时填充 -->
+                                {{ props.header.tips }}
+                            </span>
+                        </v-tooltip>
+                    </template>
+                    <template slot="items" slot-scope="props">
+                        <td class="text-xs-left">{{props.item.Limit}}</td>
+                        <td class="text-xs-left">{{props.item.SoftLimit}}</td>
+                        <td class="text-xs-left">{{props.item.HardLimit}}</td>
+                        <td class="text-xs-left">{{props.item.Units}}</td>
+                    </template>
+                    <!-- 没有数据时显示的内容 -->
+                    <template slot="no-data">
+                        no limits info
+                    </template>
+                </v-data-table>
+            </div>
+            </v-expansion-panel-content>
+
+            <!-- status -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Status</h5>
+                        <pre>{{ tips.processes.other.statusHdr }}</pre>
+                    </v-tooltip>
                 </div>
-            </div>
-        </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ Status }}</pre>
+                </div>
+            </v-expansion-panel-content>
 
+            <!-- syscall -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Syscall</h5>
+                        <pre>{{ tips.processes.other.syscallHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ Syscall }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- environ -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Environ</h5>
+                        <pre>{{ tips.processes.other.environHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ Environ }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- FDs -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">File Descriptors</h5>
+                        <pre>{{ tips.processes.other.fdHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <div v-for="item in FDs" :key=item.id>
+                        {{ item.Name }} -> {{ item.File }}
+                    </div>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- map files -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Map Files</h5>
+                        <pre>{{ tips.processes.other.mapFilesHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <div v-for="item in MapFiles" :key=item.id>
+                        {{ item.AddrRange }} -> {{ item.File }}
+                    </div>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- auto group -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Auto Group</h5>
+                        <pre>{{ tips.processes.other.autoGroupHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ AutoGroup }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- cgroup -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">CGroup</h5>
+                        <pre>{{ tips.processes.other.cgroupHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ CGroup }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- uid map -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Uid Map</h5>
+                        <pre>{{ tips.processes.other.uidMapHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ UidMap }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- gid map -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Gid Map</h5>
+                        <pre>{{ tips.processes.other.gidMapHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ GidMap }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- projid map -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Projid Map</h5>
+                        <pre>{{ tips.processes.other.projidMapHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ ProjidMap }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- mount info -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Mount Info</h5>
+                        <pre>{{ tips.processes.other.mountInfoHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ MountInfo }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- mounts -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Mounts</h5>
+                        <pre>{{ tips.processes.other.mountsHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ Mounts }}</pre>
+                </div>
+            </v-expansion-panel-content>
+
+            <!-- mount stats -->
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Mount Stats</h5>
+                        <pre>{{ tips.processes.other.mountStatsHdr }}</pre>
+                    </v-tooltip>
+                </div>
+                <div class="info-card">
+                    <pre class="rawData">{{ MountStats }}</pre>
+                </div>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
         
-
-        <!-- status -->
-        <div class="info-card">
-            <h2>Status</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ Status }}</pre>
-            </div>
-        </div>
-
-        <!-- syscall -->
-        <div class="info-card">
-            <h2>Syscall</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ Syscall }}</pre>
-            </div>
-        </div>
-
-        <!-- projid map -->
-        <div class="info-card">
-            <h2>Projid Map</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ ProjidMap }}</pre>
-            </div>
-        </div>
-
-        <!-- environ -->
-        <div class="info-card">
-            <h2>Environ</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ Environ }}</pre>
-            </div>
-        </div>
-
-        <!-- auto group -->
-        <div class="info-card">
-            <h2>Auto Group</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ AutoGroup }}</pre>
-            </div>
-        </div>
-
-        <!-- cgroup -->
-        <div class="info-card">
-            <h2>CGroup</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ CGroup }}</pre>
-            </div>
-        </div>
-
-        <!-- uid map -->
-        <div class="info-card">
-            <h2>Uid Map</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ UidMap }}</pre>
-            </div>
-        </div>
-
-        <!-- gid map -->
-        <div class="info-card">
-            <h2>Gid Map</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ GidMap }}</pre>
-            </div>
-        </div>
-
-        <!-- FDs -->
-        <div class="info-card">
-            <h2>File Descriptors</h2>
-            <v-divider></v-divider>
-            <br>
-            <div v-for="item in FDs" :key=item.id>
-                {{ item.Name }} -> {{ item.File }}
-            </div>
-        </div>
-
-        <!-- map files -->
-        <div class="info-card">
-            <h2>Map Files</h2>
-            <v-divider></v-divider>
-            <br>
-            <div v-for="item in MapFiles" :key=item.id>
-                {{ item.AddrRange }} -> {{ item.File }}
-            </div>
-        </div>
-
-        <!-- mount info -->
-        <div class="info-card">
-            <h2>Mount Info</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ MountInfo }}</pre>
-            </div>
-        </div>
-
-        <!-- mounts -->
-        <div class="info-card">
-            <h2>Mounts</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ Mounts }}</pre>
-            </div>
-        </div>
-
-        <!-- mount stats -->
-        <div class="info-card">
-            <h2>Mount Stats</h2>
-            <v-divider></v-divider>
-            <br>
-            <div>
-                <pre class="rawData">{{ MountStats }}</pre>
-            </div>
-        </div>
+        
     </div>
 </template>
 
@@ -267,8 +370,11 @@ export default {
         }
     },
     computed: {
+        // Sched: function() {
+        //     return this.info.RDSched || "no Sched to show";
+        // },
         Sched: function() {
-            return this.info.RDSched || "no Sched to show";
+            return this.info.Sched || [];
         },
         Limits: function() {
             if(this.info.Limits) {
@@ -328,17 +434,17 @@ export default {
 <style scoped>
 .info-card {
     text-align: left;
-    padding: 1em 1em 1em 3em;
+    padding: 1em 1em 1em 1em;
 }
 
 .rawData {
-    font-family: 'Liberation Mono', 'Courier', 'Courier New', '宋体';
+    /* font-family: 'Liberation Mono', 'Courier', 'Courier New', '宋体'; */
     text-align: left;
 }
 
 .info-table {
     text-align: left;
-    padding: 1em 1em 1em 3em;
+    padding: 1em 1em 1em 1em;
 }
 td {
     padding: 0em 1em 0em 0em;
@@ -346,6 +452,13 @@ td {
 
 pre {
     text-align: left;
+}
+
+#sched-content {
+    display: flex;
+}
+.sched-tips {
+    color: grey;
 }
 </style>
 

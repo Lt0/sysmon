@@ -1,4 +1,5 @@
 // http://man7.org/linux/man-pages/man7/user_namespaces.7.html
+// 除了把 uid 改为 gid，所有地方和 uid_map 的相同
 package pid
 
 import (

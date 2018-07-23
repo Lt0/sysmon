@@ -36,9 +36,10 @@ type detailsInfo struct {
 	OOMScoreAdj	int
 	FD			pid.FDInfo
 	MapFiles	pid.MapFilesInfo
+	Sched		pid.SchedInfo
 
 	// raw data, 文件的原始数据
-	RDSched				string
+	// RDSched				string
 	// RDLimits			string
 	RDStatus			string
 	RDEnviron			string
@@ -82,8 +83,9 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.details.OOMScore = pid.OOMScore(p.pid)
 	p.details.FD = pid.FD(p.pid)
 	p.details.MapFiles = pid.MapFiles(p.pid)
+	p.details.Sched, _ = pid.Sched(p.pid)
 
-	p.details.RDSched = pid.SchedRawData(p.pid)
+	// p.details.RDSched = pid.SchedRawData(p.pid)
 	// p.details.RDLimits = pid.LimitsRawData(p.pid)
 	p.details.RDStatus = pid.StatusRawData(p.pid)
 	p.details.RDEnviron = pid.EnvironRawData(p.pid)

@@ -46,11 +46,55 @@
 package pid
 
 import (
+	"strings"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 )
+
+type SchedInfo struct {
+	Items	[]SchedItem
+	Other	string
+}
+
+type SchedItem struct {
+	Name	string
+	Val		string
+}
+
+func Sched(pid string) (SchedInfo, error) {
+	var info SchedInfo
+
+	buf, err := ioutil.ReadFile(filepath.Join(procfs, pid, "sched"))
+	if err != nil {
+		return info, err
+	}
+	lines := strings.Split(string(buf), "\n")
+	if len(lines) < 3 {
+		return info, fmt.Errorf("Invalid Sched content: %v\n", string(buf))
+	}
+
+	for _, v := range(lines[2:]) {
+		if strings.Contains(v, ":") {
+			vs := strings.Split(v, ":")
+			if len(vs) == 2 {
+				var item SchedItem
+				item.Name = strings.TrimSpace(vs[0])
+				item.Val = strings.TrimSpace(vs[1])
+				info.Items = append(info.Items, item)
+			} else {
+				fmt.Println("Sched: Invalid entry:", v)
+			}
+		} else {
+			info.Other += (v + "\n")
+		}
+	}
+
+	return info, nil
+}
 
 func SchedRawData(pid string) string {
 	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "sched"))
 	return string(buf)
 }
+

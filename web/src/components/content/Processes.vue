@@ -2,7 +2,7 @@
     <div>
         <process-list :info='infoCtrl.info' @show-process-details="showProcessDetailsHandler($event)" />
 
-        <v-dialog v-model="dialog" lazy scrollable >
+        <v-dialog v-model="dialog" lazy scrollable persistent fullscreen>
         <v-card>
             <v-toolbar dark color="teal lighten-1">
                 <v-toolbar-title><span>Details of pid {{ detailsCtrl.pid }}</span></v-toolbar-title>
@@ -142,7 +142,8 @@ export default {
 
     methods: {
         showProcessDetailsHandler(pid) {
-            this.closeProcessDetailsHandler();
+            cm.process.stopUpdater(infoCtrl);
+            cm.process.stopUpdater(detailsCtrl);
 
             this.detailsCtrl.pid = pid;
             cm.process.startUpdater(this.detailsCtrl);
@@ -151,6 +152,7 @@ export default {
         closeProcessDetailsHandler(){
             this.dialog = false;
             cm.process.stopUpdater(this.detailsCtrl);
+            cm.process.startUpdater(infoCtrl, infoCtrl.type);
         }
     },
 }
