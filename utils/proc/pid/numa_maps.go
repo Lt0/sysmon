@@ -1,6 +1,7 @@
 package pid
 
 import (
+	"strconv"
 	"bufio"
 	"fmt"
 	"io"
@@ -20,13 +21,13 @@ type Mapping struct {
 	Nodes		[]NodePages	// 各个 NUMA 节点上分配的内存页数。
 	File		string	// 内存范围所对应的文件。 如果文件被映射为私有，则写访问可能已在此内存范围中生成COW（写时复制）页。 这些页面显示为匿名页面。
 	MapType		string	// 该字段可能为空，以下是可能的类型：Heap: 由堆使用的内存; Stack: 由栈使用的内存; Huge: Huge 内存范围，显示的是大页内存而不是常规页。
-	Anon		string	// 该范围内的匿名内存页数
-	Dirty		string	// 需要回写磁盘的页数
-	Mapped		string	// 映射的内存页面总数（如果和 dirty 以及 anon 的页数不同的话）。
-	MapMax		string	// 扫描期间遇到的最大mapcount（映射单个页面的进程数）。 这可以用作在给定存储器范围内发生的共享程度的指示符。
-	SwapCache	string	// 在交换设备上具有关联条目的页数。
-	Active		string	// 活动列表中的页数。仅当与此范围内的页数不同时，才会显示此字段。 这意味着存储器范围中存在一些非活动页面，这些页面很快就会被交换器从内存中删除。
-	WriteBack	string	// 当前正在回写到磁盘的页数
+	Anon		int		// 该范围内的匿名内存页数
+	Dirty		int		// 需要回写磁盘的页数
+	Mapped		int		// 映射的内存页面总数（如果和 dirty 以及 anon 的页数不同的话）。
+	MapMax		int		// 扫描期间遇到的最大mapcount（映射单个页面的进程数）。 这可以用作在给定存储器范围内发生的共享程度的指示符。
+	SwapCache	int		// 在交换设备上具有关联条目的页数。
+	Active		int		// 活动列表中的页数。仅当与此范围内的页数不同时，才会显示此字段。 这意味着存储器范围中存在一些非活动页面，这些页面很快就会被交换器从内存中删除。
+	WriteBack	int		// 当前正在回写到磁盘的页数
 
 	KernelPageSizeKB string	// 内核页大小
 }
@@ -89,19 +90,19 @@ func parseNumaMapLine(s string) (Mapping, error) {
 		case "file":
 			mapping.File = kvpaire[1]
 		case "anon":
-			mapping.Anon = kvpaire[1]
+			mapping.Anon, _ = strconv.Atoi(kvpaire[1])
 		case "dirty":
-			mapping.Dirty = kvpaire[1]
+			mapping.Dirty, _ = strconv.Atoi(kvpaire[1])
 		case "mapped":
-			mapping.Mapped = kvpaire[1]
+			mapping.Mapped, _ = strconv.Atoi(kvpaire[1])
 		case "mapmax":
-			mapping.MapMax = kvpaire[1]
+			mapping.MapMax, _ = strconv.Atoi(kvpaire[1])
 		case "swapcache":
-			mapping.SwapCache = kvpaire[1]
+			mapping.SwapCache, _ = strconv.Atoi(kvpaire[1])
 		case "active":
-			mapping.Active = kvpaire[1]
+			mapping.Active, _ = strconv.Atoi(kvpaire[1])
 		case "writeback":
-			mapping.WriteBack = kvpaire[1]
+			mapping.WriteBack, _ = strconv.Atoi(kvpaire[1])
 		case "kernelpagesize_kB":
 			mapping.KernelPageSizeKB = kvpaire[1]
 		default:
