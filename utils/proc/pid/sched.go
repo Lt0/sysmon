@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-func SchedRawData(pid string) string {
+func RawData(pid string) string {
 	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "sched"))
 	return string(buf)
 }

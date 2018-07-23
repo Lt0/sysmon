@@ -54,7 +54,7 @@ func (p *DetailsCtrl) Do() interface{} {
 	p.fillSmaps()
 	p.fillNumaMaps()
 
-	p.details.RDSched = pid.SchedRawData(strconv.Itoa(p.pid))
+	p.details.RDSched = pid.RawData(strconv.Itoa(p.pid))
 	return p.details
 }
 
