@@ -1,7 +1,6 @@
 package process
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/Lt0/sysmon/utils/proc"
@@ -23,7 +22,6 @@ type AllProcess struct {
 func (p *AllProcessCtrl) Do() interface{} {
 	var ap AllProcess
 
-	fmt.Println("do AllProcess")
 	t := time.Now()
 	ap.TimeStamp = t.UnixNano()
 	p.AllPidInfo(&ap)

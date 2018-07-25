@@ -110,8 +110,6 @@ func (p *DetailsCtrl) Do() interface{} {
 
 func (p *DetailsCtrl) param() {
 	pid := p.Controller.GetString("pid")
-
-	fmt.Println("pid:", pid)
 	p.pid = pid
 }
 
