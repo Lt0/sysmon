@@ -1,14 +1,13 @@
 #!/bin/bash
 
 WS=$PWD
-
 cd web
-npm install
+#npm install
 npm run build
-
 cd $WS
 
 echo "build..."
+export CC="musl-gcc"
 go build -o sysmon -ldflags '-linkmode "external" -extldflags "-static"'
 
 echo "pack..."
