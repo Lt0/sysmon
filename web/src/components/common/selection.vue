@@ -37,7 +37,7 @@
 <script>
 export default {
     name: 'appSelection',
-    props: ['items', 'selectedItems', 'defaultItemNum'],
+    props: ['items', 'selectedItems', 'defaultItemNum', 'dataKey'],
     model: {
         prop: 'selectedItems',
         event: 'input',
@@ -49,39 +49,62 @@ export default {
             selectedType: 'Default',
         }
     },
+    created() {
+        this.initSelectedItems();
+    },
     methods: {
         updateSelection(arg){
             this.$emit('input', arg);
+            this.saveSelectedItems(arg);
         },
+        initSelectedItems() {
+            if(this.dataKey) {
+                if(!localStorage[this.dataKey]) {
+                    return;
+                }
+
+                let items = JSON.parse(localStorage[this.dataKey]);
+                console.log("selection init " + this.dataKey + ": " + items);
+                this.$emit('input', items);
+            }
+        }, 
+        saveSelectedItems(items) {
+            if(this.dataKey) {
+                // console.log("go to save " + this.dataKey);
+                localStorage.setItem(this.dataKey, JSON.stringify(items))
+                console.log("saved data: " + localStorage[this.dataKey]);
+            }
+        }
     },
     watch: {
         selectedType: function(){
             // console.log("selectedType: " + this.selectedType);
+            let items = [];
             switch (this.selectedType) {
                 case 'Default':
-                    let items = [];
                     for (let i = 0; i < this.defaultItemNum; i++){
                         items.push(this.items[i]);
                     }
-                    this.$emit('input', items);
                     break;
                 case 'Items':
-                    let devs = JSON.parse(JSON.stringify(this.items));
+                    items = JSON.parse(JSON.stringify(this.items));
                     for (let i = 0; i < this.defaultItemNum; i++){
-                        devs.shift();
+                        items.shift();
                     }
-                    this.$emit('input', devs);
                     break;
                 case 'All':
-                    this.$emit('input', this.items);
+                    items = this.items;
                     break;
                 default:
-                    return;
+                    items = this.selectedItems;
             }
+
+            this.$emit('input', items);
+            this.saveSelectedItems(items);
         },
         selectedItems: function(){
             // console.log("selection: selectedItems: " + this.selectedItems);
-            if (this.selectedItems.length == this.items.length) {
+            if (this.selectedItems.length == this.items.length && this.items.length != 1) {
                 this.selectedType = this.selectTypes[2].name;
                 // console.log("2 this.selectedType: " + this.selectedType);
                 return;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <chart-hdr title='Network History' :items='nicNameList' v-model='selectedNicName' defaultItemNum=1 />
+        <chart-hdr title='Network History' :items='nicNameList' v-model='selectedNicName' defaultItemNum=1 dataKey="resources-net" />
         <net-line-chart :net='net' :rscOp='rscOp' :points='points' :selectedNics='selectedNics' />
     </div>
 </template>
@@ -38,8 +38,14 @@ export default {
             let self = this;
             self.selectedNics = [];
             for (let i = 0; i < self.selectedNicName.length; i++){
-                self.selectedNics.push(self.nicNameList.indexOf(self.selectedNicName[i]))
+                let index = self.nicNameList.indexOf(self.selectedNicName[i]);
+                if(index >= 0) {
+                    self.selectedNics.push(index)
+                }
+                
             }
+            console.log("self.selectedNicName: " + self.selectedNicName)
+            console.log("self.selectedNics: " + self.selectedNics)
         }
     },
     methods: {

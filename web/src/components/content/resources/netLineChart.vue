@@ -155,7 +155,9 @@ export default {
             let self = this;
             for(let i = 0; i < self.selectedNics.length; i++){
                 let index = self.selectedNics[i];
-                forceFmtNic(self.nics[index]);
+                if(self.nics[index]) {
+                    forceFmtNic(self.nics[index]);
+                }
             }
         },
         updateDatacollection(){
@@ -164,6 +166,9 @@ export default {
             let colorIndex = 0;
             
             for (let i = 0; i < self.selectedNics.length; i++){
+                if(!self.nics[self.selectedNics[i]]) {
+                    continue;
+                }
                 let n = self.nics[self.selectedNics[i]];
                 let rDataset = {
                     label: n.name + "(rx) ",

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <chart-hdr title='Memory Usage History' :items='typeNameList' v-model='selectedTypeName' defaultItemNum=2 />
+        <chart-hdr title='Memory Usage History' :items='typeNameList' v-model='selectedTypeName' :defaultItemNum='2' dataKey="resources-mem" />
         <mem-line-chart :mem='mem' :rscOp='rscOp' :points='points' :selectedTypeName='selectedTypeName' />
     </div>
 </template>
