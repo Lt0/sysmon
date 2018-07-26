@@ -13,27 +13,13 @@
                     <span>clear all custom setting</span>
                 </v-tooltip>
                 
-                <v-list-tile @click="aboutDialog = true">
+                <v-list-tile @click='aboutDialog = true'>
                     <v-list-tile-title>About</v-list-tile-title>
                 </v-list-tile>
             </v-list>
         </v-menu>
 
-        <v-dialog v-model="aboutDialog" max-width="500px">
-            <v-card>
-                <v-card-title class="headline " primary-title > About Sysmon </v-card-title>
-                <v-card-text>
-                    Sysmon is a B/S mode system monitor tool. Created by lightimehpq@gmail.com.
-                </v-card-text>
-                <v-btn outline large color="black" href="https://github.com/Lt0/sysmon" target="blank">Github<v-icon right>mdi-github-circle</v-icon></v-btn>
-                <br><br><br>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" flat @click="aboutDialog = false" > Close </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <about v-model="aboutDialog" />
 
         <v-dialog v-model="clearSettingDialog" max-width="500px">
             <v-card>
@@ -51,8 +37,13 @@
 </template>
 
 <script>
+import about from '@/components/common/about'
+
 export default {
     name: 'more',
+    components: {
+        about,
+    },
     data() {
         return {
             aboutDialog: false,

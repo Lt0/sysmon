@@ -3,7 +3,7 @@
         <v-navigation-drawer v-model="drawer" clipped fixed app ><drawer-left /></v-navigation-drawer>
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title>System Monitor</v-toolbar-title>
+            <v-toolbar-title class="hdr-text" @click="aboutDialog = true">System Monitor</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -26,6 +26,8 @@
         <!-- <v-footer app fixed>
             <div>&copy; lightimehpq@gmail.com</div>
         </v-footer> -->
+
+        <about v-model="aboutDialog" />
     </v-app>
 </template>
 
@@ -33,17 +35,20 @@
 import cm from '../js/common'
 import DrawerLeft from '@/components/DrawerLeft'
 import more from '@/components/more'
+import about from '@/components/common/about'
 
 export default {
     name: 'Layout',
     components: {
         DrawerLeft,
-        more
+        more, 
+        about, 
     },
     data () {
         return {
             drawer: false,
             infoAll: null,
+            aboutDialog: false,
         }
     },
     beforeCreate () {
@@ -84,5 +89,9 @@ export default {
 
 #main-flex {
     max-width: 100%;
+}
+
+.hdr-text {
+    cursor: pointer;
 }
 </style>
