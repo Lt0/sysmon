@@ -8,6 +8,7 @@
                             :backgroundColor=dataset.backgroundColor
                             :label=dataset.label
                             :dynamicLabel=dataset.dynamiclabel
+                            :dynamiclabelPercent=dataset.dynamiclabelPercent
                             dynamicLabelMinWidth='5em'
                             v-model="dataset.ctrl.hideChart"
                             @updateChart="updateChartHandler"

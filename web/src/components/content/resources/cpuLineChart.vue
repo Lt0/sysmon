@@ -93,9 +93,16 @@ export default {
                 if (this.selectedCores.indexOf(r.name) < 0) {
                     continue;
                 }
+
+                let dynamiclabel = "";
+                if(r.fmtRec[0]) {
+                    dynamiclabel = `(${r.fmtRec[0]}%)`
+                }
+
                 let dataset = {
                     label: r.name,
-                    dynamiclabel: `(${r.fmtRec[0]}%)`,
+                    dynamiclabel: dynamiclabel,
+                    dynamiclabelPercent: r.fmtRec[0] || 0,
                     ctrl: r.ctrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],

@@ -98,9 +98,16 @@ export default {
             let datasets = [];
             for (let i in this.selectedTypeName){
                 let name = this.selectedTypeName[i]
+
+                let dynamiclabel = `${cm.fmtSize.fmtKBSize(r[name].rec[0], 2)} (${r[name].percentRec[0]}%) of ${r[name].allStr})`;
+                if(!r[name].percentRec[0]) {
+                    dynamiclabel = `${cm.fmtSize.fmtKBSize(r[name].rec[0], 2)} of ${r[name].allStr})`;
+                }
+
                 let dataset = {
                     label: name,
-                    dynamiclabel: `${cm.fmtSize.fmtKBSize(r[name].rec[0], 2)} (${r[name].percentRec[0]}%) of ${r[name].allStr})`,
+                    dynamiclabel: dynamiclabel,
+                    dynamiclabelPercent: r[name].percentRec[0] || 0,
                     ctrl: r[name].ctrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],
