@@ -21,6 +21,8 @@ export default {
     // backgroundColor: 图案背景颜色
     // hideChart: 是否隐藏 chartjs 中对应的数据图，由调用者通过 v-model 传入
     // label: 文字内容
+    // dynamicLabel: 需要动态更新的文字内容
+    // dynamiclabelPercent: 图示百分比
     props:['borderColor', 'backgroundColor', 'label', 'dynamicLabel', 'dynamiclabelPercent', 'dynamicLabelMinWidth', 'labelColor', 'hideChart'],
     computed: {
         labelColorWidth: function() {
@@ -33,12 +35,44 @@ export default {
                 }
                 return this.dynamiclabelPercent + "%";
             }
-            return "0px"
+            return "0px";
         }
     },
     model: {
         prop: 'hideChart',
         event: "toggleChart",
+    },
+    mounted() {
+        // console.log("mounted " + this.label + ", go to init");
+        this.initHideChart(this.label);
+    },
+    watch: {
+        label: function() {
+            // console.log(this.label + " change label to " + this.label + ", go to save");
+            this.saveHideChart(this.label, this.hideChart);
+        },
+        hideChart: function() {
+            // console.log(this.label + " change hideChart to " + this.hideChart + ", go to save");
+            this.saveHideChart(this.label, this.hideChart);
+        }
+    },
+    methods: {
+        saveHideChart(key, val) {
+            localStorage.setItem(key, val);
+        },
+        initHideChart(key) {
+            let hc = localStorage[key];
+            if(!hc) {
+                return;
+            }
+            if(hc == "true") {
+                hc = true;
+            } else {
+                hc = false;
+            }
+            // console.log("hc: " + hc);
+            this.$emit('toggleChart', hc)
+        }
     },
 }
 </script>
