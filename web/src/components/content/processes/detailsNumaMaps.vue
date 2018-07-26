@@ -1,30 +1,12 @@
 <template>
     <div class="numa-maps-container">
-        <v-card id="numa-maps-card" v-resize="onResize">
-            <v-card-title>
-                <v-text-field
-                    v-model="search"
-                    append-icon="search"
-                    label="Search"
-                    single-line
-                    hide-details
-                ></v-text-field>
-                <v-spacer></v-spacer>
-                <selection style='padding-top: 12px;' :items="items" v-model='selectedItems' defaultItemNum=3 />
-            </v-card-title>
-            <div>
-                {{ NumasTotal }}
-            </div>
+        <v-card>
+            <br>
             <v-data-table
-                :headers="headers"
-                :items="NumaMaps"
+                :headers="memNodesHeaders"
+                :items="memNodes"
                 class="elevation-1"
-                must-sort
-                :search="search"
-                id="process-table"
-
-                :rows-per-page-items='[10,25,50, {text: "ALL", value: -1}]'
-                rows-per-page-text = ""
+                hide-actions
             >
                 <!-- 定制表头 -->
                 <template slot="headerCell" slot-scope="props">
@@ -40,63 +22,125 @@
                     </v-tooltip>
                 </template>
                 <template slot="items" slot-scope="props">
-                    <td class="text-xs-left file-item" v-if="displayAddr">{{props.item.Addr}}</td>
-                    <td class="text-xs-left file-item" v-if="displayPolicy">{{props.item.Policy}}</td>
-                    <td class="text-xs-left file-item" v-if="displayFile">{{props.item.File}}</td>
-                    <td class="text-xs-left file-item" v-if="displayNodes">{{props.item.Nodes}}</td>
-                    <td class="text-xs-left file-item" v-if="displayMapType">{{props.item.MapType}}</td>
-                    <td class="text-xs-left" v-if="displayAnon">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.Anon }}</span>
-                            <span>{{cm.fmtSize.fmtKBSize(props.item.Anon * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Anon * (props.item.KernelPageSizeKB || 4)}} KB)</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left" v-if="displayDirty">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.Dirty }}</span>
-                            <span>{{cm.fmtSize.fmtKBSize(props.item.Dirty * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Dirty * (props.item.KernelPageSizeKB || 4)}} KB)</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left" v-if="displayMapped">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.Mapped }}</span>
-                            <span>{{cm.fmtSize.fmtKBSize(props.item.Mapped * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Mapped * (props.item.KernelPageSizeKB || 4)}} KB)</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left file-item" v-if="displayMapMax">{{props.item.MapMax}}</td>
-                    <td class="text-xs-left" v-if="displaySwapCache">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.SwapCache }}</span>
-                            <span>{{cm.fmtSize.fmtKBSize(props.item.SwapCache * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.SwapCache * (props.item.KernelPageSizeKB || 4)}} KB)</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left" v-if="displayActive">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.Active }}</span>
-                            <span>{{cm.fmtSize.fmtKBSize(props.item.Active * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Active * (props.item.KernelPageSizeKB || 4)}} KB)</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left" v-if="displayWriteBack">
-                        <v-tooltip bottom>
-                            <span slot="activator">{{ props.item.WriteBack }}</span>
-                            <span>{{cm.fmtSize.fmtKBSize(props.item.WriteBack * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.WriteBack * (props.item.KernelPageSizeKB || 4)}} KB)</span>
-                        </v-tooltip>
-                    </td>
-                    <td class="text-xs-left file-item" v-if="displayKernelPageSizeKB">{{props.item.KernelPageSizeKB}}</td>
-                    
+                    <td class="text-xs-left file-item">{{ props.item.Node }}</td>
+                    <td class="text-xs-left file-item">{{ props.item.stack }}</td>
+                    <td class="text-xs-left file-item">{{ props.item.heap }}</td>
+                    <td class="text-xs-left file-item">{{ props.item.huge }}</td>
+                    <!-- <td class="text-xs-left file-item">{{ props.item.total }}</td> -->
                 </template>
 
                 <!-- 没有数据时显示的内容 -->
                 <template slot="no-data">
                     Nothing to show
                 </template>
-
-                <!-- 搜索没有匹配的结果时显示的内容 -->
-                <v-alert slot="no-results" :value="true" color="warning" icon="warning">
-                    Your search for "{{ search }}" found no results.
-                </v-alert>
             </v-data-table>
         </v-card>
+
+        <br><br><br>
+
+        <v-expansion-panel expand>
+            <v-expansion-panel-content lazy>
+                <div slot="header">
+                    <v-tooltip bottom>
+                        <h5 slot="activator">Details</h5>
+                        <pre>Details of NUMA nodes Maps</pre>
+                    </v-tooltip>
+                </div>
+                <v-card id="numa-maps-card" v-resize="onResize">
+                    <v-card-title>
+                        <v-text-field
+                            v-model="search"
+                            append-icon="search"
+                            label="Search"
+                            single-line
+                            hide-details
+                        ></v-text-field>
+                        <v-spacer></v-spacer>
+                        <selection style='padding-top: 12px;' :items="items" v-model='selectedItems' defaultItemNum=3 />
+                    </v-card-title>
+                    <v-data-table
+                        :headers="headers"
+                        :items="NumaMaps"
+                        class="elevation-1"
+                        must-sort
+                        :search="search"
+                        id="process-table"
+
+                        :rows-per-page-items='[10,25,50, {text: "ALL", value: -1}]'
+                        rows-per-page-text = ""
+                    >
+                        <!-- 定制表头 -->
+                        <template slot="headerCell" slot-scope="props">
+                            <v-tooltip bottom>
+                                <!-- 表头显示内容 -->
+                                <span slot="activator">{{ props.header.text }}</span>
+
+                                <!-- 表头的 tooltip, updateHeaders 时填充 -->
+                                <pre style="text-align: left">{{ props.header.tips }}</pre>
+                            </v-tooltip>
+                        </template>
+                        <template slot="items" slot-scope="props">
+                            <td class="text-xs-left file-item" v-if="displayAddr">{{props.item.Addr}}</td>
+                            <td class="text-xs-left file-item" v-if="displayPolicy">{{props.item.Policy}}</td>
+                            <td class="text-xs-left file-item" v-if="displayFile">{{props.item.File}}</td>
+                            <td class="text-xs-left file-item" v-if="displayNodes">{{props.item.NodesStr}}</td>
+                            <td class="text-xs-left file-item" v-if="displayMapType">{{props.item.MapType}}</td>
+                            <td class="text-xs-left" v-if="displayAnon">
+                                <v-tooltip bottom>
+                                    <span slot="activator">{{ props.item.Anon }}</span>
+                                    <span>{{cm.fmtSize.fmtKBSize(props.item.Anon * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Anon * (props.item.KernelPageSizeKB || 4)}} KB)</span>
+                                </v-tooltip>
+                            </td>
+                            <td class="text-xs-left" v-if="displayDirty">
+                                <v-tooltip bottom>
+                                    <span slot="activator">{{ props.item.Dirty }}</span>
+                                    <span>{{cm.fmtSize.fmtKBSize(props.item.Dirty * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Dirty * (props.item.KernelPageSizeKB || 4)}} KB)</span>
+                                </v-tooltip>
+                            </td>
+                            <td class="text-xs-left" v-if="displayMapped">
+                                <v-tooltip bottom>
+                                    <span slot="activator">{{ props.item.Mapped }}</span>
+                                    <span>{{cm.fmtSize.fmtKBSize(props.item.Mapped * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Mapped * (props.item.KernelPageSizeKB || 4)}} KB)</span>
+                                </v-tooltip>
+                            </td>
+                            <td class="text-xs-left file-item" v-if="displayMapMax">{{props.item.MapMax}}</td>
+                            <td class="text-xs-left" v-if="displaySwapCache">
+                                <v-tooltip bottom>
+                                    <span slot="activator">{{ props.item.SwapCache }}</span>
+                                    <span>{{cm.fmtSize.fmtKBSize(props.item.SwapCache * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.SwapCache * (props.item.KernelPageSizeKB || 4)}} KB)</span>
+                                </v-tooltip>
+                            </td>
+                            <td class="text-xs-left" v-if="displayActive">
+                                <v-tooltip bottom>
+                                    <span slot="activator">{{ props.item.Active }}</span>
+                                    <span>{{cm.fmtSize.fmtKBSize(props.item.Active * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.Active * (props.item.KernelPageSizeKB || 4)}} KB)</span>
+                                </v-tooltip>
+                            </td>
+                            <td class="text-xs-left" v-if="displayWriteBack">
+                                <v-tooltip bottom>
+                                    <span slot="activator">{{ props.item.WriteBack }}</span>
+                                    <span>{{cm.fmtSize.fmtKBSize(props.item.WriteBack * (props.item.KernelPageSizeKB || 4), 1)}} ({{props.item.WriteBack * (props.item.KernelPageSizeKB || 4)}} KB)</span>
+                                </v-tooltip>
+                            </td>
+                            <td class="text-xs-left file-item" v-if="displayKernelPageSizeKB">{{props.item.KernelPageSizeKB}}</td>
+                            
+                        </template>
+
+                        <!-- 没有数据时显示的内容 -->
+                        <template slot="no-data">
+                            Nothing to show
+                        </template>
+
+                        <!-- 搜索没有匹配的结果时显示的内容 -->
+                        <v-alert slot="no-results" :value="true" color="warning" icon="warning">
+                            Your search for "{{ search }}" found no results.
+                        </v-alert>
+                    </v-data-table>
+                </v-card>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+
+        
     </div>
 </template>
 
@@ -117,6 +161,7 @@ export default {
         return {
             cm: cm,
             tips: tips,
+            memNodes: [],
             windowSize: {
                 x: 0,
                 y: 0
@@ -125,7 +170,7 @@ export default {
             search: '',
             items: ['Addr', 'Policy', 'File', 'Nodes', 'MapType', 'Anon', 'Dirty', 'Mapped', 'MapMax', 'SwapCache', 'Active', 'WriteBack', 'KernelPageSizeKB'],  // 所有可显示的项目
             selectedItems: [],  // 实际显示的项目，由 selection 返回
-            selectAddr: null,
+            displayAddr: false,
             displayPolicy: true,
             displayFile: false,
             displayNodes: true,
@@ -139,8 +184,12 @@ export default {
             displayWriteBack: false,
             displayKernelPageSizeKB: false,
             headers: [],
-
-            // rowsPerPageItems: [5,10,25,{text: Vuetify.dataIterator.rowsPerPageAll, value: -1}],
+            memNodesHeaders: [{text: 'node', value: 'node', tips: tips.processes.numaMapsHdr.node}, 
+                {text: 'stack', value: 'stack', tips: tips.processes.numaMapsHdr.stack}, 
+                {text: 'heap', value: 'heap', tips: tips.processes.numaMapsHdr.heap}, 
+                {text: 'huge', value: 'huge', tips: tips.processes.numaMapsHdr.huge}, 
+                // {text: 'total', value: 'total', tips: tips.processes.numaMapsHdr.total}
+                ],
         }
     },
     computed: {
@@ -159,7 +208,7 @@ export default {
                     for(let j = 0; j < mapping.Nodes.length; j++) {
                         nodesStr += mapping.Nodes[j].Node + ": " + mapping.Nodes[j].NrPages + "; "
                     }
-                    mapping.Nodes = nodesStr;
+                    mapping.NodesStr = nodesStr;
                     // 格式化 Nodes End
                 }
 
@@ -168,8 +217,8 @@ export default {
 
             return [];
         },
-        NumasTotal: function() {
-            let nodes = [];
+        NumaMapTotal: function() {
+            let nodes = {};
             if(this.numaMapsInfo && this.numaMapsInfo.Mappings) {
                 let mappings = this.numaMapsInfo.Mappings;
                 for(let i = 0; i < mappings.length; i++) {
@@ -180,10 +229,13 @@ export default {
                     let mapping = mappings[i];
                     for(let j = 0; j < mapping.Nodes.length; j++) {
                         let node = mapping.Nodes[j];
+                        if(!nodes[node.Node]) {
+                            nodes[node.Node] = parseInt(node.NrPages)
+                        }
                         nodes[node.Node] += parseInt(node.NrPages);
                     }
                 }
-                console.log("nodes: " + nodes)
+                console.log("nodes: " + JSON.stringify(nodes))
             }
             return nodes;
         }, 
@@ -209,11 +261,51 @@ export default {
             this.updateHeaders();
             this.updateDisplay();
         },
-        // numaMapsInfo: function() {
-        //     console.log("numaMapsInfo: ", this.numaMapsInfo)
-        // },
+        numaMapsInfo: function() {
+            this.updateMemNodes();
+        },
     },
     methods: {
+        updateMemNodes() {
+            let memNodes = [];
+            if(this.numaMapsInfo && this.numaMapsInfo.Mappings) {
+                let mappings = this.numaMapsInfo.Mappings;
+                for(let i = 0; i < mappings.length; i++) {
+                    if(!mappings[i].Nodes) {
+                        continue;
+                    }
+                    
+                    let mapping = mappings[i];
+                    for(let j = 0; j < mapping.Nodes.length; j++) {
+                        let node = mapping.Nodes[j];
+
+                        let index = -1;
+                        for(let k = 0; k < memNodes.length; k++) {
+                            if(memNodes[k].Node == node.Node) {
+                                index = k;
+                                break;
+                            }
+                        }
+                        if(index == -1) {
+                            let mn = {
+                                Node: node.Node,
+                                stack: 0,
+                                heap: 0,
+                                huge: 0,
+                                // total: 0
+                            }
+                            index = memNodes.push(mn) - 1;
+                        }
+                        if(mapping.MapType) {
+                            memNodes[index][mapping.MapType] += parseInt(node.NrPages);
+                        }
+                        
+                        // memNodes[index].total += parseInt(node.NrPages);
+                    }
+                }
+            }
+            this.memNodes = memNodes;
+        },
         updateHeaders(){
             this.headers = [];
 
@@ -222,8 +314,8 @@ export default {
                     if(this.items[i] == this.selectedItems[j]) {
                         let t = this.selectedItems[j];
                         let hdr = {text: t, value: t};
-                        // 每一项表头的 tips 都定义在 tips.processes.details.numaMapsHdr 这个对象的同名项中
-                        hdr.tips = tips.processes.numaMapsHdr[this.selectedItems[j]];
+                        // 每一项表头的 tips 都定义在 tips.processes.details.numaMapsDetailsHdr 这个对象的同名项中
+                        hdr.tips = tips.processes.numaMapsDetailsHdr[this.selectedItems[j]];
                         this.headers.push(hdr);
                         break;
                     }

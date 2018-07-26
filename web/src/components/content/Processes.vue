@@ -39,7 +39,7 @@
                     </v-tab>
                     <v-tab>
                         <v-tooltip bottom>
-                            <span slot="activator">numa maps</span>
+                            <span slot="activator">numa</span>
                             <span>{{tips.processes.detailsTabs.numaMaps}}</span>
                         </v-tooltip>
                     </v-tab>
