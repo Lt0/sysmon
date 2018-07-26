@@ -37,7 +37,12 @@
 <script>
 export default {
     name: 'appSelection',
-    props: ['items', 'selectedItems', 'defaultItemNum', 'dataKey'],
+    // items: 所有的选项
+    // selectedItems: 已选项
+    // defaultItemNum: 默认选项的数量
+    // dataKey: 用来自动记录已选项的 key
+    // lazyInit: 是否等待 items 发生变化时才初始化已选项（根据本地自动保存的记录进行初始化）
+    props: ['items', 'selectedItems', 'defaultItemNum', 'dataKey', 'lazyInit'],
     model: {
         prop: 'selectedItems',
         event: 'input',
@@ -77,6 +82,9 @@ export default {
         }
     },
     watch: {
+        items: function() {
+            this.initSelectedItems();
+        },
         selectedType: function(){
             // console.log("selectedType: " + this.selectedType);
             let items = [];

@@ -42,10 +42,7 @@ export default {
                 if(index >= 0) {
                     self.selectedNics.push(index)
                 }
-                
             }
-            console.log("self.selectedNicName: " + self.selectedNicName)
-            console.log("self.selectedNics: " + self.selectedNics)
         }
     },
     methods: {

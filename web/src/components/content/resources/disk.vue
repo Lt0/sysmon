@@ -1,6 +1,6 @@
 <template>
     <div>
-        <chart-hdr title='Disk(s) History' :items='diskNameList' v-model='selectedDiskName' defaultItemNum=1 />
+        <chart-hdr title='Disk(s) History' :items='diskNameList' v-model='selectedDiskName' defaultItemNum=1 dataKey='resources-disk' />
         <disk-line-chart :rsc='rsc' :rscOp='rscOp' :interval='interval' :selectedDisks='selectedDisks' />
     </div>
 </template>

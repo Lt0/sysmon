@@ -266,7 +266,7 @@ function forceFmtNic(nic){
     } else {
         nic.rFmtRec = [];
     }
-console.log("forceFmtNic");
+// console.log("forceFmtNic");
     if (!nic.tCtrl.hideChart) {
         reFmtRec(nic.tRec, nic.tFmtRec, unit);
     } else {

@@ -191,6 +191,9 @@ export default {
             let colorIndex = 0;
             
             for (let i = 0; i < self.selectedDisks.length; i++){
+                if(!self.disks[self.selectedDisks[i]]) {
+                    continue;
+                }
                 let d = self.disks[self.selectedDisks[i]];
                 // console.log("d.rFmtRec: " + d.rFmtRec);
                 // console.log("d.wFmtRec: " + d.wFmtRec);
@@ -285,6 +288,10 @@ function fmtDisk(disk, pointsLen){
 }
 
 function forceFmtDisk(disk){
+    if(!disk) {
+        return;
+    }
+    
     if (!disk.rCtrl.hideChart) {
         reFmtRec(disk.rRec, disk.rFmtRec, unit);
     } else {
