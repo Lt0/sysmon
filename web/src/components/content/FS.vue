@@ -2,7 +2,7 @@
     <div id="fs">
         <v-container id="fs-container">
             <v-layout wrap align-center>
-                    <v-flex v-for="storage in info.Storage" :key="storage.index" xs12 sm4 md4 lg3 xl2>
+                    <v-flex v-for="storage in Storages" :key="storage.index" xs12 sm4 md4 lg3 xl2>
                         <disk-card :storage='storage'></disk-card>
                     </v-flex>
             </v-layout>
@@ -38,6 +38,21 @@ export default {
         //console.log("processes beforeRouteLeave");
         cm.fs.stopUpdater();
         next();
+    },
+    computed: {
+        Storages: function() {
+            if(!this.info || !this.info.Storage) {
+                return [];
+            }
+
+            let valideStorages = [];
+            for(let i = 0; i < this.info.Storage.length; i++) {
+                if(this.info.Storage[i].Fs != "none") {
+                    valideStorages.push(this.info.Storage[i])
+                }
+            }
+            return valideStorages;
+        },
     },
 }
 </script>
