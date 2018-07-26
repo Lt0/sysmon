@@ -9,6 +9,7 @@
 import LineChart from './LineChart.js'
 import chartLegendBar from '@/components/content/resources/chartLegendBar'
 import cm from '../../../js/common'
+import tips from "../../../js/tips"
 
 let preCpuInfo = {};
 let colors = cm.rsc.colors;
@@ -103,6 +104,7 @@ export default {
                     label: r.name,
                     dynamiclabel: dynamiclabel,
                     dynamiclabelPercent: r.fmtRec[0] || 0,
+                    tips: tips.resources.legend.cpu[r.name],
                     ctrl: r.ctrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],

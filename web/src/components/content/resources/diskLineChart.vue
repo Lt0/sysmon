@@ -9,6 +9,7 @@
 import LineChart from './LineChart.js'
 import chartLegendBar from '@/components/content/resources/chartLegendBar'
 import cm from '../../../js/common'
+import tips from "../../../js/tips"
 
 // 记录上一次更新的 Disk 数据
 let preDiskInfo = null;
@@ -201,6 +202,7 @@ export default {
                 let rDataset = {
                     label: d.name + "(r)",
                     dynamiclabel: cm.fmtSize.fmtSize(d.rRec[0], 1),
+                    tips: tips.resources.legend.disk[d.name + "(r)"], 
                     ctrl: d.rCtrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],
@@ -211,6 +213,7 @@ export default {
                 let wDataset = {
                     label: d.name + "(w)",
                     dynamiclabel: cm.fmtSize.fmtSize(d.wRec[0], 1),
+                    tips: tips.resources.legend.disk[d.name + "(w)"], 
                     ctrl: d.wCtrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],

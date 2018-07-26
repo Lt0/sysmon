@@ -9,6 +9,7 @@
 import LineChart from './LineChart.js'
 import chartLegendBar from '@/components/content/resources/chartLegendBar'
 import cm from '../../../js/common'
+import tips from "../../../js/tips"
 
 let colors = cm.rsc.colors;
 // let tooltipsCallback = {
@@ -108,6 +109,7 @@ export default {
                     label: name,
                     dynamiclabel: dynamiclabel,
                     dynamiclabelPercent: r[name].percentRec[0] || 0,
+                    tips: tips.resources.legend.mem[name], 
                     ctrl: r[name].ctrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],

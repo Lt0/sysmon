@@ -9,6 +9,7 @@
 import LineChart from './LineChart.js'
 import chartLegendBar from '@/components/content/resources/chartLegendBar'
 import cm from '../../../js/common'
+import tips from "../../../js/tips"
 
 // 记录上一次更新的 net 数据
 let preNetInfo = null;
@@ -171,8 +172,9 @@ export default {
                 }
                 let n = self.nics[self.selectedNics[i]];
                 let rDataset = {
-                    label: n.name + "(rx) ",
+                    label: n.name + "(rx)",
                     dynamiclabel: cm.fmtSize.fmtSize(n.rRec[0], 1),
+                    tips: tips.resources.legend.net[n.name + "(rx)"], 
                     ctrl: n.rCtrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],
@@ -181,8 +183,9 @@ export default {
                 datasets.push(rDataset);
 
                 let tDataset = {
-                    label: n.name + "(tx) ",
+                    label: n.name + "(tx)",
                     dynamiclabel: cm.fmtSize.fmtSize(n.tRec[0], 1),
+                    tips: tips.resources.legend.net[n.name + "(tx)"], 
                     ctrl: n.tCtrl,
                     borderColor: colors[colorIndex++],
                     backgroundColor: ['rgba(0, 0, 0, 0)'],

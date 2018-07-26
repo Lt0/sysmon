@@ -12,6 +12,7 @@
                             dynamicLabelMinWidth='5em'
                             v-model="dataset.ctrl.hideChart"
                             @updateChart="updateChartHandler"
+                            :tips="dataset.tips"
                         >
                         </chart-legend>
                     </v-flex>

@@ -1,16 +1,23 @@
 <template>
-    <div class="chart-legend" @click="$emit('toggleChart', !hideChart); $emit('updateChart')">
-        <div class="color-indicator" :style="{borderColor: borderColor, backgroundColor: backgroundColor}">
-            <div class="percent-indicator" :style='{backgroundColor: borderColor, width: labelColorWidth}'></div>
-        </div>
-        <div class="chart-label" :class="{'hide-chart': hideChart}" :style="{color: labelColor}">
-            <div>
-                {{ label }} 
+    <div>
+        <v-tooltip bottom>
+            <div slot="activator">
+                <div class="chart-legend" @click="$emit('toggleChart', !hideChart); $emit('updateChart')">
+                    <div class="color-indicator" :style="{borderColor: borderColor, backgroundColor: backgroundColor}">
+                        <div class="percent-indicator" :style='{backgroundColor: borderColor, width: labelColorWidth}'></div>
+                    </div>
+                    <div class="chart-label" :class="{'hide-chart': hideChart}" :style="{color: labelColor}">
+                        <div>
+                            {{ label }} 
+                        </div>
+                        <div :style="{'min-width': dynamicLabelMinWidth}" class="dynamic-label">
+                            &ensp;{{ dynamicLabel }}
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div :style="{'min-width': dynamicLabelMinWidth}" class="dynamic-label">
-                &ensp;{{ dynamicLabel }}
-            </div>
-        </div>
+            <pre style="text-align: left">{{ tips || label }}</pre>
+        </v-tooltip>
     </div>
 </template>
 
@@ -23,7 +30,7 @@ export default {
     // label: 文字内容
     // dynamicLabel: 需要动态更新的文字内容
     // dynamiclabelPercent: 图示百分比
-    props:['borderColor', 'backgroundColor', 'label', 'dynamicLabel', 'dynamiclabelPercent', 'dynamicLabelMinWidth', 'labelColor', 'hideChart'],
+    props:['borderColor', 'backgroundColor', 'label', 'dynamicLabel', 'dynamiclabelPercent', 'dynamicLabelMinWidth', 'labelColor', 'hideChart', 'tips'],
     computed: {
         labelColorWidth: function() {
             if(this.dynamiclabelPercent) {
