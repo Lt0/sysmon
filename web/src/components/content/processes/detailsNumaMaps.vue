@@ -12,7 +12,9 @@
                 <v-spacer></v-spacer>
                 <selection style='padding-top: 12px;' :items="items" v-model='selectedItems' defaultItemNum=3 />
             </v-card-title>
-            
+            <div>
+                {{ NumasTotal }}
+            </div>
             <v-data-table
                 :headers="headers"
                 :items="NumaMaps"
@@ -146,12 +148,15 @@ export default {
             if(this.numaMapsInfo && this.numaMapsInfo.Mappings) {
                 let Mappings = this.numaMapsInfo.Mappings;
                 // 按要求格式化所有的字符串
-                for(let i in Mappings) {
+                for(let i = 0; i < Mappings.length; i++) {
+                    if(!Mappings[i].Nodes) {
+                        continue;
+                    }
                     let mapping = Mappings[i];
 
                     // 格式化 Nodes
                     let nodesStr = "";
-                    for(let j in mapping.Nodes) {
+                    for(let j = 0; j < mapping.Nodes.length; j++) {
                         nodesStr += mapping.Nodes[j].Node + ": " + mapping.Nodes[j].NrPages + "; "
                     }
                     mapping.Nodes = nodesStr;
@@ -163,6 +168,25 @@ export default {
 
             return [];
         },
+        NumasTotal: function() {
+            let nodes = [];
+            if(this.numaMapsInfo && this.numaMapsInfo.Mappings) {
+                let mappings = this.numaMapsInfo.Mappings;
+                for(let i = 0; i < mappings.length; i++) {
+                    if(!mappings[i].Nodes) {
+                        continue;
+                    }
+                    
+                    let mapping = mappings[i];
+                    for(let j = 0; j < mapping.Nodes.length; j++) {
+                        let node = mapping.Nodes[j];
+                        nodes[node.Node] += parseInt(node.NrPages);
+                    }
+                }
+                console.log("nodes: " + nodes)
+            }
+            return nodes;
+        }, 
     },
     watch: {
         selectedItems: function(){
