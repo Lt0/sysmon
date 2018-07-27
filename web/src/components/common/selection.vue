@@ -4,7 +4,6 @@
             <!-- <v-btn slot="activator" flat icon color="teal"><v-icon>mdi-format-list-checkbox</v-icon></v-btn> -->
             <v-btn slot="activator" flat icon color="teal">
                 <icon iconClass="LC_icon_list_line" />
-                <!-- <iconsvg iconClass="LC_icon_list_line" /> -->
             </v-btn>
             <v-card>
                 <v-card-title>Select items to show</v-card-title>
@@ -38,13 +37,8 @@
 </template>
 
 <script>
-import iconsvg from '@/components/common/iconsvg/iconsvg'
-
 export default {
     name: 'appSelection',
-    components: {
-        iconsvg,
-    },
     // items: 所有的选项
     // selectedItems: 已选项
     // defaultItemNum: 默认选项的数量
