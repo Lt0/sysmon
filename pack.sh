@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 WS=$PWD
 cd web
 #npm install
