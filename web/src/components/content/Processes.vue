@@ -7,7 +7,7 @@
             <v-toolbar dark color="teal lighten-1">
                 <v-toolbar-title><span>Details of pid {{ detailsCtrl.pid }}</span></v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click.native="closeProcessDetailsHandler()"><v-icon>close</v-icon></v-btn>
+                <v-btn icon dark @click.native="closeProcessDetailsHandler()"><v-icon>mdi-close</v-icon></v-btn>
             </v-toolbar>
             <!-- <v-card-title class="headline"> </v-card-title> -->
 

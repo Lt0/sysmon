@@ -152,7 +152,7 @@
 
         <div id="updatedTime" class="elevation-5">
             <v-tooltip top>
-                <span slot='activator'><v-icon size="1.5em">update</v-icon>&ensp;{{ latestUpdate }}</span>
+                <span slot='activator'><v-icon size="1.5em">mdi-update</v-icon>&ensp;{{ latestUpdate }}</span>
                 <span>Latest Update &ensp;{{ latestUpdate }}</span>
             </v-tooltip>
         </div>
