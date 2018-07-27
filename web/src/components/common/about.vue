@@ -1,5 +1,5 @@
 <template>
-    <v-dialog :value="value" max-width="500px" @input="$emit('input', value)" persistent>
+    <v-dialog v-model="dialog" max-width="500px" >
         <v-card>
             <v-card-title class="headline " primary-title > About Sysmon </v-card-title>
             <v-card-text>
@@ -20,5 +20,22 @@
 export default {
     name: "about",
     props: ['value'],
+    model: {
+        prop: 'value',
+        event: 'input',
+    },
+    data() {
+        return {
+            dialog: false,
+        }
+    },
+    watch: {
+        value: function() {
+            this.dialog = this.value;
+        },
+        dialog: function() {
+            this.$emit('input', this.dialog)
+        },
+    },
 }
 </script>
