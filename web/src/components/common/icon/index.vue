@@ -16,8 +16,6 @@ export default {
 
     computed: {
         iconName: function() {
-            let n = "#icon-" + this.iconClass;
-            console.log("name: " + n)
             return "#icon-" + this.iconClass;
         }
     },
