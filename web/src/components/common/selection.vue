@@ -1,9 +1,8 @@
 <template>
     <div>
         <v-dialog v-model="dialog" max-width="500px" >
-            <!-- <v-btn slot="activator" flat icon color="teal"><v-icon>mdi-format-list-checkbox</v-icon></v-btn> -->
             <v-btn slot="activator" flat icon color="teal">
-                <icon iconClass="LC_icon_list_line" />
+                <icon iconClass="tools" />
             </v-btn>
             <v-card>
                 <v-card-title>Select items to show</v-card-title>

@@ -5,7 +5,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
+    <v-btn icon><icon iconClass="moreif" /></v-btn>
 </div>
 </template>
 

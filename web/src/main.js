@@ -9,7 +9,6 @@ import 'vuetify/dist/vuetify.min.css'
 import cm from './js/common'
 import './css/app.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import '@mdi/font/css/materialdesignicons.min.css'
 
 import icon from '@/components/common/icon'
 
