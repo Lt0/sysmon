@@ -149,8 +149,6 @@ import selection from '@/components/common/selection'
 import cm from '../../../js/common'
 import tips from '../../../js/tips'
 
-import Vuetify from 'vuetify'
-
 export default {
     name: 'detailsNumaMaps',
     props: ['numaMapsInfo'],
