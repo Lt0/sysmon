@@ -1,6 +1,7 @@
 <template>
     <svg class="icon" aria-hidden="true">
         <use :xlink:href="iconName"></use>
+        <slot>dd</slot>
     </svg>
 </template>
 
@@ -9,14 +10,14 @@ import './iconfont'
 
 export default {
     name: 'icon',
-    props: {iconClass: {
-        type: String, 
-        required: true,
-    }},
+    // props: {iconClass: {
+    //     type: String, 
+    //     required: true,
+    // }},
 
     computed: {
         iconName: function() {
-            return "#icon-" + this.iconClass;
+            return "#icon-" +  this.$slots.default[0].text;
         }
     },
 }

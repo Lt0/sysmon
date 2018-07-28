@@ -5,7 +5,7 @@
 
     <v-spacer></v-spacer>
 
-    <v-btn icon><icon iconClass="moreif" /></v-btn>
+    <v-btn icon><icon>moreif</icon></v-btn>
 </div>
 </template>
 

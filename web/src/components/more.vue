@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-menu bottom left offset-y min-width="180px">
-            <v-btn slot="activator" icon><icon iconClass="moreif" /></v-btn>
+            <v-btn slot="activator" icon><icon>moreif</icon></v-btn>
 
             <v-list>
                 <v-tooltip bottom>

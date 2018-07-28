@@ -2,7 +2,7 @@
     <div>
         <v-dialog v-model="dialog" max-width="500px" >
             <v-btn slot="activator" flat icon color="teal">
-                <icon iconClass="tools" />
+                <icon>tools</icon>
             </v-btn>
             <v-card>
                 <v-card-title>Select items to show</v-card-title>

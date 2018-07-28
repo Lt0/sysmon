@@ -5,7 +5,7 @@
             <v-card-text>
                 Sysmon is a B/S mode system monitor tool. Created by lightimehpq@gmail.com.
             </v-card-text>
-            <v-btn outline large color="black" href="https://github.com/Lt0/sysmon" target="blank">Github &ensp;<icon iconClass="github" style="font-size: 2em" /></v-btn>
+            <v-btn outline large color="black" href="https://github.com/Lt0/sysmon" target="blank">Github &ensp;<icon style="font-size: 2em">github</icon></v-btn>
             <br><br><br>
             <v-divider></v-divider>
             <v-card-actions>
