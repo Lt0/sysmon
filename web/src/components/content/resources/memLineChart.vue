@@ -100,10 +100,7 @@ export default {
             for (let i in this.selectedTypeName){
                 let name = this.selectedTypeName[i]
 
-                let dynamiclabel = `${cm.fmtSize.fmtKBSize(r[name].rec[0], 2)} (${r[name].percentRec[0]}%) of ${r[name].allStr})`;
-                if(!r[name].percentRec[0]) {
-                    dynamiclabel = `${cm.fmtSize.fmtKBSize(r[name].rec[0], 2)} of ${r[name].allStr})`;
-                }
+                let dynamiclabel = genDynamicLabel(r[name]);
 
                 let dataset = {
                     label: name,
@@ -201,7 +198,7 @@ function Records(){
 // allStr: 方便人类阅读的 rec 字符串
 // percentRec: 该用途占用内存总量的百分比
 // hide: 是否隐藏当前记录的线图
-function MemType(name, all, allStr, rec, percentRec, hide){
+function MemType(name, all, allStr, rec, percentRec, hide, rawData){
     this.name = name;
     this.all = all || 0;
     this.allStr = allStr || null,
@@ -210,6 +207,7 @@ function MemType(name, all, allStr, rec, percentRec, hide){
     this.ctrl = {
         hideChart: hide || false,
     }
+    this.rawData = rawData;
 }
 
 function recordMem(records, currentMem, pointsLen){
@@ -233,7 +231,7 @@ function recordMem(records, currentMem, pointsLen){
 
     if (r.HugePages.all !=  m.HugePagesTotal){
         r.HugePages.all = m.HugePagesTotal;
-        r.HugePages.allStr = cm.fmtSize.fmtKBSize(r.HugePages.all, 2)
+        r.HugePages.allStr = r.HugePages.all;
     }
     updateElements(r.HugePages.rec, m.HugePagesTotal - m.HugePagesFree, p);
     // updateElements(r.HugePages.percentRec, (r.HugePages.rec[0]*100).toFixed(2), p);
@@ -284,5 +282,25 @@ function reFmtPercentRec(percentRec, rec, all){
     for (let i = 0; i < rec.length; i++){
         percentRec[i] = (rec[i]/all*100).toFixed(2)
     }
+}
+
+function genDynamicLabel(record) {
+    let dynamiclabel = "";
+    switch(record.name) {
+        case 'HugePages':
+            dynamiclabel = "0";
+            if(record.all != 0) {
+                dynamiclabel = `${record.rec} (${record.percentRec[0]}%) of ${record.all} (pages)`;
+            }
+            break;
+        default:
+        if(record.percentRec[0]) {
+            dynamiclabel = `${cm.fmtSize.fmtKBSize(record.rec[0], 2)} (${record.percentRec[0]}%) of ${record.allStr}`;
+        } else {
+            dynamiclabel = `${cm.fmtSize.fmtKBSize(record.rec[0], 2)} of ${record.allStr})`;
+        }
+    }
+    
+    return dynamiclabel;
 }
 </script>
