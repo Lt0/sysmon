@@ -293,6 +293,11 @@ function genDynamicLabel(record) {
                 dynamiclabel = `${record.rec} (${record.percentRec[0]}%) of ${record.all} (pages)`;
             }
             break;
+        case 'DirectMap4k':
+        case 'DirectMap2M':
+        case 'DirectMap1G':
+            dynamiclabel = cm.fmtSize.fmtKBSize(record.rec[0], 2);
+            break;
         default:
         if(record.percentRec[0]) {
             dynamiclabel = `${cm.fmtSize.fmtKBSize(record.rec[0], 2)} (${record.percentRec[0]}%) of ${record.allStr}`;
