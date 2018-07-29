@@ -296,6 +296,7 @@ function genDynamicLabel(record) {
         case 'DirectMap4k':
         case 'DirectMap2M':
         case 'DirectMap1G':
+        case 'HardwareCorrupted':
             dynamiclabel = cm.fmtSize.fmtKBSize(record.rec[0], 2);
             break;
         default:
