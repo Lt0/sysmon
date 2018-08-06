@@ -70,7 +70,7 @@ export default {
                 }
 
                 let items = JSON.parse(localStorage[this.dataKey]);
-                console.log("selection init " + this.dataKey + ": " + items);
+                // console.log("selection init " + this.dataKey + ": " + items);
                 this.$emit('input', items);
             }
         }, 
@@ -78,7 +78,7 @@ export default {
             if(this.dataKey) {
                 // console.log("go to save " + this.dataKey);
                 localStorage.setItem(this.dataKey, JSON.stringify(items))
-                console.log("saved data: " + localStorage[this.dataKey]);
+                // console.log("saved data: " + localStorage[this.dataKey]);
             }
         }
     },
