@@ -100,7 +100,7 @@ export default {
             for (let i in this.selectedTypeName){
                 let name = this.selectedTypeName[i]
 
-                let dynamiclabel = genDynamicLabel(r[name]);
+                let dynamiclabel = genDynamicLabel(r[name], this.mem);
 
                 let dataset = {
                     label: name,
@@ -198,7 +198,7 @@ function Records(){
 // allStr: 方便人类阅读的 rec 字符串
 // percentRec: 该用途占用内存总量的百分比
 // hide: 是否隐藏当前记录的线图
-function MemType(name, all, allStr, rec, percentRec, hide, rawData){
+function MemType(name, all, allStr, rec, percentRec, hide){
     this.name = name;
     this.all = all || 0;
     this.allStr = allStr || null,
@@ -207,7 +207,6 @@ function MemType(name, all, allStr, rec, percentRec, hide, rawData){
     this.ctrl = {
         hideChart: hide || false,
     }
-    this.rawData = rawData;
 }
 
 function recordMem(records, currentMem, pointsLen){
@@ -227,14 +226,14 @@ function recordMem(records, currentMem, pointsLen){
         r.Swap.allStr = cm.fmtSize.fmtKBSize(r.Swap.all, 2)
     }
     updateElements(r.Swap.rec, m.SwapTotal - m.SwapFree, p);
-    // updateElements(r.Swap.percentRec, (r.Swap.rec[0]*100).toFixed(2), p);
+    updateElements(r.Swap.percentRec, (r.Swap.rec[0]*100).toFixed(2), p);
 
     if (r.HugePages.all !=  m.HugePagesTotal){
         r.HugePages.all = m.HugePagesTotal;
         r.HugePages.allStr = r.HugePages.all;
     }
     updateElements(r.HugePages.rec, m.HugePagesTotal - m.HugePagesFree, p);
-    // updateElements(r.HugePages.percentRec, (r.HugePages.rec[0]*100).toFixed(2), p);
+    updateElements(r.HugePages.percentRec, (r.HugePages.rec[0]/m.HugePagesTotal*100).toFixed(2), p);
 
     if (r.Vmalloc.all !=  m.VmallocTotal){
         r.Vmalloc.all = m.VmallocTotal;
@@ -284,13 +283,13 @@ function reFmtPercentRec(percentRec, rec, all){
     }
 }
 
-function genDynamicLabel(record) {
+function genDynamicLabel(record, curMem) {
     let dynamiclabel = "";
     switch(record.name) {
         case 'HugePages':
             dynamiclabel = "0";
             if(record.all != 0) {
-                dynamiclabel = `${record.rec} (${record.percentRec[0]}%) of ${record.all} (pages)`;
+                dynamiclabel = `${record.rec[0]} (${record.percentRec[0]}%) of ${record.all} pages(size: ${cm.fmtSize.fmtKBSize(curMem.Hugepagesize, 0)})`;
             }
             break;
         case 'DirectMap4k':
