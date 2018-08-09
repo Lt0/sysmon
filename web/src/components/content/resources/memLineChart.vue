@@ -226,7 +226,7 @@ function recordMem(records, currentMem, pointsLen){
         r.Swap.allStr = cm.fmtSize.fmtKBSize(r.Swap.all, 2)
     }
     updateElements(r.Swap.rec, m.SwapTotal - m.SwapFree, p);
-    updateElements(r.Swap.percentRec, (r.Swap.rec[0]*100).toFixed(2), p);
+    updateElements(r.Swap.percentRec, (r.Swap.rec[0]/m.SwapTotal*100).toFixed(2), p);
 
     if (r.HugePages.all !=  m.HugePagesTotal){
         r.HugePages.all = m.HugePagesTotal;
