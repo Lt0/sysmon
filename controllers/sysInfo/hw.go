@@ -31,7 +31,6 @@ func getHWInfo() HWInfo {
 	initedGlobalHW = true
 
 	mi, _ := proc.GetMeminfo()
-	fmt.Println("mi:", mi)
 	GHW.Mem.PhySize = mi.MemTotal
 	GHW.Mem.SWapSize = mi.SwapTotal
 
