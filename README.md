@@ -18,7 +18,7 @@ nohup ./sysmon &
 ### 容器
 获取 sysmon 的 docker image 之后，执行：
 ```
-docker run --name sysmon --restart=always -d -p 4096:2048 -it sysmon
+docker run --name sysmon --restart=always -d -p 4096:2048 -v /proc:/hproc --privileged -it sysmon
 ```
 运行容器之后，通过浏览器访问 localhost:4096 即可访问服务
 
