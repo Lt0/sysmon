@@ -16,6 +16,8 @@ nohup ./sysmon &
 1. 通过这种方式运行的服务，重启设备之后需要重新手动执行上面的命令
 
 ### 容器
+注意：容器化开发还未完成，以下步骤进攻测试。
+
 获取 sysmon 的 docker image 之后，执行：
 ```
 docker run --name sysmon --restart=always -d -p 4096:2048 -v /proc:/hproc --privileged -it sysmon
