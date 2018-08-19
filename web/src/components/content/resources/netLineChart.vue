@@ -117,6 +117,9 @@ export default {
             // self.nics 的第一个 nic 是 Sum, 所以 self.nics[i] 对应的是 nics[i-1]
             for (let i = 1; i < self.nics.length; i++){
                 let c = nics[i-1];
+                if(!c) {
+                    continue;
+                }
                 let p = preNetInfo.Nics[i-1];
                 let RBytes = c.RBytes - p.RBytes;
                 let TBytes = c.TBytes - p.TBytes;

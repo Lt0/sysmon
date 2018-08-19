@@ -10,7 +10,8 @@ import cm from './js/common'
 import './css/app.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
-import icon from '@/components/common/icon'
+import icon from 'vicon'
+import './static/icon/iconfont'
 
 Vue.config.productionTip = false
 
