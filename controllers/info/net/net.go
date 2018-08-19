@@ -7,6 +7,12 @@ import (
 	"strconv"
 )
 
+type Context struct {
+	Procfs string
+}
+
+var Ctx Context
+
 type NetInfo struct {
 	NicNum int // 网卡数量
 	Nics []NicInfo // 每个网卡的状态信息
@@ -37,7 +43,9 @@ type NicInfo struct {
 func GetNetInfo() NetInfo {
 	var ni NetInfo
 
-	out, err := exec.Command("sh", "-c", `cat /proc/net/dev | tail -n +3 | sed 's/^\s*//g' | sed 's/\s\+/|/g'`).Output()
+	cmd := fmt.Sprintf("cat %s/net/dev | tail -n +3 | sed 's/^\\s*//g' | sed 's/\\s\\+/|/g'", Ctx.Procfs)
+	out, err := exec.Command("sh", "-c", cmd).Output()
+	//out, err := exec.Command("sh", "-c", `cat /proc/net/dev | tail -n +3 | sed 's/^\s*//g' | sed 's/\s\+/|/g'`).Output()
 	if err != nil {
 		fmt.Println("GetCoresInfo", err)
 	}

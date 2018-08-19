@@ -7,6 +7,12 @@ import (
 	"strconv"
 )
 
+type Context struct {
+	Procfs string
+}
+
+var Ctx Context
+
 // disk stats
 type DiskInfo struct {
 	Storage			[]StorageInfo	// 每一个分区存储为一个 storage
@@ -73,7 +79,8 @@ func Storage(di *DiskInfo) {
 }
 
 func Stats(di *DiskInfo){
-	out, err := exec.Command("sh", "-c", `cat /proc/diskstats | sed 's/^\s*//g' | sed 's/\s\+/ /g'`).Output()
+	cmd := fmt.Sprintf("cat %s/diskstats | sed 's/^\\s*//g' | sed 's/\\s\\+/ /g'", Ctx.Procfs)
+	out, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println("Disk Stats", err)
 		return

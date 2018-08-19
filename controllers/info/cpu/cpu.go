@@ -7,6 +7,12 @@ import (
 	"strconv"
 )
 
+type Context struct {
+	Procfs string
+}
+
+var Ctx Context
+
 type CpuInfo struct {
 	CoreNum int
 	OnlineCore string
@@ -59,7 +65,7 @@ func GetCpuInfo() CpuInfo {
 }
 
 func GetCoresInfo(ci *CpuInfo){
-	cmd := fmt.Sprintf("/bin/cat /proc/stat | /bin/grep \"^cpu[0-9]\"")
+	cmd := fmt.Sprintf("/bin/cat %s/stat | /bin/grep \"^cpu[0-9]\"", Ctx.Procfs)
 	out, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println("GetCoresInfo", err)
@@ -137,7 +143,8 @@ func GetGlobalInfo(ci *CpuInfo){
 }
 
 func GetModelName(ci *CpuInfo) {
-	out, err := exec.Command("sh", "-c", `cat /proc/cpuinfo  | grep "model name" | head -n1 | sed 's/^.*: //'`).Output()
+	cmd := fmt.Sprintf("cat %s/cpuinfo  | grep \"model name\" | head -n1 | sed 's/^.*: //'", Ctx.Procfs)
+	out, err := exec.Command("sh", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println("GetStaticInfo", err)
 	}
