@@ -25,7 +25,7 @@ type limitsItem struct {
 func Limits(pid string) (LimitsInfo, error) {
 	var info LimitsInfo
 
-	f, err := os.Open(filepath.Join(procfs, pid, "limits"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, pid, "limits"))
 	if err != nil {
 		return info, err
 	}
@@ -57,6 +57,6 @@ func Limits(pid string) (LimitsInfo, error) {
 
 
 func LimitsRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "limits"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "limits"))
 	return string(buf)
 }

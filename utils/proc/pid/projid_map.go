@@ -6,6 +6,6 @@ import (
 )
 
 func ProjidMapRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "projid_map"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "projid_map"))
 	return string(buf)
 }

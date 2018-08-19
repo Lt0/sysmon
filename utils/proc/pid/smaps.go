@@ -47,7 +47,7 @@ type MapsItem struct {
 func Smaps(pid string) (SmapsInfo, error) {
 	var info SmapsInfo
 
-	f, err := os.Open(filepath.Join(procfs, pid, "smaps"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, pid, "smaps"))
 	if err != nil {
 		return info, err
 	}

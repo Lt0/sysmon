@@ -3,6 +3,14 @@
 // However, the standard netstat(8) suite provides  much cleaner access to these files.
 package net
 
-// proc filesystem mount point, default is /proc
-var procfs = "/proc"
+
 var netfs = "net"
+
+type Context struct {
+	Procfs string
+}
+var Ctx Context
+
+func init() {
+	Ctx.Procfs = "/proc"
+}

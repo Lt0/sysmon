@@ -21,9 +21,9 @@ type CmdlineInfo struct {
 func Cmdline(pid string) (CmdlineInfo, error) {
 	var ci CmdlineInfo
 
-	f, err := os.Open(filepath.Join(procfs, pid, "cmdline"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, pid, "cmdline"))
 	if err != nil {
-		return ci, fmt.Errorf("Cmdline: open %v/%v/cmdline failed: %v\n", procfs, pid, err)
+		return ci, fmt.Errorf("Cmdline: open %v/%v/cmdline failed: %v\n", Ctx.Procfs, pid, err)
 	}
 	defer f.Close()
 

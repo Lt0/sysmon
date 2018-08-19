@@ -42,9 +42,9 @@ type CPU struct {
 
 func Stat() (StatInfo, error) {
 	var stat StatInfo
-	f, err := os.Open(filepath.Join(procfs, "stat"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, "stat"))
 	if err != nil {
-		return stat, fmt.Errorf("Stat Open %v/stat failed: %v\n", procfs, err)
+		return stat, fmt.Errorf("Stat Open %v/stat failed: %v\n", Ctx.Procfs, err)
 	}
 	defer f.Close()
 

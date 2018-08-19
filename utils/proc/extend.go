@@ -7,13 +7,13 @@ import (
 	"strconv"
 )
 
-// return all pids in procfs
+// return all pids in Ctx.Procfs
 func AllPids() []string {
-	return pids(procfs)
+	return pids(Ctx.Procfs)
 }
 
 func AllThreadPids(pid string) []string {
-	return pids(filepath.Join(procfs, pid, "task"))
+	return pids(filepath.Join(Ctx.Procfs, pid, "task"))
 }
 
 func pids(path string) []string {

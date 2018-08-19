@@ -21,7 +21,7 @@ type BuddyInfoZone	struct {
 func BuddyInfo() (BuddyInfoInfo, error) {
 	var info BuddyInfoInfo
 
-	buf, err := ioutil.ReadFile(filepath.Join(procfs, "buddyinfo"))
+	buf, err := ioutil.ReadFile(filepath.Join(Ctx.Procfs, "buddyinfo"))
 	if err != nil {
 		return info, err
 	}

@@ -9,9 +9,9 @@ import (
 type TaskInfo []string
 
 func Task(pid string) TaskInfo {
-	t, err := os.Open(filepath.Join(procfs, pid, "task"))
+	t, err := os.Open(filepath.Join(Ctx.Procfs, pid, "task"))
 	if err != nil {
-		fmt.Println("can not open", procfs)
+		fmt.Println("can not open", Ctx.Procfs)
 		return nil
 	}
 

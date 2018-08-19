@@ -22,7 +22,7 @@ type stackItem struct {
 func Stack(pid string) (StackInfo, error) {
 	var info StackInfo
 
-	f, err := os.Open(filepath.Join(procfs, pid, "stack"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, pid, "stack"))
 	if err != nil {
 		return info, err
 	}

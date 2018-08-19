@@ -8,6 +8,6 @@ import (
 )
 
 func GidMapRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "gid_map"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "gid_map"))
 	return string(buf)
 }

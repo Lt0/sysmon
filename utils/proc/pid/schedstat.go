@@ -17,7 +17,7 @@ type SchedStatInfo struct {
 func SchedStat(pid string) (SchedStatInfo, error) {
 	var info SchedStatInfo
 
-	buf, err := ioutil.ReadFile(filepath.Join(procfs, pid, "schedstat"))
+	buf, err := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "schedstat"))
 	if err != nil {
 		return info, err
 	}

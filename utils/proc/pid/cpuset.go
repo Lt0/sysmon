@@ -6,6 +6,6 @@ import (
 )
 
 func CPUSetRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "cpuset"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "cpuset"))
 	return string(buf)
 }

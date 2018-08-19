@@ -8,6 +8,6 @@ import (
 )
 
 func PersonalityRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "personality"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "personality"))
 	return string(buf)
 }

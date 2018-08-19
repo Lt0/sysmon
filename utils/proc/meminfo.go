@@ -63,9 +63,9 @@ type Meminfo struct {
 func GetMeminfo() (Meminfo, error) {
 	var mi Meminfo
 
-	f, err := os.Open(filepath.Join(procfs, "meminfo"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, "meminfo"))
 	if err != nil {
-		return mi, fmt.Errorf("open %v/meminfo failed: %v\n", procfs, err)
+		return mi, fmt.Errorf("open %v/meminfo failed: %v\n", Ctx.Procfs, err)
 	}
 	defer f.Close()
 

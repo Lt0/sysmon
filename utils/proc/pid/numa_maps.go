@@ -41,7 +41,7 @@ type NodePages struct {
 func NumaMaps(pid string) (NumaMapsInfo, error) {
 	var info NumaMapsInfo
 
-	f, err := os.Open(filepath.Join(procfs, pid, "numa_maps"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, pid, "numa_maps"))
 	if err != nil {
 		return info, err
 	}

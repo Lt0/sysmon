@@ -6,6 +6,6 @@ import (
 )
 
 func SessionIDRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "sessionid"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "sessionid"))
 	return string(buf)
 }

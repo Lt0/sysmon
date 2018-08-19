@@ -18,7 +18,7 @@ type FDItem struct {
 func FD(pid string) FDInfo {
 	var info FDInfo
 
-	path := filepath.Join(procfs, pid, "fd")
+	path := filepath.Join(Ctx.Procfs, pid, "fd")
 	p, err := os.Open(path)
 	if err != nil {
 		fmt.Println("can not open", path)

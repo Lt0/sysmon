@@ -9,6 +9,6 @@ import (
 )
 
 func SetGroupRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "setgroups"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "setgroups"))
 	return string(buf)
 }

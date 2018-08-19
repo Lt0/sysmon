@@ -46,7 +46,7 @@ type TX struct {
 }
 
 func (p *Dev) Update() error {
-	f, err := os.Open(filepath.Join(procfs, netfs, "dev"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, netfs, "dev"))
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func (p *Dev) Update() error {
 	r.ReadBytes('\n')
 	_, err = r.ReadBytes('\n')
 	if err == io.EOF {
-		return fmt.Errorf("Invalid procfs file %v/%v/dev\n", procfs, netfs)
+		return fmt.Errorf("Invalid Ctx.Procfs file %v/%v/dev\n", Ctx.Procfs, netfs)
 	}
 
 	p.Ifaces = make([]Iface, 0)

@@ -16,7 +16,7 @@ type UpTimeInfo struct {
 
 func UpTime() (UpTimeInfo, error) {
 	var ut UpTimeInfo
-	f, err := os.Open(filepath.Join(procfs, "uptime"))
+	f, err := os.Open(filepath.Join(Ctx.Procfs, "uptime"))
 	if err != nil {
 		return ut, err
 	}
@@ -27,7 +27,7 @@ func UpTime() (UpTimeInfo, error) {
 	s := strings.TrimSpace(string(b))
 	vs := strings.Split(s, " ")
 	if len(vs) < 2 {
-		return ut, fmt.Errorf("splited strings read from %v/uptime incorrect. len(vs): %v\n", procfs, len(vs))
+		return ut, fmt.Errorf("splited strings read from %v/uptime incorrect. len(vs): %v\n", Ctx.Procfs, len(vs))
 	}
 	ut.Uptime, err = strconv.ParseFloat(vs[0], 10)
 	if err != nil {

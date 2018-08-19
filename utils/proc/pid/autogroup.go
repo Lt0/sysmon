@@ -6,6 +6,6 @@ import (
 )
 
 func AutoGroupRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "autogroup"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "autogroup"))
 	return string(buf)
 }

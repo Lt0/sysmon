@@ -65,7 +65,7 @@ type SchedItem struct {
 func Sched(pid string) (SchedInfo, error) {
 	var info SchedInfo
 
-	buf, err := ioutil.ReadFile(filepath.Join(procfs, pid, "sched"))
+	buf, err := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "sched"))
 	if err != nil {
 		return info, err
 	}
@@ -94,7 +94,7 @@ func Sched(pid string) (SchedInfo, error) {
 }
 
 func SchedRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "sched"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "sched"))
 	return string(buf)
 }
 

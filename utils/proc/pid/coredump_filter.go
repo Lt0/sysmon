@@ -56,6 +56,6 @@ import (
 )
 
 func CoredumpFilterRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "coredump_filter"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "coredump_filter"))
 	return string(buf)
 }

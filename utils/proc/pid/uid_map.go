@@ -42,6 +42,6 @@ import (
 )
 
 func UidMapRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "uid_map"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "uid_map"))
 	return string(buf)
 }

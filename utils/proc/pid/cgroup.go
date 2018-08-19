@@ -6,6 +6,6 @@ import (
 )
 
 func CGroupRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "cgroup"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "cgroup"))
 	return string(buf)
 }

@@ -6,6 +6,6 @@ import (
 )
 
 func MountInfoRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "mountinfo"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "mountinfo"))
 	return string(buf)
 }

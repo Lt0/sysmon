@@ -33,7 +33,7 @@ import (
 )
 
 func OOMScore(pid string) int {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "oom_score"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "oom_score"))
 	score, _ := strconv.Atoi(string(buf))
 	return score
 }

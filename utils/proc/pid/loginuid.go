@@ -6,6 +6,6 @@ import (
 )
 
 func LoginUidRawData(pid string) string {
-	buf, _ := ioutil.ReadFile(filepath.Join(procfs, pid, "loginuid"))
+	buf, _ := ioutil.ReadFile(filepath.Join(Ctx.Procfs, pid, "loginuid"))
 	return string(buf)
 }

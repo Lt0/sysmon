@@ -18,7 +18,7 @@ type MapFilesItem struct {
 func MapFiles(pid string) MapFilesInfo {
 	var info MapFilesInfo
 
-	path := filepath.Join(procfs, pid, "map_files")
+	path := filepath.Join(Ctx.Procfs, pid, "map_files")
 	p, err := os.Open(path)
 	if err != nil {
 		fmt.Println("can not open", path)
