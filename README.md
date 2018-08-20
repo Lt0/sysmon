@@ -53,6 +53,11 @@ The basic step is to download/compile the application installation package sysmo
 
 <br>
 
+## Download
+https://pan.baidu.com/s/1EKfi2553dXZFvMWCkr60xQ
+
+<br>
+
 ## Deploy Server Side
 ### Native Application
 Downloading sysmon.tar.gz to your server and then unpack it and run sysmon
