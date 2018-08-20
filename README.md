@@ -69,6 +69,7 @@ sudo docker run --name sysmon --restart=always -d -p 4096:2048 -v /proc:/hproc -
 后端使用的是 beego 框架，要开启 https 功能，在 conf/app.conf 添加如下配置(CertFile 和 KeyFile 是你自己的整数和密钥)：
 ```
 EnableHTTPS = true
+HTTPSPort = 2049
 HTTPSCertFile = xxx.cert
 HTTPSKeyFile = xxx.key
 ```
