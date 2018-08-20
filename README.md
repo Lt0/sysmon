@@ -31,6 +31,7 @@ http://45.32.84.249:2047
 - ubuntu 14.04/16.04
 - rhel 7.1
 - centos 7
+- CentOS release 6.5 (Final)（resources network 显示有问题）
 
 <br>
 
