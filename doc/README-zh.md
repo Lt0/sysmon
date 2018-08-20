@@ -51,6 +51,11 @@ http://45.32.84.249:2047
 
 <br>
 
+## 下载
+https://pan.baidu.com/s/1EKfi2553dXZFvMWCkr60xQ
+
+<br>
+
 ## 部署
 ### 原生应用
 将 sysmon.tar.gz 复制到服务器上，解压并运行 sysmon
