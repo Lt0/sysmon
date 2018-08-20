@@ -1,6 +1,6 @@
 # web
 
-> sysmon frontend
+sysmon frontend is a web application based on vue and vuetify. It use <a href="https://github.com/Lt0/vicon" target="_blank">vicon</a>/iconfont project for icons.
 
 ## Build Setup
 Note: If your network is slow when connecting to npm repository, please use cnpm instead of npm(check https://npm.taobao.org/ for how to use cnpm).
