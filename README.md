@@ -28,7 +28,7 @@ http://45.32.84.249:2047
 ## 系统支持情况
 以下是经过实际测试能够正常使用的系统，除了这些系统，主流的 Linux 发行版应该都支持。
 
-- ubuntu 14.04/16.04
+- ubuntu 12.04/12.10/14.04/16.04
 - rhel 7.1
 - centos 7
 - CentOS release 6.5 (Final)（系统默认 iptables 禁止外部访问，resources network 显示有问题）
