@@ -1,3 +1,5 @@
+<a href="https://github.com/Lt0/sysmon/blob/master/README.md"> English </a>
+
 # sysmon
 sysmon 是一个为 Linux 开发的前后端分离的系统资源监视器，在服务器上启动后台服务之后，可以通过任意一个能够访问该服务器的浏览器查看系统资源使用状况。
 
