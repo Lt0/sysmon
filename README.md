@@ -29,7 +29,7 @@ http://45.32.84.249:2047
 
 <br>
 
-## System support
+## System Support
 The following are the systems that have been tested. In addition, sysmon should be able to run on most distribution:
 
 - Ubuntu 12.04/12.10/14.04/16.04
@@ -44,6 +44,17 @@ The following are the systems that have been tested. In addition, sysmon should 
 Unsupported system:
 
 - CentOS release 5.4 (Final)
+
+<br>
+
+## Architecture Support
+The prebuilt package includes the following architecture:
+
+- x86-64 (sysmon-xxx-amd64.tar.gz)
+- x86 (sysmon-xxx-386.tar.gz)
+- ARMv6 (sysmon-xxx-armv6l.tar.gz)
+- ARMv8 (sysmon-xxx-arm64.tar.gz)
+
 
 <br>
 <br>
