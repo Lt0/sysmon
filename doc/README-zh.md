@@ -49,7 +49,7 @@ http://45.32.84.249:2047
 ## 架构支持
 预发布的版本包括以下架构：
 
-- amd64 (sysmon-xxx-amd64.tar.gz)
+- x86-64 (sysmon-xxx-amd64.tar.gz)
 - x86 (sysmon-xxx-386.tar.gz)
 - ARMv6 (sysmon-xxx-armv6l.tar.gz)
 - ARMv8 (sysmon-xxx-arm64.tar.gz)
