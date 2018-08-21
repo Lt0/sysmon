@@ -27,7 +27,7 @@ http://45.32.84.249:2047
 
 <br>
 
-## 系统支持情况
+## 系统支持
 以下是经过实际测试能够正常使用的系统，除了这些系统，主流的 Linux 发行版应该都支持。
 
 - Ubuntu 12.04/12.10/14.04/16.04
@@ -42,6 +42,17 @@ http://45.32.84.249:2047
 已测不支持的系统：
 
 - CentOS release 5.4 (Final)
+
+
+<br>
+
+## 架构支持
+预发布的版本包括以下架构：
+
+- x86-64 (sysmon-xxx-amd64.tar.gz)
+- x86 (sysmon-xxx-386.tar.gz)
+- ARMv6 (sysmon-xxx-armv6l.tar.gz)
+- ARMv8 (sysmon-xxx-arm64.tar.gz)
 
 <br>
 <br>
