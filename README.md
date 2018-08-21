@@ -5,6 +5,8 @@
 # sysmon
 Sysmon is a B/S mode system monitor for Linux distribution. With server side daemon, you can remotely watch usage of your system resources via web browser.
 
+<img src="https://raw.githubusercontent.com/Lt0/sysmon/master/doc/img/sysmon-resources.png" />
+
 Features：
 1. Watch CPU, memory, disk, network usage in one page
 2. Support single CPU usage real-time display
