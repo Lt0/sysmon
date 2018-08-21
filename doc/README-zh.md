@@ -5,6 +5,8 @@ sysmon 是一个为 Linux 开发的前后端分离的系统资源监视器，在
 
 <img src="https://raw.githubusercontent.com/Lt0/sysmon/master/doc/img/sysmon-resources.png" />
 
+<img src="https://raw.githubusercontent.com/Lt0/sysmon/master/doc/img/sysmon-mobile.png" />
+
 特性：
 1. 单页显示 CPU，内存，磁盘，网络使用状态曲线图
 2. 支持单个 CPU 使用率实时显示
