@@ -20,6 +20,7 @@ Features：
 8. Watch System status remotely(via IP)
 9. Mobile friendly
 10. Small web UI(only about 350KB)
+11. Support PWA(you can add the web page to Homescreen)
 
 <br>
 
