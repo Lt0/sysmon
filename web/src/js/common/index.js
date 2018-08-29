@@ -4,6 +4,7 @@ var fs = require('./fs')
 var fmtSize = require('./fmtSize')
 var sysInfo = require('./sysInfo')
 var bapi = require('./backendAPI')
+import sapi from './serverAPI'
 
 export default {
     bus: null,
@@ -14,4 +15,5 @@ export default {
     fs: fs,
     sysInfo: sysInfo,
     bapi: bapi,
+    sapi: sapi,
 }

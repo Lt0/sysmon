@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Layout from '@/components/Layout'
+import Init from '@/components/Init'
 import Resources from '@/components/content/Resources'
 import Processes from '@/components/content/Processes'
 import FS from '@/components/content/FS.vue'
@@ -12,8 +13,17 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'Layout',
+    	path: '/',
+    	redirect: Init,
+    },
+    {
+    	path: '/init',
+    	name: 'Init',
+    	component: Init,
+    },
+    {
+    	path: '/main',
+      name: 'Main',
       component: Layout,
       redirect: Resources,
       children: [

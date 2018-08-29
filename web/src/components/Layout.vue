@@ -3,7 +3,8 @@
         <v-navigation-drawer v-model="drawer" clipped fixed app ><drawer-left /></v-navigation-drawer>
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-            <v-toolbar-title class="hdr-text" @click="aboutDialog = true">System Monitor</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-title class="hdr-text" @click="aboutDialog = true">{{activeServer}}</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -49,6 +50,7 @@ export default {
             drawer: false,
             infoAll: null,
             aboutDialog: false,
+            activeServer: cm.sapi.getActiveServer(),
         }
     },
     beforeCreate () {
@@ -59,6 +61,7 @@ export default {
     },
     methods: {
         changeContentHandler (r) {
+        	console.log("this.$router: ", this.$router);
             switch (r) {
                 case 'resources':
                     this.$router.push('resources');
@@ -93,5 +96,8 @@ export default {
 
 .hdr-text {
     cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    margin: 0;
 }
 </style>
