@@ -1,12 +1,18 @@
 const ver = "v1"
 
-const infoAll = "/" + ver + "/info/all"
-const infoDisk = "/" + ver + "/info/disk"
+var activeServer = localStorage.getItem("activeServer")
+if(!activeServer) {
+	activeServer = ""
+}
 
-const processAll = "/" + ver + "/process/all"
-const processDetails = "/" + ver + "/process/details"
+const infoAll = activeServer + "/" + ver + "/info/all"
+const infoDisk = activeServer + "/" + ver + "/info/disk"
 
-const sysInfoAll = "/" + ver + "/sysInfo/all"
+const processAll = activeServer + "/" + ver + "/process/all"
+const processDetails = activeServer + "/" + ver + "/process/details"
+
+const sysInfoAll = activeServer + "/" + ver + "/sysInfo/all"
+
 
 exports.infoAll = infoAll;
 exports.infoDisk = infoDisk;
