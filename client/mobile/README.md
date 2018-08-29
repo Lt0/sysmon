@@ -1,7 +1,9 @@
 # 关于
-	当前目录下的文件是用于生成移动客户端的，移动客户端目前覆盖 Android 和 IOS，通过 HBuilder 直接使用 web app 来生成移动客户端。web app 是 server 端自带的由 vue 实现的客户端（位于 sysmon/web 下）。
+当前目录下的文件是用于生成移动客户端的，移动客户端目前覆盖 Android 和 IOS，通过 HBuilder 直接使用 web app 来生成移动客户端。web app 是 server 端自带的由 vue 实现的客户端（位于 sysmon/web 下）。
 
-# 步骤
+<br>
+
+# 构建步骤
 ## 1. 生成 web app
 在 sysmon/web 下执行：
 ```
@@ -17,7 +19,7 @@ Note: 如果是首次执行，则需要先在 sysmon/web 下执行 "npm install"
 ```
 ./mobile.sh gen
 ```
-执行成功的话，可以生成 HBuilder 移动 APP 所需的文件
+执行成功的话，可以生成构建移动 APP 所需的全部文件
 
 ## 3. 构建移动 APP
 通过 HBuilder 客户端打开当前目录，即可作为一个移动 APP 项目来生成移动 APP。
