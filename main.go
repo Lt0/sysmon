@@ -3,6 +3,7 @@ package main
 import (
 	_ "github.com/Lt0/sysmon/routers"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/plugins/cors"
 
 	"github.com/Lt0/sysmon/controllers/info/cpu"
 	"github.com/Lt0/sysmon/controllers/info/disk"
@@ -14,6 +15,7 @@ import (
 )
 
 func main() {
+	setCORS()
 	initStaticDir()
 	initProcfs()
 
@@ -42,4 +44,13 @@ func initProcfs() {
 	proc.Ctx.Procfs = procfs
 	ppid.Ctx.Procfs = procfs
 	pnet.Ctx.Procfs = procfs
+}
+
+func setCORS() {
+	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{   
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "PUT", "PATCH"},        
+		AllowHeaders: []string{"Origin"},
+		ExposeHeaders: []string{"Content-Length"},     
+		AllowCredentials: true,}))
 }
