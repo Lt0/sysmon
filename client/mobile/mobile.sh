@@ -5,73 +5,79 @@ DIST=../../web/dist
 RSC=$DIST/static
 
 # resources from web dist
-IMG=$RSC/img
-JS=$RSC/js
-CSS=$RSC/css
-
-FONTS=$RSC/fonts
+#IMG=$RSC/img
+#JS=$RSC/js
+#CSS=$RSC/css
+#FONTS=$RSC/fonts
 
 # mobile only resources
 MANIFEST=manifest.json
-UNPACK=unpackage
 
 backup() {
-	bak_files="img js css $UNPACK"
+#	bak_files="img js css fonts"
+	bak_files="static"
 	dir=backup-$(date +%y_%m_%d-%H:%M:%S)
 	mkdir $dir
 	mv $bak_files $dir 2>/dev/null
 }
 
 update_web_files() {
-	mkdir $UNPACK
-	cp -rf $IMG $JS $CSS .
-	cp -rf $FONTS $UNPACK
+	cp -rf $RSC .
+	rm -rf static/PWA
 }
 
 modify_css() {
-	css_file=$(cd css && ls *.css)
+	css_file=$(cd static/css && ls *.css)
 	if [[ -z $css_file ]]; then
 		echo modify_css: no css file
 		exit 2
 	fi
 
 	echo regenerate fonts link in css 
-	sed -i "s|/static/fonts|../$UNPACK/fonts|g" css/$css_file
+	sed -i "s|/static/fonts|../fonts|g" static/css/$css_file
 }
 
+del_js_link() {
+	index=index.html
+	sed -i '/<script type="text\/javascript" src="/d' $index
+}
+del_css_link() {
+	index=index.html
+	sed -i '/<link href="static\/css/d' $index
+}
 add_js_link() {
 	pattern=$1
 
-	js=$(cd js && ls $pattern*.js)
+	js=$(cd static/js && ls $pattern*.js)
 	if [[ -z $js ]]; then
-		echo modify_index: no $pattern js file
+		echo add_js_link: no $pattern js file
 		exit 3
 	fi
-	link="<script type=\"text/javascript\" src=\"js/$js\"></script>"
+	link="<script type=\"text/javascript\" src=\"static/js/$js\"></script>"
 	sed -i "/<\/body>/ i $link" $index
+}
+add_css_link(){
+	pattern=$1
+	css=$(cd static/css && ls $pattern*.css)
+	if [[ -z $css ]]; then
+		echo add_css_link: no $pattern css file
+		exit 4
+	fi
+	link="<link href=\"static/css/$css\" rel=\"stylesheet\">"
+	sed -i "/<\/title>/ a $link" $index
 }
 modify_index() {
 	index=index.html
 	
 	echo regenerate js link in $index
-	# remove old js link
-	sed -i '/<script type="text\/javascript" src="/d' $index
-	# add js link
+	del_js_link
 	add_js_link manifest
 	add_js_link vendor
 	add_js_link app
 
-
-	# modify css
 	echo regenerate css link in $index
-	css_file=$(cd css && ls *.css)
-	if [[ -z $css_file ]]; then
-		echo modify_index: no css file
-		exit 4
-	fi
-
-	link="<link href=\"css/$css_file\" rel=\"stylesheet\">"
-	sed -i "s|<link href=\"css/.*rel=\"stylesheet\">|$link|" $index
+	del_css_link
+	add_css_link app
 }
 
 generate() {
@@ -85,8 +91,12 @@ generate() {
 
 clear_generated_files() {
 	echo clear autogen files
-	rm -rf img js css $UNPACK
+	rm -rf static
 	rm -rf backup-*
+
+	echo clear links in index.html
+	del_js_link
+	del_css_link
 }
 
 show_help() {
@@ -124,13 +134,3 @@ case $1 in
 		show_help
 		exit $?
 esac
-
-
-if [[ -n $1 ]] && [[ $1 = "clear" ]]; then
-	echo clear autogen files
-	rm -rf img js css
-	rm -rf $UNPACK/fonts
-	rm -rf backup-*
-	exit 0
-fi
-
