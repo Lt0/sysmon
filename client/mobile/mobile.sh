@@ -6,9 +6,9 @@ RSC=$DIST/static
 
 # resources from web dist
 #IMG=$RSC/img
-#JS=$RSC/js
-#CSS=$RSC/css
-#FONTS=$RSC/fonts
+JS=$RSC/js
+CSS=$RSC/css
+FONTS=$RSC/fonts
 
 # mobile only resources
 MANIFEST=manifest.json
@@ -22,8 +22,16 @@ backup() {
 }
 
 update_web_files() {
-	cp -rf $RSC .
-	rm -rf static/PWA
+	mkdir static
+
+	mkdir static/css
+	cp -rf $CSS/*.css static/css
+
+	mkdir static/js
+	cp -rf $JS/*.js static/js
+	
+	mkdir static/fonts
+	cp -rf $FONTS/*.woff2 static/fonts
 }
 
 modify_css() {

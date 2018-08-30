@@ -119,9 +119,9 @@
                 "android": {
                     "mdpi": "", /*普通屏启动图片，分辨率：240x282*/
                     "ldpi": "", /*大屏启动图片，分辨率：320x442*/
-                    "hdpi": "S:/golang/src/github.com/Lt0/sysmon/web/design/boot-img-480.png", /*高分屏启动图片，分辨率：480x762*/
-                    "xhdpi": "S:/golang/src/github.com/Lt0/sysmon/web/design/boot-img-720.png", /*720P高分屏启动图片，分辨率：720x1242*/
-                    "xxhdpi": "S:/golang/src/github.com/Lt0/sysmon/web/design/boot-img.png"/*1080P高分屏启动图片，分辨率：1080x1882*/
+                    "hdpi": "unpackage/res/img/boot-img/android/boot-img-480x762.png", /*高分屏启动图片，分辨率：480x762*/
+                    "xhdpi": "unpackage/res/img/boot-img/android/boot-img-720x1242.png", /*720P高分屏启动图片，分辨率：720x1242*/
+                    "xxhdpi": "unpackage/res/img/boot-img/android/boot-img-1080x1882.png"/*1080P高分屏启动图片，分辨率：1080x1882*/
                 }
             }
         }
@@ -130,22 +130,6 @@
 		"pages": {
 			"index.html": {
 				"resources": [
-					"/static/js/app.6239db7c643146bde16b.js",
-					"/static/js/vendor.ed511ffeaf7805de0377.js",
-					"/static/js/manifest.2ae2e69a05c33dfc65f8.js",
-					"/static/css/app.0dad0585187be8a0fa042513526cb0be.css",
-					"/unpackage/static/js/app.6239db7c643146bde16b.js",
-					"/unpackage/static/js/vendor.ed511ffeaf7805de0377.js",
-					"/unpackage/static/css/app.0dad0585187be8a0fa042513526cb0be.css",
-					"/unpackage/static/js/manifest.2ae2e69a05c33dfc65f8.js",
-					"/css/app.0dad0585187be8a0fa042513526cb0be.css",
-					"/js/manifest.2ae2e69a05c33dfc65f8.js",
-					"/js/app.6239db7c643146bde16b.js",
-					"/js/vendor.ed511ffeaf7805de0377.js",
-					"static/js/vendor.ed511ffeaf7805de0377.js",
-					"static/js/manifest.2ae2e69a05c33dfc65f8.js",
-					"static/css/app.daac29e25172da65a201385ce089db5f.css",
-					"static/js/app.790a6d48381776d63007.js"
 				],
 				"refer": [],
 				"priority": 0
@@ -153,32 +137,9 @@
 		},
 		"idle": {
 			"resources": [
-				"static/fonts/MaterialIcons-Regular.a37b0c0.ttf",
-				"static/img/sysmon-96.png",
-				"static/img/sysmon-48.png",
-				"static/js/vendor.ed511ffeaf7805de0377.js.map",
-				"static/js/app.6239db7c643146bde16b.js",
-				"static/PWA/manifest.json",
-				"static/fonts/MaterialIcons-Regular.012cf6a.woff",
-				"static/fonts/MaterialIcons-Regular.570eb83.woff2",
-				"dist/index.html",
-				"dist/新建文件夹/index.html",
-				"static/fonts/MaterialIcons-Regular.e79bfd8.eot",
-				"static/css/app.0dad0585187be8a0fa042513526cb0be.css",
-				"static/js/manifest.2ae2e69a05c33dfc65f8.js.map",
-				"static/css/app.0dad0585187be8a0fa042513526cb0be.css.map",
-				"static/img/sysmon-128.png",
-				"static/js/app.6239db7c643146bde16b.js.map",
-				"static/img/sysmon-192.png"
 			]
 		}
 	},
 	"unpackage":[
-	  "static/img/sysmon-128.png",
-	  "static/img/sysmon-192.png",
-	  "static/img/sysmon-48.png",
-	  "static/img/sysmon-96.png",
-	  "static/js/manifest.2ae2e69a05c33dfc65f8.js.map",
-	  "static/js/vendor.ed511ffeaf7805de0377.js.map"
 	]
 }
