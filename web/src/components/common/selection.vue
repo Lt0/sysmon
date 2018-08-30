@@ -27,8 +27,7 @@
                 </v-card-text>
 
                 <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click.native="dialog = false">Close</v-btn>
+                	<confirm-btns noLeft rightPrimary @clickRight="dialog = false" />
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -36,6 +35,7 @@
 </template>
 
 <script>
+import confirmBtns from '@/components/common/confirmBtns'
 export default {
     name: 'appSelection',
     // items: 所有的选项
@@ -44,6 +44,9 @@ export default {
     // dataKey: 用来自动记录已选项的 key
     // lazyInit: 是否等待 items 发生变化时才初始化已选项（根据本地自动保存的记录进行初始化）
     props: ['items', 'selectedItems', 'defaultItemNum', 'dataKey', 'lazyInit'],
+    components: {
+    	confirmBtns,
+    },
     model: {
         prop: 'selectedItems',
         event: 'input',

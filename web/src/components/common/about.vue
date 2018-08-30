@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="dialog" max-width="500px" >
+    <v-dialog v-model="dialog" max-width="480px" >
         <v-card>
             <v-card-title class="headline " primary-title > About Sysmon </v-card-title>
             <v-card-text>
@@ -9,17 +9,20 @@
             <br><br><br>
             <v-divider></v-divider>
             <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" flat @click="$emit('input', !value)" > Close </v-btn>
+                <confirm-btns noLeft rightPrimary @clickRight="$emit('input', !value)" />
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
 
 <script>
+import confirmBtns from '@/components/common/confirmBtns'
 export default {
     name: "about",
     props: ['value'],
+    components: {
+    	confirmBtns,
+    },
     model: {
         prop: 'value',
         event: 'input',

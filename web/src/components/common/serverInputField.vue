@@ -1,6 +1,6 @@
 <template>
 	<div id="container">
-		<v-card flat>
+		<v-card flat width="100%">
 			<v-card-title class="headline lighten-2" primary-title>Add Server</v-card-title>
 			<v-card-text>
 				<div id="newServerInput">
@@ -14,11 +14,7 @@
 				<div class="error-msg">{{ errMsg }}</div>
 			</v-card-text>
 			<v-card-actions>
-				<v-spacer></v-spacer>
-				<v-btn v-show="enableCancel" @click="cancel()" style="color:grey" flat><v-icon>exit_to_app</v-icon>&ensp;Cancel</v-btn>
-				<v-spacer v-if="enableCancel"></v-spacer>
-				<v-btn @click="addServer()" style="color:#26a69a" flat><v-icon>add</v-icon>&ensp;Add</v-btn>
-				<v-spacer></v-spacer>
+				<confirm-btns leftMinor rightPrimary leftPrependVIcon="exit_to_app" rightPrependVIcon="add" rightText="Add" @clickLeft='cancel()' @clickRight="addServer()" />
 			</v-card-actions>
 		</v-card>
 	</div>
@@ -26,10 +22,14 @@
 
 <script>
 	import cm from '../../js/common'
+	import confirmBtns from '@/components/common/confirmBtns'
 	
 	export default {
 		name: 'serverInputField',
 		props: ['enableCancel'],		
+		components: {
+			confirmBtns,
+		},
 		data () {
 			return {
 				newServer: "",
@@ -60,7 +60,7 @@
 
 <style>
 	#container {
-		margin: auto
+		width: 100%;
 	}
 	#newServerInput {
 		display: flex;
@@ -71,5 +71,8 @@
 	.error-msg {
 		color: red;
 		text-align: right;
+	}
+	#server-test-field {
+		width: 100%;
 	}
 </style>

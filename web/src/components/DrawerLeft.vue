@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<!--servers option-->
 		<v-list>
 				<v-list-tile @click="servers_visible = !servers_visible">
 		            <v-list-tile-action><v-icon>computer</v-icon></v-list-tile-action>
@@ -9,6 +10,7 @@
 		    	</v-list-tile>
 		</v-list>
 		
+		<!--server list-->
 		<div v-if="servers_visible">
 			<v-list>
 			    	<v-list-tile v-for="server in servers" :key=server.id @click="selectServer(server)" class="server ">
@@ -21,25 +23,25 @@
 	    		<v-btn outline class="server-btn" style="color: grey;" @click="clearServersDialog = true"><v-icon>clear_all</v-icon>&ensp;clear</v-btn>
 	    		<v-btn outline class="server-btn" style="color: #26a69a;" @click="addServerDialog = true"><v-icon>add</v-icon>&ensp;add</v-btn>
 	    		
-	    		<v-dialog v-model="addServerDialog" width="400">
+	    		<!--add server dialog-->
+	    		<v-dialog v-model="addServerDialog" width='400px'>
 	    			<div><server-input-field @addServerFinish="addServerFinishHandler()" @cancelAddServer="cancelAddServerHandler()" :enableCancel="true"></server-input-field></div>
 	    		</v-dialog>
-	    		<v-dialog v-model="clearServersDialog" width="400">
+	    		
+	    		<!--clear server dialog-->
+	    		<v-dialog v-model="clearServersDialog" width="400px">
 	    			<v-card>
 						<v-card-title class="headline lighten-2" primary-title>Clear All Servers?</v-card-title>
 						<v-card-text>All servers will be removed except Active server and Host server</v-card-text>
 						<v-card-actions>
-							<v-spacer></v-spacer>
-							<v-btn @click="clearServersDialog=false" flat style="color: #26a69a;">Cancel</v-btn>
-							<v-spacer></v-spacer>
-							<v-btn @click="clearServers()" flat style="color: grey;">Clear</v-btn>
-							<v-spacer></v-spacer>
+							<confirm-btns leftPrimary rightMinor leftPrependVIcon="exit_to_app" rightPrependVIcon="clear_all" rightText="Clear" @clickLeft='clearServersDialog=false' @clickRight="clearServers()" />
 						</v-card-actions>
 					</v-card>
 	    		</v-dialog>
 	    	</div>
     	</div>
     	
+    	<!--content list-->
 	    <v-list v-if="!servers_visible">
 	    	<v-divider />
 	        <v-list-tile @click="showResources">
@@ -63,11 +65,13 @@
 <script>
 import cm from '../js/common'
 import serverInputField from '@/components/common/serverInputField'
+import confirmBtns from '@/components/common/confirmBtns'
 
 export default {
     name: 'DrawerLeft',
     components: {
     	serverInputField,
+    	confirmBtns, 
     },
     props: ['drawer'],
     data () {

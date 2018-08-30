@@ -51,6 +51,7 @@
 				cm.sapi.setActiveServer(hostServer)
 				let servers = [hostServer]
 				cm.sapi.setServers(servers);
+				location.reload();
 			}
 		}
 	}
