@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-dialog v-model="dialog" max-width="500px" >
+        <v-dialog v-model="dialog" max-width="480px" scrollable>
             <v-btn slot="activator" flat icon color="teal">
                 <icon>tools</icon>
             </v-btn>
             <v-card>
-                <v-card-title>Select items to show</v-card-title>
+                <v-card-title>Select items</v-card-title>
                 <v-card-text>
                     <v-radio-group v-model="selectedType" row>
                         <v-radio
