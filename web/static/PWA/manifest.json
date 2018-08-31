@@ -3,17 +3,17 @@
     "name": "System Monitor",
     "icons": [
       {
-        "src": "../../static/img/sysmon-48.png",
+        "src": "../../static/img/48x48.png",
         "type": "image/png",
         "sizes": "48x48"
       },
       {
-        "src": "../../static/img/sysmon-96.png",
+        "src": "../../static/img/96x96.png",
         "type": "image/png",
         "sizes": "96x96"
       },
       {
-        "src": "../../static/img/sysmon-192.png",
+        "src": "../../static/img/192x192.png",
         "type": "image/png",
         "sizes": "192x192"
       }
