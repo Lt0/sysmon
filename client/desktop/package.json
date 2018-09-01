@@ -1,0 +1,22 @@
+{
+  "name": "sysmon",
+  "version": "1.0.0",
+  "description": "A system monitor for linux",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . --icon=logo/sysmon.icns --out=build --overwrite"
+  },
+  "keywords": [
+    "sysmon",
+    "system monitor",
+    "Electron"
+  ],
+  "author": "hepeiqin",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^2.0.8",
+    "electron-packager": "^12.1.1"
+  },
+  "dependencies": {}
+}
