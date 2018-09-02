@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <v-menu bottom left offset-y min-width="180px">
+    <div id="more-container">
+        <v-menu bottom left offset-y min-width="180px" id="more-btn">
         	<!--more button-->
             <v-btn slot="activator" icon><icon>moreif</icon></v-btn>
 
@@ -43,3 +43,9 @@ export default {
     },
 }
 </script>
+
+<style scoped>
+	#more-container {
+		margin-right: 0px;
+	}
+</style>

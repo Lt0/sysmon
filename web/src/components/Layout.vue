@@ -2,7 +2,7 @@
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer" clipped fixed app ><drawer-left /></v-navigation-drawer>
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
-            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-side-icon id="side-btn" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-spacer></v-spacer>
             <v-toolbar-title class="hdr-text" @click="aboutDialog = true">{{activeServer}}</v-toolbar-title>
 
@@ -99,5 +99,9 @@ export default {
     font-size: 1em;
     text-align: center;
     margin: 0;
+}
+
+#side-btn {
+	margin: 6px;
 }
 </style>
