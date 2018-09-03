@@ -17,7 +17,7 @@ echo "pack..."
 DST=$(mktemp -d)
 mkdir $DST/sysmon
 DST=$DST/sysmon
-cp -rvf sysmon views conf web/dist install.sh onboot $DST
+cp -rvf sysmon views conf web/dist install.sh etc $DST
 mkdir $DST/web
 mv $DST/dist $DST/web/
 sed -i 's/runmode = dev/runmode = prod/g' $DST/conf/app.conf

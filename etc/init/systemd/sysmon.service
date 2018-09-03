@@ -1,0 +1,13 @@
+[Unit]
+Description=sysmon - system monitor by lightimehpq@gmail.com
+[Service]
+Environment=
+WorkingDirectory=APP_PATH
+ExecStart=APP_PATH/sysmon
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=10s
+[Install]
+WantedBy=multi-user.target
+Alias=sysmon.target
