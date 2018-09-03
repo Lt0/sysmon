@@ -33,6 +33,7 @@
 		data () {
 			return {
 				newServer: "",
+				conn_new_server: true,
             	newServerProto: "http",
             	serverProtocols: ["http", "https"],
             	errMsg: " ",
@@ -48,7 +49,9 @@
 				let server = this.newServerProto + "://" + this.newServer;
 				this.errMsg = cm.sapi.addServer(server);
 				if(this.errMsg == null) {
+					cm.sapi.setActiveServer(server);
 					this.$emit('addServerFinish', server);
+					location.reload();
 				}
 			},
 			cancel() {
