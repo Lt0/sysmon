@@ -7,7 +7,7 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 620})
+  mainWindow = new BrowserWindow({width: 1000, height: 680})
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')

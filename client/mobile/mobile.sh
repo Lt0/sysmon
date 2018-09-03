@@ -9,9 +9,7 @@ RSC=$DIST/static
 JS=$RSC/js
 CSS=$RSC/css
 FONTS=$RSC/fonts
-
-# mobile only resources
-MANIFEST=manifest.json
+IMG=$RSC/img
 
 backup() {
 #	bak_files="img js css fonts"
@@ -32,6 +30,9 @@ update_web_files() {
 	
 	mkdir static/fonts
 	cp -rf $FONTS/*.woff2 static/fonts
+	
+	cp -rf $IMG static/
+	rm -f static/img/*.png
 }
 
 modify_css() {
@@ -41,8 +42,8 @@ modify_css() {
 		exit 2
 	fi
 
-	echo regenerate fonts link in css 
-	sed -i "s|/static/fonts|../fonts|g" static/css/$css_file
+	echo modify css
+	sed -i "s|/static/|../|g" static/css/$css_file
 }
 
 del_js_link() {

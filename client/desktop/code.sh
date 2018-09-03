@@ -9,6 +9,7 @@ RSC=$DIST/static
 JS=$RSC/js
 CSS=$RSC/css
 FONTS=$RSC/fonts
+IMG=$RSC/img
 
 clean() {
 	echo clean
@@ -28,6 +29,9 @@ copy_web_files() {
 	mkdir static/fonts
 	cp -rf $FONTS/*.woff2 static/fonts
 
+	cp -rf $IMG static/
+	rm -f static/img/*.png
+
 	cp -rf $DIST/index.html .
 }
 
@@ -38,8 +42,8 @@ modify_css() {
 		exit 2
 	fi
 
-	echo regenerate fonts link in css 
-	sed -i "s|/static/fonts|../fonts|g" static/css/$css_file
+	echo modify css
+	sed -i "s|/static/|../|g" static/css/$css_file
 }
 
 modify_index() {

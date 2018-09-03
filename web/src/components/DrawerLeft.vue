@@ -1,14 +1,15 @@
 <template>
 	<div>
-		<!--servers option-->
-		<v-list>
+		<div id="servers-container">
+			<v-list id="servers-btn">
 				<v-list-tile @click="servers_visible = !servers_visible">
-		            <v-list-tile-action><v-icon>computer</v-icon></v-list-tile-action>
+		            <v-list-tile-action><v-icon color="white">computer</v-icon></v-list-tile-action>
 		            <v-list-tile-content><v-list-tile-title> Servers </v-list-tile-title></v-list-tile-content>
-		            <v-list-tile-action v-if="!servers_visible"><v-icon>expand_more</v-icon></v-list-tile-action>
-		            <v-list-tile-action v-if="servers_visible"><v-icon>expand_less</v-icon></v-list-tile-action>
+		            <v-list-tile-action v-if="!servers_visible"><v-icon color="white">arrow_drop_down</v-icon></v-list-tile-action>
+		            <v-list-tile-action v-if="servers_visible"><v-icon color="white">arrow_drop_up</v-icon></v-list-tile-action>
 		    	</v-list-tile>
-		</v-list>
+			</v-list>
+		</div>
 		
 		<!--server list-->
 		<div v-if="servers_visible">
@@ -43,7 +44,6 @@
     	
     	<!--content list-->
 	    <v-list v-if="!servers_visible">
-	    	<v-divider />
 	        <v-list-tile @click="showResources">
 	            <v-list-tile-action><icon>chart-line</icon></v-list-tile-action>
 	            <v-list-tile-content><v-list-tile-title> Resources </v-list-tile-title></v-list-tile-content>
@@ -149,5 +149,16 @@ export default {
 	}
 	#newServerProtoInput {
 		width: 6em;
+	}
+	#servers-container {
+		
+		background-image: url(/static/img/drawerLeft/material.jpg);
+		width: 100%;
+		height: 14em;
+		background-size: 100% 14em;
+	}
+	#servers-btn {
+		padding-top: 10em;
+		color: white;
 	}
 </style>
