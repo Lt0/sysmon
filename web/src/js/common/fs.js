@@ -11,6 +11,7 @@ function runUpdater(self) {
         updater = setTimeout(runUpdater, interval, self);
     }).catch(function(err){
         console.log("get disk info failed: " + err);
+        self.infoErr = err;
         updater = setTimeout(runUpdater, interval, self);
     })
 }

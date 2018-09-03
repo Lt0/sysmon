@@ -15,6 +15,7 @@ function runUpdater(self) {
         updater = setTimeout(runUpdater, interval, self);
     }).catch(function(err){
         console.log("get info all failed: " + err);
+        self.rscErr = err;
         updater = setTimeout(runUpdater, interval, self);
     })
 }

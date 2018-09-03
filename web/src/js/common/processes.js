@@ -13,6 +13,7 @@ function runUpdater(ctrl, api) {
         // console.log(ctrl.type, ctrl.pid + " updater: ", ctrl.updater);
     }).catch(function(err){
         console.log("get info all failed: " + err);
+        ctrl.infoErr = err;
         ctrl.updater = setTimeout(runUpdater, interval, ctrl, api);
     })
 }

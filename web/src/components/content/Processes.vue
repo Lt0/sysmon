@@ -92,6 +92,7 @@ let infoCtrl = {
     updater: null,
     interval: 1000,         // 更新时间间隔
     info: new Object(),
+    infoErr: null,
 }
 let detailsCtrl = {
     type: "details",
@@ -122,6 +123,22 @@ export default {
             tabs: null,
             tips: tips,
         }
+    },
+    computed: {
+    	info: function() {
+    		return infoCtrl.info;
+    	},
+    	infoErr: function() {
+    		return infoCtrl.infoErr;
+    	}
+    },
+    watch: {
+    	info: function() {
+    		cm.bus.$emit("updateInfo", "success");
+    	},
+    	infoErr: function() {
+    		cm.bus.$emit("updateInfo", "failed");
+    	},
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {

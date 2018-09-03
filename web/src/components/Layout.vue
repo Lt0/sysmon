@@ -4,7 +4,7 @@
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon id="side-btn" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-spacer></v-spacer>
-            <v-toolbar-title class="hdr-text" @click="aboutDialog = true">{{activeServer}}</v-toolbar-title>
+            <v-toolbar-title class="hdr-text" @click="aboutDialog = true" :class="{uif: updateInfoFailed}">{{activeServer}}</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -51,6 +51,7 @@ export default {
             infoAll: null,
             aboutDialog: false,
             activeServer: cm.sapi.getActiveServer(),
+            updateInfoFailed: false,
         }
     },
     beforeCreate () {
@@ -58,6 +59,7 @@ export default {
     },
     created () {
         cm.bus.$on('changeContent', this.changeContentHandler);
+        cm.bus.$on('updateInfo', this.updateInfoHandler);
     },
     methods: {
         changeContentHandler (r) {
@@ -79,7 +81,18 @@ export default {
                     console.log('unknow page to route: ', r);
             }
         },
-
+		updateInfoHandler(arg) {
+			switch(arg) {
+				case "success":
+					this.updateInfoFailed = false;
+					break;
+				case "failed":
+					this.updateInfoFailed = true;
+					break;
+				default:
+					console.log("updateInfoHandler: unknown status: ", arg);
+			}
+		}
     }
 }
 </script>
@@ -103,5 +116,9 @@ export default {
 
 #side-btn {
 	margin: 6px;
+}
+
+.uif {
+	color: #f7abab;
 }
 </style>

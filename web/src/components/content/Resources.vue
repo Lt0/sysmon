@@ -100,8 +100,17 @@ export default {
     data () {
         return {
             rsc: new Object(),      // 系统信息状态数据，由 resources updater 负责填充
+            rscErr: null,				// 获取系统状态时的错误信息
             interval: 1000,         // 更新时间间隔
         }
+    },
+    watch: {
+    	rsc: function() {
+    		cm.bus.$emit("updateInfo", "success");
+    	},
+    	rscErr: function() {
+    		cm.bus.$emit("updateInfo", "failed");
+    	}
     },
     computed: {
         rscStr: function(){

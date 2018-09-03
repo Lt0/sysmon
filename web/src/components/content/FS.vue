@@ -21,8 +21,17 @@ export default {
     data () {
         return {
             info: new Object(),     // 进程数据，由 processes updater 负责填充
+            infoErr: null,				// 获取状态是的错误信息
             interval: 1000,
         }
+    },
+    watch: {
+    	info: function() {
+    		cm.bus.$emit("updateInfo", "success");
+    	},
+    	infoErr: function() {
+    		cm.bus.$emit("updateInfo", "failed");
+    	}
     },
     beforeRouteEnter: (to, from, next) => {
         next(vm => {
