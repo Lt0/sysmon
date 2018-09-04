@@ -1,18 +1,31 @@
 const ver = "v1"
 
+let path = {
+	infoAll: "/" + ver + "/info/all",
+	infoDisk: "/" + ver + "/info/disk",
+	
+	processAll: "/" + ver + "/process/all",
+	processDetails: "/" + ver + "/process/details",
+	
+	sysInfoAll: "/" + ver + "/sysInfo/all",
+	sysInfoHostname: "/" + ver + "/sysInfo/hostname",
+}
+
 var activeServer = localStorage.getItem("activeServer")
 if(!activeServer) {
 	activeServer = ""
 }
 
-const infoAll = activeServer + "/" + ver + "/info/all"
-const infoDisk = activeServer + "/" + ver + "/info/disk"
+const infoAll = activeServer + path.infoAll;
+const infoDisk = activeServer + path.infoDisk;
 
-const processAll = activeServer + "/" + ver + "/process/all"
-const processDetails = activeServer + "/" + ver + "/process/details"
+const processAll = activeServer + path.processAll;
+const processDetails = activeServer + path.processDetails;
 
-const sysInfoAll = activeServer + "/" + ver + "/sysInfo/all"
+const sysInfoAll = activeServer + path.sysInfoAll;
+const sysInfoHostname = activeServer + path.sysInfoHostname;
 
+exports.path = path;
 
 exports.infoAll = infoAll;
 exports.infoDisk = infoDisk;
@@ -21,3 +34,4 @@ exports.processAll = processAll;
 exports.processDetails = processDetails;
 
 exports.sysInfoAll = sysInfoAll;
+exports.sysInfoHostname = sysInfoHostname;

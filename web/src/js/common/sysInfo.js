@@ -14,5 +14,16 @@ function getSysInfo(serverInfo) {
     })
 }
 
-// exports.SysInfo = SysInfo;
+// 获取当前连接的 server （activeServer）的 hostname，保存到 self 参数的 hostname 属性中
+function getHostname(self) {
+    console.log("getHostname");
+    axios.get(bapi.sysInfoHostname).then(function(res){
+    	console.log("hostname: ", res.data)
+        self.hostname = res.data;
+    }).catch(function(err){
+        console.log("get SysInfo all failed: " + err);
+    })
+}
+
 exports.getSysInfo = getSysInfo;
+exports.getHostname = getHostname;

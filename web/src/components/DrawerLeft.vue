@@ -13,9 +13,16 @@
 		
 		<!--server list-->
 		<div v-if="servers_visible">
-			<v-list>
+			<v-list two-line>
 			    	<v-list-tile v-for="server in servers" :key=server.id @click="selectServer(server)" class="server ">
-			            <v-list-tile-content><div class="caption font-weight-thin"> {{ server }} </div> </v-list-tile-content>
+			            <v-list-tile-content>
+			            	<v-list-tile-title v-if="hostnames[server].hostname">
+			            		{{ hostnames[server].hostname }}
+			            	</v-list-tile-title>
+			            	<v-list-tile-sub-title class="caption font-weight-thin">{{ server }}</v-list-tile-sub-title>
+			            	
+			            	<!--<div class="caption font-weight-thin"> {{ server }} </div>--> 
+			            </v-list-tile-content>
 			            <v-list-tile-action v-if="server == activeServer"><v-icon>done</v-icon></v-list-tile-action>
 			            <v-list-tile-action v-if="server != activeServer && (hostServer != null && server != hostServer)" @click.stop="removeServer(server)"><v-icon>remove</v-icon></v-list-tile-action>
 			    	</v-list-tile>
@@ -77,6 +84,7 @@ export default {
     data () {
         return {
         	servers: [],
+        	hostnames: {},
         	hostServer: cm.sapi.getHostServer(),
         	activeServer: "",
             servers_visible: false,
@@ -88,6 +96,7 @@ export default {
     	// init these servers in order
     	this.updateActiveServer();
     	this.updateServers();
+    	this.updateHostnames();
     },
     methods: {
     	updateActiveServer() {
@@ -95,6 +104,10 @@ export default {
     	},
     	updateServers() {
     		this.servers = cm.sapi.getServers();
+    	},
+    	updateHostnames() {
+    		console.log("updateHostnames");
+    		cm.sapi.getHostnames(this.hostnames);
     	},
     	selectServer(server){
     		cm.sapi.setActiveServer(server);
@@ -138,12 +151,12 @@ export default {
 <style scoped>
 	.server {
 		color: grey;
-		
+		/*padding: 0.5em 0em;*/
 	}
-	.server-btn {
+	/*.server-btn {
 		width: 40%;
 		color: grey;
-	}
+	}*/
 	#newServerInput {
 		display: flex;
 	}
@@ -151,7 +164,6 @@ export default {
 		width: 6em;
 	}
 	#servers-container {
-		
 		background-image: url(/static/img/drawerLeft/material.jpg);
 		width: 100%;
 		height: 14em;

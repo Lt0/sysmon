@@ -4,7 +4,7 @@
         <v-toolbar app fixed clipped-left color="teal lighten-1" dark>
             <v-toolbar-side-icon id="side-btn" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-spacer></v-spacer>
-            <v-toolbar-title class="hdr-text" @click="aboutDialog = true" :class="{uif: updateInfoFailed}">{{activeServer}}</v-toolbar-title>
+            <v-toolbar-title class="hdr-text" @click="serverDialog = true" :class="{uif: updateInfoFailed}">{{ hostname || activeServer}}</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
@@ -28,7 +28,13 @@
             <div>&copy; lightimehpq@gmail.com</div>
         </v-footer> -->
 
-        <about v-model="aboutDialog" />
+        <!--<about v-model="aboutDialog" />-->
+        <v-dialog v-model="serverDialog" width='400px'>
+        	<v-card>
+        		<server-info :hostname="hostname" :server="activeServer"></server-info>
+        		<v-card-actions><confirm-btns noLeft rightPrimary @clickRight="serverDialog = false"></confirm-btns></v-card-actions>
+        	</v-card>
+		</v-dialog>
     </v-app>
 </template>
 
@@ -36,26 +42,29 @@
 import cm from '../js/common'
 import DrawerLeft from '@/components/DrawerLeft'
 import more from '@/components/more'
-import about from '@/components/common/about'
+import serverInfo from '@/components/header/serverInfo'
+import confirmBtns from '@/components/common/confirmBtns'
 
 export default {
     name: 'Layout',
     components: {
         DrawerLeft,
         more, 
-        about, 
+        serverInfo, 
+        confirmBtns, 
     },
     data () {
         return {
             drawer: false,
             infoAll: null,
-            aboutDialog: false,
+            serverDialog: false,
             activeServer: cm.sapi.getActiveServer(),
+            hostname: null,
             updateInfoFailed: false,
         }
     },
     beforeCreate () {
-        
+    	cm.sapi.getActiveHostname(this);
     },
     created () {
         cm.bus.$on('changeContent', this.changeContentHandler);
