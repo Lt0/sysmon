@@ -10,7 +10,7 @@ get_init_type() {
 	if [ "$comm" = "systemd" ]; then
 		INIT_TYPE="systemd"
 		return
-	elif [ $comm = "init"  ]; then
+	elif [ "$comm" = "init"  ]; then
 		ver=$(/sbin/init --version 2>/dev/null | grep upstart)
 		if [ -n $ver ]; then
 			INIT_TYPE="upstart"
@@ -25,8 +25,15 @@ install() {
 	case $INIT_TYPE in
 		"systemd" )
 			echo install in systemd init
-			cp $SCRIPTS_ROOT/systemd/sysmon.service /lib/systemd/system/
-			sed -i "s|APP_PATH|$APP_PATH|g" /lib/systemd/system/sysmon.service
+			if [ -d /usr/lib/systemd/system ]; then
+				dst_path="/usr/lib/systemd/system"
+			elif [ -d /lib/systemd/system ]; then
+				dst_path="/lib/systemd/system"
+			else
+				dst_path="/etc/systemd/system"
+			fi
+			cp $SCRIPTS_ROOT/systemd/sysmon.service $dst_path/
+			sed -i "s|APP_PATH|$APP_PATH|g" $dst_path/sysmon.service
 			systemctl daemon-reload
 			systemctl enable sysmon
 			systemctl start sysmon
@@ -56,6 +63,7 @@ uninstall() {
 			systemctl daemon-reload
 		;;
 		"upstart" )
+			rm -rvf /etc/init/sysmon.conf
 			echo uninstall sysmon from upstart init
 		;;
 		"sysvinit" )
