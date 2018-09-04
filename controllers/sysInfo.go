@@ -22,3 +22,14 @@ func (c *SysInfoController) GetSysInfo() {
 	c.Data["json"] = handler.Do()
 	c.ServeJSON()
 }
+
+// @Title Hostname
+// @Description Get hostname reported by the kernel.
+// @Success 200 {object} models.Object
+// @Failure 403 :objectId is empty
+// @router /hostname [get]
+func (c *SysInfoController) GetHostname() {
+	handler := &sysInfo.Hostname{}
+	c.Data["json"] = handler.Do()
+	c.ServeJSON()
+}
