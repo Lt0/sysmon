@@ -1,0 +1,5 @@
+static
+backup-*
+unpackage/release
+unpackage/.confirmed_dependencies
+unpackage/.dependencies

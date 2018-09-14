@@ -1,0 +1,25 @@
+{
+    "short_name": "Sysmon",
+    "name": "System Monitor",
+    "icons": [
+      {
+        "src": "../../static/img/48x48.png",
+        "type": "image/png",
+        "sizes": "48x48"
+      },
+      {
+        "src": "../../static/img/96x96.png",
+        "type": "image/png",
+        "sizes": "96x96"
+      },
+      {
+        "src": "../../static/img/192x192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+    ],
+    "start_url": "../../index.html", 
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "display": "standalone"
+  }
