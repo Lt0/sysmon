@@ -1,0 +1,14 @@
+.rsc-chart{
+  padding-top: 2em;
+}
+
+
+.rsc-legend-bar{
+  padding-top: 0.2em;
+}
+
+.rsc-line-chart-container {
+  position: relative;
+  margin: auto;
+  width: 99%;
+}

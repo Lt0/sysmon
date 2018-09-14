@@ -1,0 +1,11 @@
+sysmon
+swagger/swagger.json
+swagger/swagger.yml
+routers/commentsRouter_controllers.go
+routers/commentsRouter_*controllers.go
+lastupdate.tmp
+
+sysmon*.tar.gz
+sysmon*.tar.xz
+
+.project
