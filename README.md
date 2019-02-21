@@ -32,11 +32,7 @@ Features：
 
 ## Demo
 
-http://45.32.84.249:2047
-
-https://athena-bookshelf.com:2048
-
-http://athena-bookshelf.com:2047
+http://149.28.83.24:2048
 
 
 
