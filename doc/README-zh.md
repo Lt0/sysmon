@@ -28,11 +28,7 @@ sysmon 是一个为 Linux 开发的前后端分离的系统资源监视器，在
 <br>
 
 ## Demo
-http://45.32.84.249:2047
-
-https://athena-bookshelf.com:2048
-
-http://athena-bookshelf.com:2047
+http://149.28.83.24:2048
 
 
 <br>
